@@ -1,0 +1,14 @@
+# Treat HTML files and common web directories as HTML for GitHub language stats
+*.html linguist-language=HTML
+*.htm linguist-language=HTML
+public/** linguist-language=HTML
+web/** linguist-language=HTML
+src/** linguist-language=HTML
+
+# Mark vendored or generated files so they don't skew language breakdown
+vendor/** linguist-vendored
+build/** linguist-generated
+dist/** linguist-generated
+
+# Treat markdown as documentation (optional)
+*.md linguist-documentation
