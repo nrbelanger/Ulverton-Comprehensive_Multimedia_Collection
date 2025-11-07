@@ -1,0 +1,12 @@
+{
+  "files.defaultLanguage": "html",
+  "files.associations": {
+    "*.html": "html",
+    "*.htm": "html"
+  },
+  "editor.formatOnSave": true,
+  "html.format.wrapAttributes": "auto",
+  "emmet.includeLanguages": {
+    "html": "html"
+  }
+}
