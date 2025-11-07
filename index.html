@@ -2,11 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Ulverton — HTML example</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ulverton — Home</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Add social metadata later (og:tags, twitter:card) if you want sharing previews -->
 </head>
 <body>
-  <h1>Ulverton — HTML example</h1>
-  <p>This repository is configured to be treated as HTML (Linguist + editor settings).</p>
+  <header>
+    <div class="container">
+      <h1>Ulverton — Comprehensive Multimedia Collection</h1>
+      <nav aria-label="Main navigation">
+        <ul class="nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="#">Gallery</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h2>Welcome</h2>
+        <p>Starter page for your HTML project. Edit this content and add pages in the repo.</p>
+        <a class="cta" href="about.html">Learn more</a>
+      </div>
+    </section>
+
+    <section class="features container" aria-labelledby="features-heading">
+      <h3 id="features-heading">Quick features</h3>
+      <ul>
+        <li>Semantic HTML structure</li>
+        <li>Linked CSS and JavaScript</li>
+        <li>Responsive-friendly meta tag</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; <span id="year"></span> Ulverton</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
 </body>
 </html>
