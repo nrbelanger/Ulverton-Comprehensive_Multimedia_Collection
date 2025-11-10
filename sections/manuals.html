@@ -1,1 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Manuals — Ulverton Collection</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>Manuals</h1>
+      <nav aria-label="Main navigation">
+        <ul class="nav">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="history.html">History</a></li>
+          <li><a href="parts.html">Parts List</a></li>
+          <li><a href="manuals.html" class="active">Manuals</a></li>
+          <li><a href="cad.html">CAD Assemblies &amp; Simulations</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section-page">
+    <div class="container">
+      <!-- File Grid -->
+      <div class="file-grid" id="manualGrid">
+        <!-- Existing files or previews will appear here -->
+      </div>
+
+      <!-- Add Files Button -->
+      <button id="addManualFile" class="add-file-btn">Add File</button>
+      <input type="file" id="manualFileInput" style="display:none;" multiple>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> Ulverton Multimedia Collection</p>
+    </div>
+  </footer>
+
+  <script src="../js/main.js" defer></script>
+</body>
+</html>
 
