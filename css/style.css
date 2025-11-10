@@ -163,3 +163,21 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
 }
+
+.file-item {
+  background-color: #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  word-wrap: break-word;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none; /* remove underline */
+  color: #222;           /* color for text */
+}
+
+.file-item:hover {
+  background-color: #ccc;
+}
