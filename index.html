@@ -2,47 +2,68 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ulverton — Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ulverton Multimedia Collection</title>
+
+  <!-- Link to external stylesheet -->
   <link rel="stylesheet" href="css/style.css">
-  <!-- Add social metadata later (og:tags, twitter:card) if you want sharing previews -->
 </head>
+
 <body>
-  <header>
+  <header class="site-header">
     <div class="container">
       <h1>Ulverton — Comprehensive Multimedia Collection</h1>
       <nav aria-label="Main navigation">
         <ul class="nav">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="#">Gallery</a></li>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="sections/history.html">History</a></li>
+          <li><a href="sections/parts.html">Parts List</a></li>
+          <li><a href="sections/manuals.html">Manuals</a></li>
+          <li><a href="sections/cad.html">CAD Assemblies &amp; Simulations</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="container">
-        <h2>Welcome</h2>
-        <p>Starter page for your HTML project. Edit this content and add pages in the repo.</p>
-        <a class="cta" href="about.html">Learn more</a>
-      </div>
-    </section>
+  <main class="homepage">
+    <section class="section-grid">
+      <!-- Card 1: History -->
+      <a href="sections/history.html" class="section-card">
+        <div class="card-bg" style="background-image: url('https://via.placeholder.com/600x400');"></div>
+        <div class="card-overlay">
+          <h2>History</h2>
+        </div>
+      </a>
 
-    <section class="features container" aria-labelledby="features-heading">
-      <h3 id="features-heading">Quick features</h3>
-      <ul>
-        <li>Semantic HTML structure</li>
-        <li>Linked CSS and JavaScript</li>
-        <li>Responsive-friendly meta tag</li>
-      </ul>
+      <!-- Card 2: Parts List -->
+      <a href="sections/parts.html" class="section-card">
+        <div class="card-bg" style="background-image: url('https://via.placeholder.com/600x400');"></div>
+        <div class="card-overlay">
+          <h2>Parts List</h2>
+        </div>
+      </a>
+
+      <!-- Card 3: Manuals -->
+      <a href="sections/manuals.html" class="section-card">
+        <div class="card-bg" style="background-image: url('https://via.placeholder.com/600x400');"></div>
+        <div class="card-overlay">
+          <h2>Manuals</h2>
+        </div>
+      </a>
+
+      <!-- Card 4: CAD Assemblies & Simulations -->
+      <a href="sections/cad.html" class="section-card">
+        <div class="card-bg" style="background-image: url('https://via.placeholder.com/600x400');"></div>
+        <div class="card-overlay">
+          <h2>CAD Assemblies &amp; Simulations</h2>
+        </div>
+      </a>
     </section>
   </main>
 
-  <footer>
+  <footer class="site-footer">
     <div class="container">
-      <p>&copy; <span id="year"></span> Ulverton</p>
+      <p>&copy; <span id="year"></span> Ulverton Multimedia Collection</p>
     </div>
   </footer>
 
