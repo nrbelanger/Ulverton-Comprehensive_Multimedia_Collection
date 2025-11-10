@@ -181,3 +181,186 @@ body {
 .file-item:hover {
   background-color: #ccc;
 }
+
+/* File Grid for Parts Page */
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 3 columns approx */
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Individual File Preview */
+.file-item {
+  background-color: #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  word-wrap: break-word;
+  min-height: 100px;
+}
+
+/* Add Files Button */
+.add-file-btn {
+  display: block;
+  margin: 1rem auto;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #222;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.add-file-btn:hover {
+  background-color: #444;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .file-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+
+.file-item {
+  background-color: #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  word-wrap: break-word;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none; /* remove underline */
+  color: #222;           /* color for text */
+}
+
+.file-item:hover {
+  background-color: #ccc;
+}
+
+/* File Grid for CAD Assemblies and Simulations Page */
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 3 columns approx */
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Individual File Preview */
+.file-item {
+  background-color: #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  word-wrap: break-word;
+  min-height: 100px;
+}
+
+/* Add Files Button */
+.add-file-btn {
+  display: block;
+  margin: 1rem auto;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #222;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.add-file-btn:hover {
+  background-color: #444;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .file-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+
+.file-item {
+  background-color: #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  word-wrap: break-word;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none; /* remove underline */
+  color: #222;           /* color for text */
+}
+
+.file-item:hover {
+  background-color: #ccc;
+}
+
+/* File Grid for Manuals Page */
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 3 columns approx */
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Individual File Preview */
+.file-item {
+  background-color: #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  word-wrap: break-word;
+  min-height: 100px;
+}
+
+/* Add Files Button */
+.add-file-btn {
+  display: block;
+  margin: 1rem auto;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #222;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.add-file-btn:hover {
+  background-color: #444;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .file-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+
+.file-item {
+  background-color: #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  word-wrap: break-word;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none; /* remove underline */
+  color: #222;           /* color for text */
+}
+
+.file-item:hover {
+  background-color: #ccc;
+}
