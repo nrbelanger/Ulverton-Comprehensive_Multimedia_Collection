@@ -50,12 +50,20 @@ body {
 
 .section-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr); /* 2 columns on desktop */
   gap: 1rem;
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }
+
+/* Mobile-friendly: switch to 1 column on small screens */
+@media (max-width: 700px) {
+  .section-grid {
+    grid-template-columns: 1fr; /* 1 column on phones/small tablets */
+  }
+}
+
 
 .section-card {
   position: relative;
