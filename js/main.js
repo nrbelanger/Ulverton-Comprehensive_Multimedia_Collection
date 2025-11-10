@@ -11,10 +11,16 @@ document.addEventListener("DOMContentLoaded", () => {
   fileInput.addEventListener("change", (event) => {
     const files = event.target.files;
     for (let i = 0; i < files.length; i++) {
-      const fileItem = document.createElement("div");
-      fileItem.className = "file-item";
-      fileItem.textContent = files[i].name; // Display file name
-      grid.appendChild(fileItem);
+      const file = files[i];
+      
+      // Create a clickable link instead of div
+      const link = document.createElement("a");
+      link.className = "file-item";
+      link.href = URL.createObjectURL(file); // temporary URL to open file
+      link.target = "_blank"; // open in new tab
+      link.textContent = file.name;
+
+      grid.appendChild(link);
     }
     fileInput.value = ""; // Reset input so same file can be added again
   });
