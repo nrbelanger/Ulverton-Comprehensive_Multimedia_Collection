@@ -30,4 +30,3 @@ Additions you may want next
 - CSS framework or build tool (npm + parcel/webpack/eleventy) if you want a more complex pipeline
 - Accessibility, linting (htmlhint), and CI for previews
 
-If you want, I can create a branch and add the starter files above, open a PR, or walk you through opening a Codespace — which would you prefer?
