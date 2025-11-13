@@ -156,6 +156,22 @@ body {
 .add-file-btn:hover {
   background-color: #444;
 }
+#addHistoryFile {
+  display: block;
+  margin: 20px auto; /* centers the button */
+  background-color: #000;
+  color: white;
+  font-size: 1.1rem;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#addHistoryFile:hover {
+  background-color: #333;
+}
 
 /* Responsive adjustments */
 @media (max-width: 900px) {
