@@ -5,9 +5,9 @@ function getThumbnailForFile(filename) {
     case 'jpeg':
     case 'png':
     case 'gif':
-      return 'images/icons/image-icon.png';
+      return 'images/png-icon.webp';
     case 'pdf':
-      return 'images/icons/pdf-icon.png';
+      return 'images/pdf-icon.webp';
     case 'doc':
     case 'docx':
       return 'images/docx-icon.webp';
