@@ -48,16 +48,25 @@ document.addEventListener("DOMContentLoaded", () => {
       const card = document.createElement("div");
       card.className = "file-card";
 
-      const thumbnail = document.createElement('img');
-      thumbnail.src = getThumbnailForFile(file.name);
-      thumbnail.alt = 'File thumbnail';
-      thumbnail.className = 'file-thumbnail';
-      card.appendChild(thumbnail);
+      // Set the thumbnail as the background
+      card.style.backgroundImage = `url(${getThumbnailForFile(file.name)})`;
 
-      const fileName = document.createElement('p');
+      // Overlay container for filename + description
+      const overlay = document.createElement("div");
+      overlay.className = "file-overlay";
+
+      const fileName = document.createElement("p");
       fileName.textContent = file.name;
-      card.appendChild(fileName);
+      overlay.appendChild(fileName);
+
+      const desc = document.createElement("p");
+      desc.className = "file-description";
+      desc.textContent = description || '';
+      overlay.appendChild(desc);
+
+      card.appendChild(overlay);
       grid.appendChild(card);
+
 
       // Create the clickable file link
       const link = document.createElement("a");
