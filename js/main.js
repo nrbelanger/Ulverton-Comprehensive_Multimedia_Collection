@@ -47,6 +47,22 @@ document.addEventListener("DOMContentLoaded", () => {
       // Create a container for the file card
       const card = document.createElement("div");
       card.className = "file-card";
+      card.style.backgroundImage = `url(${getThumbnailForFile(file.name)})`;
+
+      const overlay = document.createElement("div");
+      overlay.className = "file-overlay";
+
+      const fileName = document.createElement("p");
+      fileName.textContent = file.name;
+      overlay.appendChild(fileName);
+
+      const desc = document.createElement("p");
+      desc.className = "file-description";
+      desc.textContent = description || '';
+      overlay.appendChild(desc);
+
+      card.appendChild(overlay);
+
 
       // Set the thumbnail as the background
       card.style.backgroundImage = `url(${getThumbnailForFile(file.name)})`;
