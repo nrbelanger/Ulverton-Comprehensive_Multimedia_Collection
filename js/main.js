@@ -1,3 +1,29 @@
+function getThumbnailForFile(filename) {
+  const ext = filename.split('.').pop().toLowerCase();
+  switch (ext) {
+    case 'jpg':
+    case 'jpeg':
+    case 'png':
+    case 'gif':
+      return 'images/icons/image-icon.png';
+    case 'pdf':
+      return 'images/icons/pdf-icon.png';
+    case 'doc':
+    case 'docx':
+      return 'images/docx-icon.webp';
+    case 'zip':
+    case 'rar':
+      return 'images/zip-icon.webp';
+    case 'stl':
+    case 'obj':
+    case 'step':
+      return 'images/stl-icon.webp';
+    case 'mp4':
+      return 'images/mp4-icon.webp'
+    default:
+      return 'images/icons/generic-icon.png';
+  }
+}
 // History Add Files with description
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.getElementById("addHistoryFile");
@@ -20,6 +46,17 @@ document.addEventListener("DOMContentLoaded", () => {
       // Create a container for the file card
       const card = document.createElement("div");
       card.className = "file-card";
+
+      const thumbnail = document.createElement('img');
+      thumbnail.src = getThumbnailForFile(file.name);
+      thumbnail.alt = 'File thumbnail';
+      thumbnail.className = 'file-thumbnail';
+      card.appendChild(thumbnail);
+
+      const fileName = document.createElement('p');
+      fileName.textContent = file.name;
+      card.appendChild(fileName);
+      grid.appendChild(card);
 
       // Create the clickable file link
       const link = document.createElement("a");
