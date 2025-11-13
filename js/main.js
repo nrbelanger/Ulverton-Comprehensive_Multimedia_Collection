@@ -21,7 +21,7 @@ function getThumbnailForFile(filename) {
     case 'mp4':
       return 'images/mp4-icon.webp'
     default:
-      return 'images/icons/generic-icon.png';
+      return 'images/file-icon.webp';
   }
 }
 // History Add Files with description
