@@ -367,19 +367,31 @@ body {
 
 .file-card {
   position: relative;
-  background-color: #eee;
+  background-color: #ccc; /* grey container */
   border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  min-height: 150px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end; /* pushes text to bottom */
-  background-size: cover;    /* makes thumbnail fill the card */
+  width: 200px;  /* adjust as needed */
+  height: 200px; /* adjust as needed */
+  margin: 0.5rem;
+  background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-  color: #fff;               /* if overlaying text on image */
+  display: flex;
+  align-items: flex-end; /* puts overlay at bottom */
+  overflow: hidden;
 }
+
+.file-overlay {
+  background-color: rgba(50, 50, 50, 0.7); /* dark semi-transparent overlay */
+  color: #fff;
+  width: 100%;
+  padding: 0.5rem;
+  box-sizing: border-box;
+}
+
+.file-overlay p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
 
 .file-description {
   margin-top: 0.5rem;
