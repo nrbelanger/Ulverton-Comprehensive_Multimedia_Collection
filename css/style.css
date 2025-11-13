@@ -142,12 +142,12 @@ body {
 /* Add Files Button */
 .add-file-btn {
   display: block;
-  margin: 1rem auto;
+  margin: 20px auto;
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   border: none;
   border-radius: 6px;
-  background-color: #222;
+  background-color: #fff;
   color: #fff;
   cursor: pointer;
   transition: background 0.3s ease;
