@@ -32,64 +32,54 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Helper function to pick thumbnail based on file type
   function getThumbnailForFile(filename) {
-    const ext = filename.split('.').pop().toLowerCase();
-    switch (ext) {
-      case 'jpg':
-      case 'jpeg':
-      case 'png':
-      case 'gif':
-      case 'webp':
-        return 'images/png-icon.webp';
-      case 'pdf':
-        return 'images/pdf-icon.webp';
-      case 'doc':
-      case 'docx':
-        return 'images/docx-icon.webp';
-      case 'stl':
-      case 'obj':
-      case 'step':
-        return 'images/cad-icon.webp';
-      default:
-        return 'images/file-icon.webp';
-    }
+  const ext = filename.split('.').pop().toLowerCase();
+  if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
+    return "images/image-icon.webp"; // or whatever your actual path is
+  } else if (["pdf"].includes(ext)) {
+    return "images/pdf-icon.webp";
+  } else if (["zip", "rar"].includes(ext)) {
+    return "images/archive_icon.webp";
+  } else {
+    return "images/file-icon.webp";
   }
+}
+
 
   // Clicking the Add File button triggers the hidden file input
   addBtn.addEventListener("click", () => {
-    fileInput.click();
-  });
+  fileInput.click();
+});
 
-  // When files are selected, create cards
-  fileInput.addEventListener("change", (event) => {
-    const files = event.target.files;
+fileInput.addEventListener("change", (event) => {
+  const files = event.target.files;
+  for (const file of files) {
+    const card = document.createElement("div");
+    card.className = "file-card";
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+    // Create thumbnail
+    const thumbnail = document.createElement("img");
+    thumbnail.src = getThumbnailForFile(file.name);
+    thumbnail.alt = "File thumbnail";
+    thumbnail.className = "file-thumbnail";
+    card.appendChild(thumbnail);
 
-      // Prompt for description
-      const description = prompt("Enter a description (max 1000 chars):", "");
+    // Add filename
+    const fileName = document.createElement("p");
+    fileName.textContent = file.name;
+    card.appendChild(fileName);
 
-      // Create card
-      const card = document.createElement("div");
-      card.className = "file-card";
-      card.style.backgroundImage = `url(${getThumbnailForFile(file.name)})`;
-
-      // Overlay for filename + description
-      const overlay = document.createElement("div");
-      overlay.className = "file-overlay";
-
-      const fileName = document.createElement("p");
-      fileName.textContent = file.name;
-      overlay.appendChild(fileName);
-
-      const desc = document.createElement("p");
-      desc.className = "file-description";
-      desc.textContent = description || '';
-      overlay.appendChild(desc);
-
-      card.appendChild(overlay);
-      grid.appendChild(card);
+    // Ask for description
+    const description = prompt("Enter a description (max 1000 characters):", "");
+    if (description) {
+      const descEl = document.createElement("p");
+      descEl.textContent = description.substring(0, 1000);
+      card.appendChild(descEl);
     }
+
+    grid.appendChild(card);
+  }
+});
+
 
     // Reset file input so same file can be uploaded again if needed
     fileInput.value = "";
