@@ -366,24 +366,30 @@ body {
 }
 
 .file-card {
+  position: relative;
   background-color: #eee;
   border-radius: 8px;
   padding: 1rem;
   text-align: center;
-  word-wrap: break-word;
+  min-height: 150px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  min-height: 150px;
+  justify-content: flex-end; /* pushes text to bottom */
+  background-size: cover;    /* makes thumbnail fill the card */
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #fff;               /* if overlaying text on image */
 }
 
 .file-description {
   margin-top: 0.5rem;
   font-size: 0.9rem;
-  color: #333;
   line-height: 1.3;
-  text-align: left;
+  background-color: rgba(0, 0, 0, 0.4); /* optional overlay for readability */
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
 }
+
 
 .file-grid {
   display: grid;
