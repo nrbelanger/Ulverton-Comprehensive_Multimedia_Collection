@@ -1,4 +1,4 @@
-// History Add Files
+// History Add Files with description
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.getElementById("addHistoryFile");
   const fileInput = document.getElementById("historyFileInput");
@@ -12,21 +12,39 @@ document.addEventListener("DOMContentLoaded", () => {
     const files = event.target.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      
-      // Create a clickable link instead of div
+
+      // Prompt for description
+      const description = prompt("Enter a short description (max 1000 characters):") || "";
+      const trimmedDescription = description.substring(0, 1000); // enforce character limit
+
+      // Create a container for the file card
+      const card = document.createElement("div");
+      card.className = "file-card";
+
+      // Create the clickable file link
       const link = document.createElement("a");
       link.className = "file-item";
-      link.href = URL.createObjectURL(file); // temporary URL to open file
-      link.target = "_blank"; // open in new tab
+      link.href = URL.createObjectURL(file);
+      link.target = "_blank";
       link.textContent = file.name;
 
-      grid.appendChild(link);
+      // Create the description element
+      const desc = document.createElement("p");
+      desc.className = "file-description";
+      desc.textContent = trimmedDescription;
+
+      // Add everything to the card
+      card.appendChild(link);
+      card.appendChild(desc);
+      grid.appendChild(card);
     }
-    fileInput.value = ""; // Reset input so same file can be added again
+
+    // Reset file input so same file can be added again
+    fileInput.value = "";
   });
 });
 
-// Parts Add Files
+// Parts Add Files with description
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.getElementById("addPartsFile");
   const fileInput = document.getElementById("partsFileInput");
@@ -40,21 +58,40 @@ document.addEventListener("DOMContentLoaded", () => {
     const files = event.target.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      
-      // Create a clickable link instead of div
+
+      // Prompt for description
+      const description = prompt("Enter a short description (max 1000 characters):") || "";
+      const trimmedDescription = description.substring(0, 1000); // enforce character limit
+
+      // Create a container for the file card
+      const card = document.createElement("div");
+      card.className = "file-card";
+
+      // Create the clickable file link
       const link = document.createElement("a");
       link.className = "file-item";
-      link.href = URL.createObjectURL(file); // temporary URL to open file
-      link.target = "_blank"; // open in new tab
+      link.href = URL.createObjectURL(file);
+      link.target = "_blank";
       link.textContent = file.name;
 
-      grid.appendChild(link);
+      // Create the description element
+      const desc = document.createElement("p");
+      desc.className = "file-description";
+      desc.textContent = trimmedDescription;
+
+      // Add everything to the card
+      card.appendChild(link);
+      card.appendChild(desc);
+      grid.appendChild(card);
     }
-    fileInput.value = ""; // Reset input so same file can be added again
+
+    // Reset file input so same file can be added again
+    fileInput.value = "";
   });
 });
 
-// CAD Assemblies & Simulations Add Files
+
+// Simulations & CAD Add Files with description
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.getElementById("addCadSimFile");
   const fileInput = document.getElementById("cadSimFileInput");
@@ -68,21 +105,40 @@ document.addEventListener("DOMContentLoaded", () => {
     const files = event.target.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      
-      // Create a clickable link instead of div
+
+      // Prompt for description
+      const description = prompt("Enter a short description (max 1000 characters):") || "";
+      const trimmedDescription = description.substring(0, 1000); // enforce character limit
+
+      // Create a container for the file card
+      const card = document.createElement("div");
+      card.className = "file-card";
+
+      // Create the clickable file link
       const link = document.createElement("a");
       link.className = "file-item";
-      link.href = URL.createObjectURL(file); // temporary URL to open file
-      link.target = "_blank"; // open in new tab
+      link.href = URL.createObjectURL(file);
+      link.target = "_blank";
       link.textContent = file.name;
 
-      grid.appendChild(link);
+      // Create the description element
+      const desc = document.createElement("p");
+      desc.className = "file-description";
+      desc.textContent = trimmedDescription;
+
+      // Add everything to the card
+      card.appendChild(link);
+      card.appendChild(desc);
+      grid.appendChild(card);
     }
-    fileInput.value = ""; // Reset input so same file can be added again
+
+    // Reset file input so same file can be added again
+    fileInput.value = "";
   });
 });
 
-// Manuals Add Files
+
+// Manuals Add Files with description
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.getElementById("addManualFile");
   const fileInput = document.getElementById("manualFileInput");
@@ -96,16 +152,34 @@ document.addEventListener("DOMContentLoaded", () => {
     const files = event.target.files;
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      
-      // Create a clickable link instead of div
+
+      // Prompt for description
+      const description = prompt("Enter a short description (max 1000 characters):") || "";
+      const trimmedDescription = description.substring(0, 1000); // enforce character limit
+
+      // Create a container for the file card
+      const card = document.createElement("div");
+      card.className = "file-card";
+
+      // Create the clickable file link
       const link = document.createElement("a");
       link.className = "file-item";
-      link.href = URL.createObjectURL(file); // temporary URL to open file
-      link.target = "_blank"; // open in new tab
+      link.href = URL.createObjectURL(file);
+      link.target = "_blank";
       link.textContent = file.name;
 
-      grid.appendChild(link);
+      // Create the description element
+      const desc = document.createElement("p");
+      desc.className = "file-description";
+      desc.textContent = trimmedDescription;
+
+      // Add everything to the card
+      card.appendChild(link);
+      card.appendChild(desc);
+      grid.appendChild(card);
     }
-    fileInput.value = ""; // Reset input so same file can be added again
+
+    // Reset file input so same file can be added again
+    fileInput.value = "";
   });
 });
