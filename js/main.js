@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Clicking the Add File button triggers the hidden file input
   addBtn.addEventListener("click", () => {
-  fileInput.click();
+    fileInput.click();
 });
 
 fileInput.addEventListener("change", (event) => {
