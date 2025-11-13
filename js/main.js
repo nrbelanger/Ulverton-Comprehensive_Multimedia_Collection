@@ -189,11 +189,11 @@ document.addEventListener("DOMContentLoaded", () => {
   function getThumbnailForFile(filename) {
   const ext = filename.split('.').pop().toLowerCase();
   if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
-    return "images/image-icon.webp"; // or whatever your actual path is
+    return "images/png-icon.webp"; // or whatever your actual path is
   } else if (["pdf"].includes(ext)) {
     return "images/pdf-icon.webp";
   } else if (["zip", "rar"].includes(ext)) {
-    return "images/archive_icon.webp";
+    return "images/archive-icon.webp";
   } else {
     return "images/file-icon.webp";
   }
