@@ -1,30 +1,3 @@
-function getThumbnailForFile(filename) {
-  const ext = filename.split('.').pop().toLowerCase();
-  switch (ext) {
-    case 'jpg':
-    case 'jpeg':
-    case 'png':
-    case 'gif':
-    case 'webp':
-      return 'images/png-icon.webp';
-    case 'pdf':
-      return 'images/pdf-icon.webp';
-    case 'doc':
-    case 'docx':
-      return 'images/docx-icon.webp';
-    case 'zip':
-    case 'rar':
-      return 'images/zip-icon.webp';
-    case 'stl':
-    case 'obj':
-    case 'step':
-      return 'images/stl-icon.webp';
-    case 'mp4':
-      return 'images/mp4-icon.webp'
-    default:
-      return 'images/file-icon.webp';
-  }
-}
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.getElementById("addHistoryFile");
   const fileInput = document.getElementById("historyFileInput");
