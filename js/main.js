@@ -30,21 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const fileInput = document.getElementById("historyFileInput");
   const grid = document.getElementById("historyGrid");
 
-  // Helper function to pick thumbnail based on file type
-  function getThumbnailForFile(filename) {
-  const ext = filename.split('.').pop().toLowerCase();
-  if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
-    return "images/image-icon.webp"; // or whatever your actual path is
-  } else if (["pdf"].includes(ext)) {
-    return "images/pdf-icon.webp";
-  } else if (["zip", "rar"].includes(ext)) {
-    return "images/archive_icon.webp";
-  } else {
-    return "images/file-icon.webp";
-  }
-}
-
-
   // Clicking the Add File button triggers the hidden file input
   addBtn.addEventListener("click", () => {
     fileInput.click();
@@ -225,3 +210,17 @@ document.addEventListener("DOMContentLoaded", () => {
     fileInput.value = "";
   });
 });
+
+  // Helper function to pick thumbnail based on file type
+  function getThumbnailForFile(filename) {
+  const ext = filename.split('.').pop().toLowerCase();
+  if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
+    return "images/image-icon.webp"; // or whatever your actual path is
+  } else if (["pdf"].includes(ext)) {
+    return "images/pdf-icon.webp";
+  } else if (["zip", "rar"].includes(ext)) {
+    return "images/archive_icon.webp";
+  } else {
+    return "images/file-icon.webp";
+  }
+}
