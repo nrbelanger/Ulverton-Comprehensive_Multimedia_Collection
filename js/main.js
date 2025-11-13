@@ -39,18 +39,18 @@ document.addEventListener("DOMContentLoaded", () => {
       case 'png':
       case 'gif':
       case 'webp':
-        return 'images/icons/png-icon.webp';
+        return 'images/png-icon.webp';
       case 'pdf':
-        return 'images/icons/pdf-icon.webp';
+        return 'images/pdf-icon.webp';
       case 'doc':
       case 'docx':
-        return 'images/icons/docx-icon.webp';
+        return 'images/docx-icon.webp';
       case 'stl':
       case 'obj':
       case 'step':
-        return 'images/icons/cad-icon.webp';
+        return 'images/cad-icon.webp';
       default:
-        return 'images/icons/file-icon.webp';
+        return 'images/file-icon.webp';
     }
   }
 
