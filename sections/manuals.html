@@ -30,10 +30,12 @@
       </div>
 
       <!-- Add Files Button -->
-      <button id="addManualFile" class="add-file-btn">Add File</button>
-      <input type="file" id="manualFileInput" style="display:none;" multiple>
-    </div>
-  </main>
+      <button class="add-file-btn" data-input="#historyFileInput" data-grid="#historyGrid">
+        Add History File
+      </button>
+      <input type="file" id="historyFileInput" multiple style="display:none">
+      <div id="historyGrid" class="file-grid"></div>
+
 
   <footer class="site-footer">
     <div class="container">
