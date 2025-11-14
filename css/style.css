@@ -1,5 +1,4 @@
 /* === Base Styles === */
-
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
@@ -47,23 +46,20 @@ body {
 }
 
 /* === Grid Section === */
-
 .section-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 columns on desktop */
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   padding: 2rem;
   max-width: 1000px;
   margin: 0 auto;
 }
 
-/* Mobile-friendly: switch to 1 column on small screens */
 @media (max-width: 700px) {
   .section-grid {
-    grid-template-columns: 1fr; /* 1 column on phones/small tablets */
+    grid-template-columns: 1fr;
   }
 }
-
 
 .section-card {
   position: relative;
@@ -111,7 +107,6 @@ body {
 }
 
 /* === Footer === */
-
 .site-footer {
   background-color: #222;
   color: #fff;
@@ -121,321 +116,70 @@ body {
   font-size: 0.9rem;
 }
 
-/* File Grid for History Page */
+/* === File Grid and Cards === */
 .file-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-
-  width: 100%;
-  max-width: 900px;     /* keeps grid from stretching too wide */
-  margin: 0 auto;        /* centers the grid */
-  padding: 10px;         /* keeps it from touching the screen edges */
+  gap: 12px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 10px;
 }
 
-
-/* Individual File Preview */
-.file-item {
-  background-color: #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  word-wrap: break-word;
-  min-height: 100px;
-}
-
-/* Add Files Button */
-.add-file-btn {
-  display: block;
-  margin: 20px auto;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: #000;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.add-file-btn:hover {
-  background-color: #444;
-}
-#addHistoryFile {
-  display: block;
-  margin: 20px auto; /* centers the button */
-  background-color: #000;
-  color: white;
-  font-size: 1.1rem;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-#addHistoryFile:hover {
-  background-color: #333;
-}
-
-/* Responsive adjustments */
-@media (max-width: 900px) {
+@media (max-width: 600px) {
   .file-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: 1fr;
   }
-}
-
-.file-item {
-  background-color: #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  word-wrap: break-word;
-  min-height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none; /* remove underline */
-  color: #222;           /* color for text */
-}
-
-.file-item:hover {
-  background-color: #ccc;
-}
-
-/* Individual File Preview */
-.file-item {
-  background-color: #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  word-wrap: break-word;
-  min-height: 100px;
-}
-
-/* Add Files Button */
-.add-file-btn {
-  display: block;
-  margin: 20px auto;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: #fff;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.add-file-btn:hover {
-  background-color: #444;
-}
-
-.file-item {
-  background-color: #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  word-wrap: break-word;
-  min-height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none; /* remove underline */
-  color: #222;           /* color for text */
-}
-
-.file-item:hover {
-  background-color: #ccc;
-}
-
-/* Individual File Preview */
-.file-item {
-  background-color: #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  word-wrap: break-word;
-  min-height: 100px;
-}
-
-/* Add Files Button */
-.add-file-btn {
-  display: block;
-  margin: 20px auto;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: #fff;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.add-file-btn:hover {
-  background-color: #444;
-}
-
-
-.file-item {
-  background-color: #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  word-wrap: break-word;
-  min-height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none; /* remove underline */
-  color: #222;           /* color for text */
-}
-
-.file-item:hover {
-  background-color: #ccc;
-}
-
-/* Individual File Preview */
-.file-item {
-  background-color: #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  word-wrap: break-word;
-  min-height: 100px;
-}
-
-/* Add Files Button */
-.add-file-btn {
-  display: block;
-  margin: 20px auto;
-  padding: 0.6rem 1.2rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: #fff;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.add-file-btn:hover {
-  background-color: #444;
-}
-
-.file-item {
-  background-color: #ddd;
-  border-radius: 8px;
-  padding: 1rem;
-  text-align: center;
-  word-wrap: break-word;
-  min-height: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none; /* remove underline */
-  color: #222;           /* color for text */
-}
-
-.file-item:hover {
-  background-color: #ccc;
-}
-
-.file-card {
-  position: relative;
-  background-color: #ccc; /* grey container */
-  border-radius: 8px;
-  width: 200px;  /* adjust as needed */
-  height: 200px; /* adjust as needed */
-  margin: 0.5rem;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: flex-end; /* puts overlay at bottom */
-  overflow: hidden;
 }
 
 .file-card {
   background: #f4f4f4;
-  padding: 12px;
   border-radius: 8px;
+  padding: 12px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   display: flex;
-  flex-direction: column;   /* stack thumbnail, filename, description correctly */
-  gap: 8px;                 /* clean spacing between elements */
-  height: auto !important;  /* ensure cards grow with content */
-  overflow: visible;        /* prevent clipping */
-}
-
-
-.file-description {
-  font-size: 0.9rem;
-  color: #555;
-  padding: 0 10px 10px 10px;
-  text-align: center;
-  word-wrap: break-word;
+  flex-direction: column;
+  gap: 8px;
+  height: auto;
+  overflow: visible;
+  cursor: pointer; /* clickable cards */
 }
 
 .file-card img.file-thumbnail {
   width: 100%;
   height: 160px;
   object-fit: cover;
-  background: #e0e0e0;
   display: block;
 }
 
-.file-card p {
-  margin: 6px 10px;
-  word-wrap: break-word;
-}
-
-.file-overlay {
-  background-color: rgba(50, 50, 50, 0.7); /* dark semi-transparent overlay */
-  color: #fff;
-  width: 100%;
-  padding: 0.5rem;
-  box-sizing: border-box;
-}
-
-.file-overlay p {
-  margin: 0;
-  font-size: 0.9rem;
-}
-
-/* Force description box styling */
+.file-card p,
 .file-description {
-  background: #e0e0e0 !important;
-  padding: 6px 10px !important;
-  border-radius: 6px !important;
-  margin-top: 6px !important;
-  font-size: 0.9rem !important;
-  color: #222 !important;
-  line-height: 1.3 !important;
+  margin: 6px 10px;
+  font-size: 0.9rem;
+  color: #222;
+  line-height: 1.3;
+  text-align: center;
+  word-wrap: break-word;
+  background: #e0e0e0;
+  padding: 6px 10px;
+  border-radius: 6px;
 }
 
-.file-thumbnail {
-  width: 80px;
-  height: 80px;
-  object-fit: contain;
-  margin-bottom: 0.5rem;
+/* === Buttons === */
+.add-file-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* ============================================
-   Unified file-grid layout (works for all pages)
-   ============================================ */
-.file-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  width: 100%;
-  max-width: 900px;    /* controls total width */
-  margin: 0 auto;      /* centers the grid */
-  padding: 10px;       /* prevents edge collision */
-}
-
-@media (max-width: 600px) {
-  .file-grid {
-    grid-template-columns: 1fr; /* 1 column on small screens */
-  }
+.add-file-btn:hover {
+  background-color: #444;
+  color: #fff;
 }
