@@ -2,14 +2,14 @@
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
-  background-color: #f8f8f8;
+  background-color: #fde8e8;
   color: #222;
 }
 
 /* Header */
 .site-header {
   background-color: #222;
-  color: #fff;
+  color: #c8102e;
   padding: 1rem 0;
 }
 
