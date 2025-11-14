@@ -124,10 +124,15 @@ body {
 /* File Grid for History Page */
 .file-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 3 columns approx */
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+
+  width: 100%;
+  max-width: 900px;     /* keeps grid from stretching too wide */
+  margin: 0 auto;        /* centers the grid */
+  padding: 10px;         /* keeps it from touching the screen edges */
 }
+
 
 /* Individual File Preview */
 .file-item {
@@ -201,10 +206,15 @@ body {
 /* File Grid for Parts Page */
 .file-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 3 columns approx */
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+
+  width: 100%;
+  max-width: 900px;     /* keeps grid from stretching too wide */
+  margin: 0 auto;        /* centers the grid */
+  padding: 10px;         /* keeps it from touching the screen edges */
 }
+
 
 /* Individual File Preview */
 .file-item {
@@ -262,10 +272,15 @@ body {
 /* File Grid for CAD Assemblies and Simulations Page */
 .file-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 3 columns approx */
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+
+  width: 100%;
+  max-width: 900px;     /* keeps grid from stretching too wide */
+  margin: 0 auto;        /* centers the grid */
+  padding: 10px;         /* keeps it from touching the screen edges */
 }
+
 
 /* Individual File Preview */
 .file-item {
@@ -323,10 +338,15 @@ body {
 /* File Grid for Manuals Page */
 .file-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 3 columns approx */
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+
+  width: 100%;
+  max-width: 900px;     /* keeps grid from stretching too wide */
+  margin: 0 auto;        /* centers the grid */
+  padding: 10px;         /* keeps it from touching the screen edges */
 }
+
 
 /* Individual File Preview */
 .file-item {
