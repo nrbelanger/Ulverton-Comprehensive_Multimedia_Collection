@@ -394,19 +394,19 @@ body {
   align-items: flex-end; /* puts overlay at bottom */
   overflow: hidden;
 }
+
 .file-card {
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  width: 260px;
+  background: #f4f4f4;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  text-align: center;
-  padding-bottom: 10px;
+  flex-direction: column;   /* stack thumbnail, filename, description correctly */
+  gap: 8px;                 /* clean spacing between elements */
+  height: auto !important;  /* ensure cards grow with content */
+  overflow: visible;        /* prevent clipping */
 }
+
 
 .file-description {
   font-size: 0.9rem;
