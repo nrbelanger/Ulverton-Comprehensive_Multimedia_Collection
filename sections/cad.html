@@ -30,10 +30,12 @@
       </div>
 
       <!-- Add Files Button -->
-      <button id="addCadSimFile" class="add-file-btn">Add File</button>
-      <input type="file" id="cadSimFileInput" style="display:none;" multiple>
-    </div>
-  </main>
+      <button class="add-file-btn" data-input="#cadSimFileInput" data-grid="#cadSimGrid">
+        Add CadSim File
+      </button>
+      <input type="file" id="cadSimFileInput" multiple style="display:none">
+      <div id="cadSimGrid" class="file-grid"></div>
+
 
   <footer class="site-footer">
     <div class="container">
