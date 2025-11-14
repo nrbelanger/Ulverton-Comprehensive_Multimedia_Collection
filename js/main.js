@@ -1,48 +1,52 @@
 document.addEventListener("DOMContentLoaded", () => {
+
   const addBtn = document.getElementById("addHistoryFile");
   const fileInput = document.getElementById("historyFileInput");
   const grid = document.getElementById("historyGrid");
 
-  if (!addBtn || !fileInput || !grid) return; // Prevents errors on other pages
+  if (!addBtn || !fileInput || !grid) return;
 
-  // Clicking the Add File button triggers the hidden file input
   addBtn.addEventListener("click", () => {
     fileInput.click();
   });
 
   fileInput.addEventListener("change", (event) => {
     const files = event.target.files;
+
     for (const file of files) {
+
       const card = document.createElement("div");
       card.className = "file-card";
 
-      // Create thumbnail
+      // Thumbnail
       const thumbnail = document.createElement("img");
       thumbnail.src = getThumbnailForFile(file.name);
       thumbnail.alt = "File thumbnail";
       thumbnail.className = "file-thumbnail";
       card.appendChild(thumbnail);
 
-      // Add filename
+      // Filename
       const fileName = document.createElement("p");
       fileName.textContent = file.name;
       card.appendChild(fileName);
 
-     // Ask for description
-    const description = prompt("Enter a description (max 1000 characters):", "");
+      // Description
+      const description = prompt("Enter a description (max 1000 characters):", "");
+      if (description) {
+        const descEl = document.createElement("p");
+        descEl.className = "file-description";
+        descEl.textContent = description.substring(0, 1000);
+        card.appendChild(descEl);
+      }
 
-    if (description) {
-      const descEl = document.createElement("p");
-      descEl.className = "file-description";
-      descEl.textContent = description.substring(0, 1000);
-      card.appendChild(descEl);
-}
+      grid.appendChild(card);
+    }
 
-
-    // Reset input so same file can be uploaded again if needed
     fileInput.value = "";
   });
+
 });
+
 
 
 // Parts Add Files with description
