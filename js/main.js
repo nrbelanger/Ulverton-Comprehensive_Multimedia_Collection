@@ -28,16 +28,16 @@ document.addEventListener("DOMContentLoaded", () => {
       fileName.textContent = file.name;
       card.appendChild(fileName);
 
-      // Ask for description
-      const description = prompt("Enter a description (max 1000 characters):", "");
-      if (description) {
-        const descEl = document.createElement("p");
-        descEl.textContent = description.substring(0, 1000);
-        card.appendChild(descEl);
-      }
+     // Ask for description
+    const description = prompt("Enter a description (max 1000 characters):", "");
 
-      grid.appendChild(card);
-    }
+    if (description) {
+      const descEl = document.createElement("p");
+      descEl.className = "file-description";
+      descEl.textContent = description.substring(0, 1000);
+      card.appendChild(descEl);
+}
+
 
     // Reset input so same file can be uploaded again if needed
     fileInput.value = "";
