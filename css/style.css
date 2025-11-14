@@ -445,13 +445,14 @@ body {
 }
 
 .file-description {
-  margin: 0;
+  background: #e0e0e0;        /* soft grey highlight */
+  padding: 6px 10px;          /* breathing room */
+  border-radius: 6px;         /* rounded corners for a card look */
+  margin-top: 6px;            /* spacing above */
   font-size: 0.9rem;
-  color: #333;
+  color: #222;
   line-height: 1.3;
 }
-
-
 
 .file-grid {
   display: grid;
