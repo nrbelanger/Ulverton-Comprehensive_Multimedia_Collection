@@ -149,11 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-    // Reset file input so same file can be added again
-    fileInput.value = "";
-  });
-});
-
 // Manuals Section
 document.addEventListener("DOMContentLoaded", () => {
 
