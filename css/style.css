@@ -203,19 +203,6 @@ body {
   background-color: #ccc;
 }
 
-/* File Grid for Parts Page */
-.file-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-
-  width: 100%;
-  max-width: 900px;     /* keeps grid from stretching too wide */
-  margin: 0 auto;        /* centers the grid */
-  padding: 10px;         /* keeps it from touching the screen edges */
-}
-
-
 /* Individual File Preview */
 .file-item {
   background-color: #ddd;
@@ -242,13 +229,6 @@ body {
 
 .add-file-btn:hover {
   background-color: #444;
-}
-
-/* Responsive adjustments */
-@media (max-width: 900px) {
-  .file-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  }
 }
 
 .file-item {
@@ -269,19 +249,6 @@ body {
   background-color: #ccc;
 }
 
-/* File Grid for CAD Assemblies and Simulations Page */
-.file-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-
-  width: 100%;
-  max-width: 900px;     /* keeps grid from stretching too wide */
-  margin: 0 auto;        /* centers the grid */
-  padding: 10px;         /* keeps it from touching the screen edges */
-}
-
-
 /* Individual File Preview */
 .file-item {
   background-color: #ddd;
@@ -310,12 +277,6 @@ body {
   background-color: #444;
 }
 
-/* Responsive adjustments */
-@media (max-width: 900px) {
-  .file-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  }
-}
 
 .file-item {
   background-color: #ddd;
@@ -335,19 +296,6 @@ body {
   background-color: #ccc;
 }
 
-/* File Grid for Manuals Page */
-.file-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-
-  width: 100%;
-  max-width: 900px;     /* keeps grid from stretching too wide */
-  margin: 0 auto;        /* centers the grid */
-  padding: 10px;         /* keeps it from touching the screen edges */
-}
-
-
 /* Individual File Preview */
 .file-item {
   background-color: #ddd;
@@ -376,12 +324,6 @@ body {
   background-color: #444;
 }
 
-/* Responsive adjustments */
-@media (max-width: 900px) {
-  .file-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  }
-}
 
 .file-item {
   background-color: #ddd;
@@ -473,30 +415,29 @@ body {
   line-height: 1.3 !important;
 }
 
-
-.file-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);  /* ALWAYS 2 columns */
-  gap: 20px;                               /* space between cards */
-  width: 100%;
-}
-@media (max-width: 600px) {
-  .file-grid {
-    grid-template-columns: 1fr;  /* 1 column on small screens */
-  }
-}
-
-
-/* Mobile-friendly: switch to 1 column on small screens */
-@media (max-width: 700px) {
-  .section-grid {
-    grid-template-columns: 1fr; /* 1 column on phones/small tablets */
-  }
-}
-
 .file-thumbnail {
   width: 80px;
   height: 80px;
   object-fit: contain;
   margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   Unified file-grid layout (works for all pages)
+   ============================================ */
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+
+  width: 100%;
+  max-width: 900px;    /* controls total width */
+  margin: 0 auto;      /* centers the grid */
+  padding: 10px;       /* prevents edge collision */
+}
+
+@media (max-width: 600px) {
+  .file-grid {
+    grid-template-columns: 1fr; /* 1 column on small screens */
+  }
 }
