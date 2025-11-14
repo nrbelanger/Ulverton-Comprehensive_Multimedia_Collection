@@ -186,15 +186,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
   // Helper function to pick thumbnail based on file type
-  function getThumbnailForFile(filename) {
+ function getThumbnailForFile(filename) {
   const ext = filename.split('.').pop().toLowerCase();
+
   if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
-    return "images/png-icon.webp"; // or whatever your actual path is
+    return "../images/png-icon.webp";
   } else if (["pdf"].includes(ext)) {
-    return "images/pdf-icon.webp";
+    return "../images/pdf-icon.webp";
   } else if (["zip", "rar"].includes(ext)) {
-    return "images/archive-icon.webp";
+    return "../images/archive-icon.webp";
   } else {
-    return "images/file-icon.webp";
+    return "../images/file-icon.webp";
   }
 }
+
