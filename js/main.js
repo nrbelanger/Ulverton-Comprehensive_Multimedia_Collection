@@ -11,11 +11,11 @@ function addCardToGrid(grid, file) {
   card.appendChild(thumbnail);
 
   // Filename
-  const fileName = document.createElement("p");
-  fileName.textContent = file.fileName;
-  card.appendChild(fileName);
+  const fileNameEl = document.createElement("p");
+  fileNameEl.textContent = file.fileName;
+  card.appendChild(fileNameEl);
 
-  // Description
+  // Description (if exists)
   if (file.description) {
     const descEl = document.createElement("p");
     descEl.className = "file-description";
