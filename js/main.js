@@ -31,15 +31,6 @@ function addCardToGrid(grid, file) {
   grid.appendChild(card);
 }
 
-
-  // Click opens the document
-  card.addEventListener("click", () => {
-    window.open(file.path, "_blank");
-  });
-
-  grid.appendChild(card);
-}
-
 document.addEventListener("DOMContentLoaded", () => {
 
   // Select all "Add File" buttons
