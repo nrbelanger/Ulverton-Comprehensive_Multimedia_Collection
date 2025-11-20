@@ -5,23 +5,32 @@ function addCardToGrid(grid, file) {
 
   // Thumbnail
   const thumbnail = document.createElement("img");
-  thumbnail.src = getThumbnailForFile(file.name);
+  thumbnail.src = file.thumbnail || getThumbnailForFile(file.fileName);
   thumbnail.alt = "File thumbnail";
   thumbnail.className = "file-thumbnail";
   card.appendChild(thumbnail);
 
   // Filename
   const fileName = document.createElement("p");
-  fileName.textContent = file.name;
+  fileName.textContent = file.fileName;
   card.appendChild(fileName);
 
-  // Description (if exists)
+  // Description
   if (file.description) {
     const descEl = document.createElement("p");
     descEl.className = "file-description";
     descEl.textContent = file.description;
     card.appendChild(descEl);
   }
+
+  // Click opens the static file
+  card.addEventListener("click", () => {
+    window.open(file.fileURL, "_blank");
+  });
+
+  grid.appendChild(card);
+}
+
 
   // Click opens the document
   card.addEventListener("click", () => {
