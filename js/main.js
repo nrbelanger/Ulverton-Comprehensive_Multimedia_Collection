@@ -35,6 +35,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Select all "Add File" buttons
   const addFileButtons = document.querySelectorAll(".add-file-btn");
+  
+  // === Load default content for History page ===
+  if (window.defaultHistoryFiles && Array.isArray(window.defaultHistoryFiles)) {
+
+    const historyGrid = document.querySelector("#historyGrid");
+
+    if (historyGrid) {
+      window.defaultHistoryFiles.forEach(item => addCardToGrid(historyGrid, item));
+    }
+  }
 
   addFileButtons.forEach(button => {
     // Each button should have data attributes pointing to its input and grid
