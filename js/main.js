@@ -1,3 +1,36 @@
+function addCardToGrid(grid, file) {
+  const card = document.createElement("div");
+  card.className = "file-card";
+  card.style.cursor = "pointer";
+
+  // Thumbnail
+  const thumbnail = document.createElement("img");
+  thumbnail.src = getThumbnailForFile(file.name);
+  thumbnail.alt = "File thumbnail";
+  thumbnail.className = "file-thumbnail";
+  card.appendChild(thumbnail);
+
+  // Filename
+  const fileName = document.createElement("p");
+  fileName.textContent = file.name;
+  card.appendChild(fileName);
+
+  // Description (if exists)
+  if (file.description) {
+    const descEl = document.createElement("p");
+    descEl.className = "file-description";
+    descEl.textContent = file.description;
+    card.appendChild(descEl);
+  }
+
+  // Click opens the document
+  card.addEventListener("click", () => {
+    window.open(file.path, "_blank");
+  });
+
+  grid.appendChild(card);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 
   // Select all "Add File" buttons
