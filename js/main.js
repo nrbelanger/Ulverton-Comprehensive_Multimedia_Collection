@@ -46,6 +46,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+    // === Load default content for Manuals page ===
+  if (window.defaultManualFiles && Array.isArray(window.defaultManualFiles)) {
+
+    const manualGrid = document.querySelector("#manualGrid");
+
+    if (manualGrid) {
+      window.defaultManualFiles.forEach(item => addCardToGrid(manualGrid, item));
+    }
+  }
   addFileButtons.forEach(button => {
     // Each button should have data attributes pointing to its input and grid
     const fileInput = document.querySelector(button.dataset.input);
