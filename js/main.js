@@ -70,8 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const files = event.target.files;
 
       for (const file of files) {
-        const card = document.createElement("div");
+        const card = document.createElement("a");
         card.className = "file-card";
+        card.href = URL.createObjectURL(file);
+        card.target = "_blank";
         card.style.cursor = "pointer";
 
         // Thumbnail
