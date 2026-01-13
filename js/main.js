@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
         card.className = "file-card";
         card.href = URL.createObjectURL(file);
         card.target = "_blank";
-        card.style.cursor = "pointer";
+        card.rel = "noopener";
 
         // Thumbnail
         const thumbnail = document.createElement("img");
@@ -87,6 +87,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const fileName = document.createElement("p");
         fileName.textContent = file.name;
         card.appendChild(fileName);
+
+        grid.appendChild(card);
+
 
         // Description
         const description = prompt("Enter a description (max 1000 characters):", "");
