@@ -2,7 +2,6 @@
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
-  background-color: #fde8e8;
   color: #222;
   background-image: url("../images/close-up-white-fabric-and-texture-background.jpg");
   background-repeat: repeat;
@@ -36,7 +35,7 @@ body {
 }
 
 .nav a {
-  color: #fff;
+  color: #000;
   text-decoration: none;
   font-weight: 500;
   padding: 0.3rem 0.6rem;
