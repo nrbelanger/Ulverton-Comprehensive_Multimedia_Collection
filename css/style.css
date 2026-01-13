@@ -143,6 +143,8 @@ body {
   height: auto;
   overflow: visible;
   cursor: pointer; /* clickable cards */
+  text-decoration: none;
+  color: inherit;
 }
 
 .file-card img.file-thumbnail {
