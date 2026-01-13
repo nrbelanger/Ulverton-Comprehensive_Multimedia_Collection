@@ -1,7 +1,9 @@
 function addCardToGrid(grid, file) {
-  const card = document.createElement("div");
+  const card = document.createElement("a");
   card.className = "file-card";
-  card.style.cursor = "pointer";
+  card.href = file.fileURL;
+  card.target = "_blank";
+  card.rel = "noopener";
 
   // Thumbnail
   const thumbnail = document.createElement("img");
@@ -22,11 +24,6 @@ function addCardToGrid(grid, file) {
     descEl.textContent = file.description;
     card.appendChild(descEl);
   }
-
-  // Click opens the static file
-  card.addEventListener("click", () => {
-    window.open(file.fileURL, "_blank");
-  });
 
   grid.appendChild(card);
 }
@@ -70,49 +67,32 @@ document.addEventListener("DOMContentLoaded", () => {
       const files = event.target.files;
 
       for (const file of files) {
-        const card = document.createElement("a");
-        card.className = "file-card";
-        card.href = URL.createObjectURL(file);
-        card.target = "_blank";
-        card.rel = "noopener";
+const card = document.createElement("a");
+card.className = "file-card";
+card.href = URL.createObjectURL(file);
+card.target = "_blank";
+card.rel = "noopener";
 
-        // Thumbnail
-        const thumbnail = document.createElement("img");
-        thumbnail.src = getThumbnailForFile(file.name);
-        thumbnail.alt = "File thumbnail";
-        thumbnail.className = "file-thumbnail";
-        card.appendChild(thumbnail);
+// Thumbnail
+const thumbnail = document.createElement("img");
+thumbnail.src = getThumbnailForFile(file.name);
+thumbnail.alt = "File thumbnail";
+thumbnail.className = "file-thumbnail";
+card.appendChild(thumbnail);
 
-        // Filename
-        const fileName = document.createElement("p");
-        fileName.textContent = file.name;
-        card.appendChild(fileName);
+// Filename
+const fileName = document.createElement("p");
+fileName.textContent = file.name;
+card.appendChild(fileName);
 
-        grid.appendChild(card);
-
-
-        // Description
-        const description = prompt("Enter a description (max 1000 characters):", "");
-        let descEl;
-        if (description) {
-          descEl = document.createElement("p");
-          descEl.className = "file-description";
-          descEl.textContent = description.substring(0, 1000);
-          card.appendChild(descEl);
-        }
-
-        // Temporary URL for file
-        const fileURL = URL.createObjectURL(file);
-
-        // Make card clickable
-        const openFile = (e) => {
-          e.stopPropagation();
-          window.open(fileURL, "_blank");
-        };
-
-        [card, thumbnail, fileName].forEach(el => el.addEventListener("click", openFile));
-        if (descEl) descEl.addEventListener("click", openFile);
-
+// Description
+const description = prompt("Enter a description (max 1000 characters):", "");
+if (description) {
+  const descEl = document.createElement("p");
+  descEl.className = "file-description";
+  descEl.textContent = description.substring(0, 1000);
+  card.appendChild(descEl);
+}
         grid.appendChild(card);
       }
 
