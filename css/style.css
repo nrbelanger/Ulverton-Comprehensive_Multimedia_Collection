@@ -148,6 +148,7 @@ body {
   cursor: pointer; /* clickable cards */
   text-decoration: none;
   color: inherit;
+  position: relative;
 }
 
 .file-card img.file-thumbnail {
@@ -175,6 +176,25 @@ body {
 .file-card * {
   user-select: none;
   -webkit-user-drag: none;
+}
+
+.file-card::before {
+  content: "";
+  position: absolute;
+
+  width: 26px;
+  height: 26px;
+
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background-image: url("../images/thumbtack.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  pointer-events: none;
+  z-index: 5;
 }
 
 /* === Buttons === */
