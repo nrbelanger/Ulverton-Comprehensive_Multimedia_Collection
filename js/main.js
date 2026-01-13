@@ -4,6 +4,11 @@ function addCardToGrid(grid, file) {
   card.href = file.fileURL;
   card.target = "_blank";
   card.rel = "noopener";
+card.addEventListener("dragstart", (e) => {
+  e.dataTransfer.setData("text/uri-list", card.href);
+  e.dataTransfer.setData("text/plain", card.href);
+});
+
 
   // Thumbnail
   const thumbnail = document.createElement("img");
@@ -67,23 +72,28 @@ document.addEventListener("DOMContentLoaded", () => {
       const files = event.target.files;
 
       for (const file of files) {
-const card = document.createElement("a");
-card.className = "file-card";
-card.href = URL.createObjectURL(file);
-card.target = "_blank";
-card.rel = "noopener";
+        const card = document.createElement("a");
+        card.className = "file-card";
+        card.href = URL.createObjectURL(file);
+        card.target = "_blank";
+        card.rel = "noopener";
+      card.addEventListener("dragstart", (e) => {
+        e.dataTransfer.setData("text/uri-list", card.href);
+        e.dataTransfer.setData("text/plain", card.href);
+});
+
 
 // Thumbnail
-const thumbnail = document.createElement("img");
-thumbnail.src = getThumbnailForFile(file.name);
-thumbnail.alt = "File thumbnail";
-thumbnail.className = "file-thumbnail";
-card.appendChild(thumbnail);
+        const thumbnail = document.createElement("img");
+        thumbnail.src = getThumbnailForFile(file.name);
+        thumbnail.alt = "File thumbnail";
+        thumbnail.className = "file-thumbnail";
+        card.appendChild(thumbnail);
 
 // Filename
-const fileName = document.createElement("p");
-fileName.textContent = file.name;
-card.appendChild(fileName);
+        const fileName = document.createElement("p");
+        fileName.textContent = file.name;
+        card.appendChild(fileName);
 
 // Description
 const description = prompt("Enter a description (max 1000 characters):", "");
