@@ -150,6 +150,8 @@ body {
   height: 160px;
   object-fit: cover;
   display: block;
+  pointer-events:none;
+  user-select: none;
 }
 
 .file-card p,
