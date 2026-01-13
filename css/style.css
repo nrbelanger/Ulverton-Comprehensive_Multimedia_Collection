@@ -169,6 +169,11 @@ body {
   border-radius: 6px;
 }
 
+.file-card * {
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
 /* === Buttons === */
 .add-file-btn {
   display: block;
