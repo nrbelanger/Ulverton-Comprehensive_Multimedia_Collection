@@ -4,6 +4,8 @@ body {
   font-family: system-ui, sans-serif;
   background-color: #fde8e8;
   color: #222;
+  background-image: url("../images/Wool Background");
+  background-repeat: repeat;
 }
 
 /* Header */
