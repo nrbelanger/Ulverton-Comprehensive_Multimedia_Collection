@@ -126,3 +126,38 @@ function getThumbnailForFile(filename) {
     return "../images/file-icon.webp";
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const viewer = document.getElementById("fileViewer");
+  const frame = document.getElementById("fileViewerFrame");
+  const closeBtn = document.getElementById("fileViewerClose");
+
+  if (!viewer || !frame || !closeBtn) return;
+
+  // Close viewer
+  closeBtn.addEventListener("click", () => {
+    viewer.classList.remove("active");
+    frame.src = "";
+    document.body.style.overflow = "";
+  });
+
+  // Click outside content closes viewer
+  viewer.addEventListener("click", (e) => {
+    if (e.target === viewer) closeBtn.click();
+  });
+
+  // Intercept PDF card clicks
+  document.addEventListener("click", (e) => {
+    const card = e.target.closest(".file-card");
+    if (!card || !card.href) return;
+
+    const isPDF = card.href.toLowerCase().endsWith(".pdf");
+    if (!isPDF) return;
+
+    e.preventDefault(); // stop normal navigation
+
+    frame.src = card.href;
+    viewer.classList.add("active");
+    document.body.style.overflow = "hidden";
+  });
+});
