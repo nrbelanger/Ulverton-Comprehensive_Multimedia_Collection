@@ -87,41 +87,16 @@ document.addEventListener("DOMContentLoaded", () => {
     fileInput.addEventListener("change", event => {
       const files = event.target.files;
 
-      for (const file of files) {
-        const card = document.createElement("a");
-        card.className = "file-card";
-        card.href = URL.createObjectURL(file);
-        card.target = "_blank";
-        card.rel = "noopener";
-      card.addEventListener("dragstart", (e) => {
-        e.dataTransfer.setData("text/uri-list", card.href);
-        e.dataTransfer.setData("text/plain", card.href);
-});
+for (const file of files) {
+  const fileObj = {
+    fileName: file.name,
+    fileURL: URL.createObjectURL(file),
+    description: prompt("Enter a description (max 1000 characters):", ""),
+    thumbnail: getThumbnailForFile(file.name)
+  };
 
-
-// Thumbnail
-        const thumbnail = document.createElement("img");
-        thumbnail.src = getThumbnailForFile(file.name);
-        thumbnail.alt = "File thumbnail";
-        thumbnail.className = "file-thumbnail";
-        card.appendChild(thumbnail);
-
-// Filename
-        const fileName = document.createElement("p");
-        fileName.textContent = file.name;
-        card.appendChild(fileName);
-
-// Description
-const description = prompt("Enter a description (max 1000 characters):", "");
-if (description) {
-  const descEl = document.createElement("p");
-  descEl.className = "file-description";
-  descEl.textContent = description.substring(0, 1000);
-  card.appendChild(descEl);
+  addCardToGrid(grid, fileObj);
 }
-        grid.appendChild(card);
-      }
-
       fileInput.value = ""; // reset input
     });
   });
