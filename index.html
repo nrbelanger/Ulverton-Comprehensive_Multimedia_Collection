@@ -67,17 +67,20 @@
     </div>
   </footer>
 <!-- === Fullscreen File Viewer Overlay === -->
-<div id="file-viewer" class="file-viewer hidden" aria-hidden="true">
+<div id="fileViewer" class="file-viewer">
 
-  <div class="file-viewer-toolbar">
-    <button id="file-viewer-close" aria-label="Close viewer">✕</button>
-  </div>
+  <div class="file-viewer-content">
+    <button id="fileViewerClose" aria-label="Close viewer">✕</button>
 
-  <div id="file-viewer-content">
-    <!-- Viewer content (iframe, img, canvas, video) goes here -->
+    <iframe
+      id="fileViewerFrame"
+      src=""
+      frameborder="0"
+    ></iframe>
   </div>
 
 </div>
+
 
   <script src="js/main.js" defer></script>
 </body>
