@@ -12,19 +12,19 @@ function addCardToGrid(grid, file) {
   });
 
   // CLICK HANDLING
-  card.addEventListener("click", (e) => {
-    if (card.href.toLowerCase().endsWith(".pdf")) {
-      e.preventDefault(); // stop new tab
+card.addEventListener("click", (e) => {
+  if (file.fileName.toLowerCase().endsWith(".pdf")) {
+    e.preventDefault();
 
-      const viewer = document.getElementById("fileViewer");
-      const frame = document.getElementById("fileViewerFrame");
+    const viewer = document.getElementById("fileViewer");
+    const frame = document.getElementById("fileViewerFrame");
 
-      frame.src = card.href;
-      viewer.classList.add("active");
-      document.body.style.overflow = "hidden";
-    }
-    // non-PDFs fall through and open normally
-  });
+    frame.src = card.href;
+    viewer.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+});
+
 
   // Thumbnail
   const thumbnail = document.createElement("img");
