@@ -4,11 +4,27 @@ function addCardToGrid(grid, file) {
   card.href = file.fileURL;
   card.target = "_blank";
   card.rel = "noopener";
-card.addEventListener("dragstart", (e) => {
-  e.dataTransfer.setData("text/uri-list", card.href);
-  e.dataTransfer.setData("text/plain", card.href);
-});
 
+  // Enable proper drag-to-tab
+  card.addEventListener("dragstart", (e) => {
+    e.dataTransfer.setData("text/uri-list", card.href);
+    e.dataTransfer.setData("text/plain", card.href);
+  });
+
+  // CLICK HANDLING
+  card.addEventListener("click", (e) => {
+    if (card.href.toLowerCase().endsWith(".pdf")) {
+      e.preventDefault(); // stop new tab
+
+      const viewer = document.getElementById("fileViewer");
+      const frame = document.getElementById("fileViewerFrame");
+
+      frame.src = card.href;
+      viewer.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    // non-PDFs fall through and open normally
+  });
 
   // Thumbnail
   const thumbnail = document.createElement("img");
@@ -146,18 +162,4 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === viewer) closeBtn.click();
   });
 
-  // Intercept PDF card clicks
-  document.addEventListener("click", (e) => {
-    const card = e.target.closest(".file-card");
-    if (!card || !card.href) return;
-
-    const isPDF = card.href.toLowerCase().endsWith(".pdf");
-    if (!isPDF) return;
-
-    e.preventDefault(); // stop normal navigation
-
-    frame.src = card.href;
-    viewer.classList.add("active");
-    document.body.style.overflow = "hidden";
-  });
 });
