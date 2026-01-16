@@ -13,9 +13,18 @@ function addCardToGrid(grid, file) {
 
   // CLICK HANDLING
 card.addEventListener("click", (e) => {
-  if (file.fileName.toLowerCase().endsWith(".pdf")) {
-    e.preventDefault();
+  const lower = file.fileName.toLowerCase();
 
+  if (lower.endsWith(".pdf")) {
+    e.preventDefault();
+    openPDFViewer(card.href);
+  }
+
+  if (lower.endsWith(".stl")) {
+    e.preventDefault();
+    openSTLViewer(card.href);
+  }
+});
     const viewer = document.getElementById("fileViewer");
     const frame = document.getElementById("fileViewerFrame");
 
@@ -136,5 +145,66 @@ document.addEventListener("DOMContentLoaded", () => {
   viewer.addEventListener("click", (e) => {
     if (e.target === viewer) closeBtn.click();
   });
+function openSTLViewer(url) {
+  const viewer = document.getElementById("fileViewer");
+  const content = document.getElementById("fileViewerContent");
+
+  content.innerHTML = ""; // clear previous viewer
+  viewer.classList.add("active");
+  document.body.style.overflow = "hidden";
+
+  // === Three.js setup ===
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x111111);
+
+  const camera = new THREE.PerspectiveCamera(
+    60,
+    content.clientWidth / content.clientHeight,
+    0.1,
+    1000
+  );
+  camera.position.set(0, 0, 100);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(content.clientWidth, content.clientHeight);
+  content.appendChild(renderer.domElement);
+  window.addEventListener("resize", () => {
+  camera.aspect = content.clientWidth / content.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(content.clientWidth, content.clientHeight);
+  });
+
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  dirLight.position.set(1, 1, 1);
+  scene.add(dirLight);
+
+  // Controls
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+
+  // Load STL
+  const loader = new THREE.STLLoader();
+  loader.load(url, (geometry) => {
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xaaaaaa,
+      metalness: 0.1,
+      roughness: 0.6
+    });
+
+    const mesh = new THREE.Mesh(geometry, material);
+    geometry.center();
+    scene.add(mesh);
+  });
+
+  // Render loop
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+}
 
 });
