@@ -53,17 +53,21 @@ function addCardToGrid(grid, file) {
 }
 
 function openPDFViewer(url) {
-  const viewer = document.getElementById("fileViewer");
-  const frame = document.getElementById("fileViewerFrame");
+  const viewer = document.getElementById("file-viewer");
+  const content = document.getElementById("file-viewer-content");
 
-  frame.src = url;
+  if (!viewer || !content) return;
+
+  content.innerHTML = `<iframe src="${url}"></iframe>`;
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
 }
 
 function openSTLViewer(url) {
-  const viewer = document.getElementById("fileViewer");
-  const content = document.getElementById("fileViewerContent");
+  const viewer = document.getElementById("file-viewer");
+  const content = document.getElementById("file-viewer-content");
+
+  if (!viewer || !content || !window.THREE) return;
 
   content.innerHTML = "";
   viewer.classList.add("active");
@@ -186,22 +190,19 @@ function getThumbnailForFile(filename) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const viewer = document.getElementById("fileViewer");
-  const frame = document.getElementById("fileViewerFrame");
-  const closeBtn = document.getElementById("fileViewerClose");
+  const viewer = document.getElementById("file-viewer");
+  const closeBtn = document.getElementById("file-viewer-close");
 
-  if (!viewer || !frame || !closeBtn) return;
+  if (!viewer || !closeBtn) return;
 
-  // Close viewer
   closeBtn.addEventListener("click", () => {
     viewer.classList.remove("active");
-    frame.src = "";
     document.body.style.overflow = "";
+    document.getElementById("file-viewer-content").innerHTML = "";
   });
 
-  // Click outside content closes viewer
   viewer.addEventListener("click", (e) => {
     if (e.target === viewer) closeBtn.click();
   });
-
 });
+
