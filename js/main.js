@@ -5,41 +5,35 @@ function addCardToGrid(grid, file) {
   card.target = "_blank";
   card.rel = "noopener";
 
-  // Enable proper drag-to-tab
+  // Enable drag-to-new-tab
   card.addEventListener("dragstart", (e) => {
     e.dataTransfer.setData("text/uri-list", card.href);
     e.dataTransfer.setData("text/plain", card.href);
   });
 
-  // CLICK HANDLING
-card.addEventListener("click", (e) => {
-  const lower = file.fileName.toLowerCase();
+  // Click handling
+  card.addEventListener("click", (e) => {
+    const lower = file.fileName.toLowerCase();
 
-  if (lower.endsWith(".pdf")) {
-    e.preventDefault();
-    openPDFViewer(card.href);
-  }
+    if (lower.endsWith(".pdf")) {
+      e.preventDefault();
+      openPDFViewer(card.href);
+      return;
+    }
 
-  if (lower.endsWith(".stl")) {
-    e.preventDefault();
-    openSTLViewer(card.href);
-  }
-});
-    const viewer = document.getElementById("fileViewer");
-    const frame = document.getElementById("fileViewerFrame");
-
-    frame.src = card.href;
-    viewer.classList.add("active");
-    document.body.style.overflow = "hidden";
-  }
-});
-
+    if (lower.endsWith(".stl")) {
+      e.preventDefault();
+      openSTLViewer(card.href);
+      return;
+    }
+    // all other files fall through and open normally
+  });
 
   // Thumbnail
   const thumbnail = document.createElement("img");
   thumbnail.src = file.thumbnail || getThumbnailForFile(file.fileName);
-  thumbnail.alt = "File thumbnail";
   thumbnail.className = "file-thumbnail";
+  thumbnail.alt = "File thumbnail";
   card.appendChild(thumbnail);
 
   // Filename
@@ -47,7 +41,7 @@ card.addEventListener("click", (e) => {
   fileNameEl.textContent = file.fileName;
   card.appendChild(fileNameEl);
 
-  // Description (if exists)
+  // Description
   if (file.description) {
     const descEl = document.createElement("p");
     descEl.className = "file-description";
@@ -56,6 +50,70 @@ card.addEventListener("click", (e) => {
   }
 
   grid.appendChild(card);
+}
+
+function openPDFViewer(url) {
+  const viewer = document.getElementById("fileViewer");
+  const frame = document.getElementById("fileViewerFrame");
+
+  frame.src = url;
+  viewer.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function openSTLViewer(url) {
+  const viewer = document.getElementById("fileViewer");
+  const content = document.getElementById("fileViewerContent");
+
+  content.innerHTML = "";
+  viewer.classList.add("active");
+  document.body.style.overflow = "hidden";
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x111111);
+
+  const camera = new THREE.PerspectiveCamera(
+    60,
+    content.clientWidth / content.clientHeight,
+    0.1,
+    1000
+  );
+  camera.position.set(0, 0, 100);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(content.clientWidth, content.clientHeight);
+  content.appendChild(renderer.domElement);
+
+  window.addEventListener("resize", () => {
+    camera.aspect = content.clientWidth / content.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(content.clientWidth, content.clientHeight);
+  });
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+  const light = new THREE.DirectionalLight(0xffffff, 0.8);
+  light.position.set(1, 1, 1);
+  scene.add(light);
+
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+
+  const loader = new THREE.STLLoader();
+  loader.load(url, (geometry) => {
+    geometry.center();
+    const mesh = new THREE.Mesh(
+      geometry,
+      new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
+    );
+    scene.add(mesh);
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -145,66 +203,5 @@ document.addEventListener("DOMContentLoaded", () => {
   viewer.addEventListener("click", (e) => {
     if (e.target === viewer) closeBtn.click();
   });
-function openSTLViewer(url) {
-  const viewer = document.getElementById("fileViewer");
-  const content = document.getElementById("fileViewerContent");
-
-  content.innerHTML = ""; // clear previous viewer
-  viewer.classList.add("active");
-  document.body.style.overflow = "hidden";
-
-  // === Three.js setup ===
-  const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x111111);
-
-  const camera = new THREE.PerspectiveCamera(
-    60,
-    content.clientWidth / content.clientHeight,
-    0.1,
-    1000
-  );
-  camera.position.set(0, 0, 100);
-
-  const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(content.clientWidth, content.clientHeight);
-  content.appendChild(renderer.domElement);
-  window.addEventListener("resize", () => {
-  camera.aspect = content.clientWidth / content.clientHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(content.clientWidth, content.clientHeight);
-  });
-
-  // Lights
-  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-  const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  dirLight.position.set(1, 1, 1);
-  scene.add(dirLight);
-
-  // Controls
-  const controls = new THREE.OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-
-  // Load STL
-  const loader = new THREE.STLLoader();
-  loader.load(url, (geometry) => {
-    const material = new THREE.MeshStandardMaterial({
-      color: 0xaaaaaa,
-      metalness: 0.1,
-      roughness: 0.6
-    });
-
-    const mesh = new THREE.Mesh(geometry, material);
-    geometry.center();
-    scene.add(mesh);
-  });
-
-  // Render loop
-  function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-  }
-  animate();
-}
 
 });
