@@ -103,22 +103,31 @@ function openSTLViewer(url) {
   controls.enableDamping = true;
 
   const loader = new THREE.STLLoader();
-  loader.load(url, (geometry) => {
-    geometry.center();
-    const mesh = new THREE.Mesh(
-      geometry,
-      new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
-    );
-    scene.add(mesh);
+loader.load(url, (geometry) => {
+  console.log("STL loaded");
+
+  geometry.computeBoundingBox();
+  geometry.center();
+
+  const material = new THREE.MeshStandardMaterial({
+    color: 0xaaaaaa,
+    metalness: 0.2,
+    roughness: 0.6
   });
 
-  function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-  }
-  animate();
-}
+  const mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
+
+  // Force camera placement
+  const box = geometry.boundingBox;
+  const size = new THREE.Vector3();
+  box.getSize(size);
+  const maxDim = Math.max(size.x, size.y, size.z);
+
+  camera.position.set(0, 0, maxDim * 2);
+  camera.lookAt(0, 0, 0);
+});
+
 
 document.addEventListener("DOMContentLoaded", () => {
 
