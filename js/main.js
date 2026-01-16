@@ -80,9 +80,8 @@ function openSTLViewer(url) {
     60,
     content.clientWidth / content.clientHeight,
     0.1,
-    1000
+    2000
   );
-  camera.position.set(0, 0, 100);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(content.clientWidth, content.clientHeight);
@@ -103,31 +102,35 @@ function openSTLViewer(url) {
   controls.enableDamping = true;
 
   const loader = new THREE.STLLoader();
-loader.load(url, (geometry) => {
-  console.log("STL loaded");
+  loader.load(url, (geometry) => {
+    geometry.computeBoundingBox();
+    geometry.center();
 
-  geometry.computeBoundingBox();
-  geometry.center();
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xaaaaaa,
+      metalness: 0.2,
+      roughness: 0.6
+    });
 
-  const material = new THREE.MeshStandardMaterial({
-    color: 0xaaaaaa,
-    metalness: 0.2,
-    roughness: 0.6
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    const box = geometry.boundingBox;
+    const size = new THREE.Vector3();
+    box.getSize(size);
+    const maxDim = Math.max(size.x, size.y, size.z);
+
+    camera.position.set(0, 0, maxDim * 2.5);
+    camera.lookAt(0, 0, 0);
   });
 
-  const mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
-
-  // Force camera placement
-  const box = geometry.boundingBox;
-  const size = new THREE.Vector3();
-  box.getSize(size);
-  const maxDim = Math.max(size.x, size.y, size.z);
-
-  camera.position.set(0, 0, maxDim * 2);
-  camera.lookAt(0, 0, 0);
-});
-
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+}
 
 document.addEventListener("DOMContentLoaded", () => {
 
