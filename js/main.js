@@ -67,8 +67,6 @@ function openSTLViewer(url) {
   const viewer = document.getElementById("file-viewer");
   const body = document.getElementById("viewer-body");
 
-  if (!viewer || !body || !window.THREE) return;
-
   body.innerHTML = "";
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
@@ -80,9 +78,8 @@ function openSTLViewer(url) {
     60,
     body.clientWidth / body.clientHeight,
     0.1,
-    2000
+    5000
   );
-  camera.position.set(0, 0, 150);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(body.clientWidth, body.clientHeight);
@@ -98,13 +95,21 @@ function openSTLViewer(url) {
 
   const loader = new THREE.STLLoader();
   loader.load(url, (geometry) => {
-    geometry.center();
+    geometry.computeBoundingBox();
+
+    const box = geometry.boundingBox;
+    const size = box.getSize(new THREE.Vector3()).length();
+    const center = box.getCenter(new THREE.Vector3());
+
     const mesh = new THREE.Mesh(
       geometry,
       new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
     );
+
     scene.add(mesh);
-    camera.lookAt(mesh.position);
+    controls.target.copy(center);
+    camera.position.set(center.x, center.y, size * 1.5);
+    camera.lookAt(center);
   });
 
   function animate() {
@@ -114,6 +119,7 @@ function openSTLViewer(url) {
   }
   animate();
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -201,5 +207,3 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === viewer) closeBtn.click();
   });
 });
-
-
