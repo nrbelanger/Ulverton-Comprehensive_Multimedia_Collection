@@ -96,6 +96,7 @@ function openSTLViewer(url) {
   const loader = new THREE.STLLoader();
   loader.load(url, (geometry) => {
     geometry.computeBoundingBox();
+    geometry.center();
 
     const box = geometry.boundingBox;
     const size = box.getSize(new THREE.Vector3()).length();
