@@ -198,5 +198,10 @@ document.addEventListener("DOMContentLoaded", () => {
   viewer.addEventListener("click", (e) => {
     if (e.target === viewer) closeBtn.click();
   });
+  document.getElementById("file-viewer-close").addEventListener("click", () => {
+  document.getElementById("file-viewer").classList.remove("active");
+  document.getElementById("viewer-body").innerHTML = "";
+  document.body.style.overflow = "";
+  });
 });
 
