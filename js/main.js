@@ -157,24 +157,32 @@ if (window.defaultManualFiles) {
 
 
   // Upload handling
-  document.querySelectorAll(".add-file-btn").forEach(btn => {
-    const input = document.querySelector(btn.dataset.input);
-    const grid = document.querySelector(btn.dataset.grid);
+document.querySelectorAll(".add-file-btn").forEach(btn => {
+  const inputSelector = btn.dataset.input;
+  const gridSelector = btn.dataset.grid;
 
-    btn.addEventListener("click", () => input.click());
+  if (!inputSelector || !gridSelector) return;
 
-    input.addEventListener("change", () => {
-      [...input.files].forEach(file => {
-        addCardToGrid(grid, {
-          fileName: file.name,
-          fileURL: URL.createObjectURL(file),
-          thumbnail: getThumbnailForFile(file.name),
-          description: prompt("Enter a description:", "")
-        });
+  const input = document.querySelector(inputSelector);
+  const grid = document.querySelector(gridSelector);
+
+  if (!input || !grid) return;
+
+  btn.addEventListener("click", () => input.click());
+
+  input.addEventListener("change", () => {
+    [...input.files].forEach(file => {
+      addCardToGrid(grid, {
+        fileName: file.name,
+        fileURL: URL.createObjectURL(file),
+        thumbnail: getThumbnailForFile(file.name),
+        description: prompt("Enter a description:", "")
       });
-      input.value = "";
     });
+    input.value = "";
   });
+});
+
 
   // Close viewer
   const viewer = document.getElementById("file-viewer");
