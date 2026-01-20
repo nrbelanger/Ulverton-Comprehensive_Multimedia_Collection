@@ -55,16 +55,30 @@ function addCardToGrid(grid, file) {
 function openPDFViewer(url) {
   const viewer = document.getElementById("file-viewer");
   const content = document.getElementById("file-viewer-content");
-  body.innerHTML = `<iframe src="${url}"></iframe>`;
+
+  if (!viewer || !content) return;
+
+  content.innerHTML = `
+    <button id="file-viewer-close" class="file-viewer-close">✕</button>
+    <iframe src="${url}" style="width:100%; height:100%; border:none;"></iframe>
+  `;
+
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
 }
 
 
+
 function openSTLViewer(url) {
   const viewer = document.getElementById("file-viewer");
   const content = document.getElementById("file-viewer-content");
-  body.innerHTML = "";
+
+  if (!viewer || !content || !window.THREE) return;
+
+  content.innerHTML = `
+    <button id="file-viewer-close" class="file-viewer-close">✕</button>
+  `;
+
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
 
@@ -73,14 +87,15 @@ function openSTLViewer(url) {
 
   const camera = new THREE.PerspectiveCamera(
     60,
-    body.clientWidth / body.clientHeight,
+    content.clientWidth / content.clientHeight,
     0.1,
     2000
   );
+  camera.position.set(0, 0, 150);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(body.clientWidth, body.clientHeight);
-  body.appendChild(renderer.domElement);
+  renderer.setSize(content.clientWidth, content.clientHeight);
+  content.appendChild(renderer.domElement);
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.6));
   const light = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -100,8 +115,7 @@ function openSTLViewer(url) {
     );
     scene.add(mesh);
 
-    camera.position.set(0, 0, 150);
-    camera.lookAt(0, 0, 0);
+    camera.lookAt(mesh.position);
   });
 
   function animate() {
