@@ -71,6 +71,12 @@ function openSTLViewer(url) {
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
 
+  // ⬇️ WAIT for layout to exist
+  requestAnimationFrame(() => initSTLScene(body, url));}
+
+function initSTLScene(body, url) {
+  const width = body.clientWidth;
+  const height = body.clientHeight;
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x111111);
 
