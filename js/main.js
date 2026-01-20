@@ -3,6 +3,8 @@
 ================================ */
 
 function addCardToGrid(grid, file) {
+  if (!grid || !file) return;
+
   const card = document.createElement("a");
   card.className = "file-card";
   card.href = file.fileURL;
@@ -10,27 +12,25 @@ function addCardToGrid(grid, file) {
   card.rel = "noopener";
 
   card.addEventListener("click", (e) => {
-    const lower = file.fileName.toLowerCase();
+    const name = file.fileName.toLowerCase();
 
-    if (lower.endsWith(".pdf")) {
+    if (name.endsWith(".pdf")) {
       e.preventDefault();
       openPDFViewer(file.fileURL);
-    }
-
-    if (lower.endsWith(".stl")) {
+    } else if (name.endsWith(".stl")) {
       e.preventDefault();
       openSTLViewer(file.fileURL);
     }
   });
 
-  const thumbnail = document.createElement("img");
-  thumbnail.src = file.thumbnail || getThumbnailForFile(file.fileName);
-  thumbnail.className = "file-thumbnail";
-  card.appendChild(thumbnail);
+  const img = document.createElement("img");
+  img.className = "file-thumbnail";
+  img.src = file.thumbnail || getThumbnailForFile(file.fileName);
+  card.appendChild(img);
 
-  const name = document.createElement("p");
-  name.textContent = file.fileName;
-  card.appendChild(name);
+  const title = document.createElement("p");
+  title.textContent = file.fileName;
+  card.appendChild(title);
 
   if (file.description) {
     const desc = document.createElement("p");
@@ -50,7 +50,8 @@ function openPDFViewer(url) {
   const viewer = document.getElementById("file-viewer");
   const body = document.getElementById("viewer-body");
   if (!viewer || !body) return;
-  body.innerHTML = `<iframe src="${url}"></iframe>`;
+
+  body.innerHTML = `<iframe src="${url}" loading="lazy"></iframe>`;
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
 }
@@ -59,21 +60,26 @@ function openSTLViewer(url) {
   const viewer = document.getElementById("file-viewer");
   const body = document.getElementById("viewer-body");
   if (!viewer || !body) return;
+
   body.innerHTML = "";
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
 
-  // WAIT until viewer is visible
   requestAnimationFrame(() => initSTL(body, url));
 }
 
 /* ===============================
-   STL VIEWER (THREE.JS)
+   STL VIEWER (NO CORB)
 ================================ */
 
 function initSTL(container, url) {
-  const width = container.clientWidth;
-  const height = container.clientHeight;
+  if (!window.THREE || !THREE.STLLoader || !THREE.OrbitControls) {
+    console.error("Three.js loaders not available");
+    return;
+  }
+
+  const width = container.clientWidth || 600;
+  const height = container.clientHeight || 400;
 
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x111111);
@@ -87,43 +93,43 @@ function initSTL(container, url) {
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.7));
 
-  const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
-  dirLight.position.set(1, 1, 1);
-  scene.add(dirLight);
+  const light = new THREE.DirectionalLight(0xffffff, 0.9);
+  light.position.set(1, 1, 1);
+  scene.add(light);
 
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
   const loader = new THREE.STLLoader();
 
-fetch(url)
-  .then(res => res.arrayBuffer())
-  .then(buffer => {
-    const geometry = loader.parse(buffer);
+  loader.load(
+    url,
+    (geometry) => {
+      geometry.center();
+      geometry.computeBoundingBox();
 
-    geometry.center();
-    geometry.computeBoundingBox();
+      const size = geometry.boundingBox
+        .getSize(new THREE.Vector3())
+        .length();
 
-    const size = geometry.boundingBox
-      .getSize(new THREE.Vector3())
-      .length();
+      const mesh = new THREE.Mesh(
+        geometry,
+        new THREE.MeshStandardMaterial({
+          color: 0xaaaaaa,
+          metalness: 0.15,
+          roughness: 0.65
+        })
+      );
 
-    const mesh = new THREE.Mesh(
-      geometry,
-      new THREE.MeshStandardMaterial({
-        color: 0xaaaaaa,
-        metalness: 0.15,
-        roughness: 0.65
-      })
-    );
+      scene.add(mesh);
 
-    scene.add(mesh);
-
-    camera.position.set(0, 0, size * 1.5);
-    controls.target.set(0, 0, 0);
-    camera.lookAt(0, 0, 0);
-  })
-  .catch(err => console.error("STL fetch error:", err));
+      camera.position.set(0, 0, size * 1.5);
+      controls.target.set(0, 0, 0);
+      camera.lookAt(0, 0, 0);
+    },
+    undefined,
+    (err) => console.error("STL load error:", err)
+  );
 
   function animate() {
     requestAnimationFrame(animate);
@@ -140,64 +146,54 @@ fetch(url)
 
 document.addEventListener("DOMContentLoaded", () => {
 
-   // Load Default Files
-if (window.defaultHistoryFiles) {
-  const grid = document.getElementById("historyGrid");
-  if (grid) {
-    window.defaultHistoryFiles.forEach(f => addCardToGrid(grid, f));
+  // Default files
+  if (window.defaultHistoryFiles) {
+    const grid = document.getElementById("historyGrid");
+    if (grid) window.defaultHistoryFiles.forEach(f => addCardToGrid(grid, f));
   }
-}
 
-if (window.defaultManualFiles) {
-  const grid = document.getElementById("manualGrid");
-  if (grid) {
-    window.defaultManualFiles.forEach(f => addCardToGrid(grid, f));
+  if (window.defaultManualFiles) {
+    const grid = document.getElementById("manualGrid");
+    if (grid) window.defaultManualFiles.forEach(f => addCardToGrid(grid, f));
   }
-}
 
+  // Upload buttons
+  document.querySelectorAll(".add-file-btn").forEach(btn => {
+    const input = document.querySelector(btn.dataset.input);
+    const grid = document.querySelector(btn.dataset.grid);
+    if (!input || !grid) return;
 
-  // Upload handling
-document.querySelectorAll(".add-file-btn").forEach(btn => {
-  const inputSelector = btn.dataset.input;
-  const gridSelector = btn.dataset.grid;
+    btn.addEventListener("click", () => input.click());
 
-  if (!inputSelector || !gridSelector) return;
-
-  const input = document.querySelector(inputSelector);
-  const grid = document.querySelector(gridSelector);
-
-  if (!input || !grid) return;
-
-  btn.addEventListener("click", () => input.click());
-
-  input.addEventListener("change", () => {
-    [...input.files].forEach(file => {
-      addCardToGrid(grid, {
-        fileName: file.name,
-        fileURL: URL.createObjectURL(file),
-        thumbnail: getThumbnailForFile(file.name),
-        description: prompt("Enter a description:", "")
+    input.addEventListener("change", () => {
+      [...input.files].forEach(file => {
+        addCardToGrid(grid, {
+          fileName: file.name,
+          fileURL: URL.createObjectURL(file),
+          thumbnail: getThumbnailForFile(file.name),
+          description: prompt("Enter a description:", "")
+        });
       });
+      input.value = "";
     });
-    input.value = "";
   });
-});
 
-
-  // Close viewer
+  // Viewer close
   const viewer = document.getElementById("file-viewer");
   const close = document.getElementById("file-viewer-close");
   const body = document.getElementById("viewer-body");
 
-  close.addEventListener("click", () => {
-    viewer.classList.remove("active");
-    body.innerHTML = "";
-    document.body.style.overflow = "";
-  });
+  if (viewer && close && body) {
+    close.addEventListener("click", () => {
+      viewer.classList.remove("active");
+      body.innerHTML = "";
+      document.body.style.overflow = "";
+    });
 
-  viewer.addEventListener("click", e => {
-    if (e.target === viewer) close.click();
-  });
+    viewer.addEventListener("click", e => {
+      if (e.target === viewer) close.click();
+    });
+  }
 });
 
 /* ===============================
@@ -206,10 +202,9 @@ document.querySelectorAll(".add-file-btn").forEach(btn => {
 
 function getThumbnailForFile(name) {
   const ext = name.split(".").pop().toLowerCase();
-
-  if (["pdf"].includes(ext)) return "../images/pdf-icon.webp";
+  if (ext === "pdf") return "../images/pdf-icon.webp";
   if (["jpg","jpeg","png","gif","webp"].includes(ext)) return "../images/png-icon.webp";
   if (["zip","rar"].includes(ext)) return "../images/archive-icon.webp";
-
   return "../images/file-icon.webp";
 }
+
