@@ -49,7 +49,7 @@ function addCardToGrid(grid, file) {
 function openPDFViewer(url) {
   const viewer = document.getElementById("file-viewer");
   const body = document.getElementById("viewer-body");
-  if (!viewer || !closebtn || !body) return;
+  if (!viewer || !body) return;
   body.innerHTML = `<iframe src="${url}"></iframe>`;
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
@@ -58,7 +58,7 @@ function openPDFViewer(url) {
 function openSTLViewer(url) {
   const viewer = document.getElementById("file-viewer");
   const body = document.getElementById("viewer-body");
-  if (!viewer || !closebtn || !body) return;
+  if (!viewer || !body) return;
   body.innerHTML = "";
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
@@ -140,16 +140,21 @@ function initSTL(container, url) {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Load default files
-  if (window.defaultHistoryFiles) {
-    const grid = document.getElementById("historyGrid");
+   // Load Default Files
+if (window.defaultHistoryFiles) {
+  const grid = document.getElementById("historyGrid");
+  if (grid) {
     window.defaultHistoryFiles.forEach(f => addCardToGrid(grid, f));
   }
+}
 
-  if (window.defaultManualFiles) {
-    const grid = document.getElementById("manualGrid");
+if (window.defaultManualFiles) {
+  const grid = document.getElementById("manualGrid");
+  if (grid) {
     window.defaultManualFiles.forEach(f => addCardToGrid(grid, f));
   }
+}
+
 
   // Upload handling
   document.querySelectorAll(".add-file-btn").forEach(btn => {
