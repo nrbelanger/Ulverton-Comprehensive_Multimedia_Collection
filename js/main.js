@@ -54,7 +54,7 @@ function addCardToGrid(grid, file) {
 
 function openPDFViewer(url) {
   const viewer = document.getElementById("file-viewer");
-  const content = document.getElementById("file-viewer-content");
+  const content = document.getElementById("viewer-body");
 
   if (!viewer || !content) return;
 
@@ -71,7 +71,7 @@ function openPDFViewer(url) {
 
 function openSTLViewer(url) {
   const viewer = document.getElementById("file-viewer");
-  const content = document.getElementById("file-viewer-content");
+  const content = document.getElementById("viewer-body");
 
   if (!viewer || !content || !window.THREE) return;
 
@@ -212,7 +212,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   document.getElementById("file-viewer-close").addEventListener("click", () => {
   document.getElementById("file-viewer").classList.remove("active");
-  document.getElementById("file-viewer-content").innerHTML = "";
+  document.getElementById("viewer-body").innerHTML = "";
   document.body.style.overflow = "";
   });
 });
