@@ -54,22 +54,19 @@ function addCardToGrid(grid, file) {
 
 function openPDFViewer(url) {
   const viewer = document.getElementById("file-viewer");
-  const content = document.getElementById("file-viewer-content");
+  const body = document.getElementById("viewer-body");
 
-  if (!viewer || !content) return;
-
-  content.innerHTML = `<iframe src="${url}"></iframe>`;
+  body.innerHTML = `<iframe src="${url}"></iframe>`;
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
 }
 
+
 function openSTLViewer(url) {
   const viewer = document.getElementById("file-viewer");
-  const content = document.getElementById("file-viewer-content");
+  const body = document.getElementById("viewer-body");
 
-  if (!viewer || !content || !window.THREE) return;
-
-  content.innerHTML = "";
+  body.innerHTML = "";
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
 
@@ -78,20 +75,14 @@ function openSTLViewer(url) {
 
   const camera = new THREE.PerspectiveCamera(
     60,
-    content.clientWidth / content.clientHeight,
+    body.clientWidth / body.clientHeight,
     0.1,
     2000
   );
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(content.clientWidth, content.clientHeight);
-  content.appendChild(renderer.domElement);
-
-  window.addEventListener("resize", () => {
-    camera.aspect = content.clientWidth / content.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(content.clientWidth, content.clientHeight);
-  });
+  renderer.setSize(body.clientWidth, body.clientHeight);
+  body.appendChild(renderer.domElement);
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.6));
   const light = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -103,24 +94,15 @@ function openSTLViewer(url) {
 
   const loader = new THREE.STLLoader();
   loader.load(url, (geometry) => {
-    geometry.computeBoundingBox();
     geometry.center();
 
-    const material = new THREE.MeshStandardMaterial({
-      color: 0xaaaaaa,
-      metalness: 0.2,
-      roughness: 0.6
-    });
-
-    const mesh = new THREE.Mesh(geometry, material);
+    const mesh = new THREE.Mesh(
+      geometry,
+      new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
+    );
     scene.add(mesh);
 
-    const box = geometry.boundingBox;
-    const size = new THREE.Vector3();
-    box.getSize(size);
-    const maxDim = Math.max(size.x, size.y, size.z);
-
-    camera.position.set(0, 0, maxDim * 2.5);
+    camera.position.set(0, 0, 150);
     camera.lookAt(0, 0, 0);
   });
 
