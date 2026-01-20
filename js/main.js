@@ -1,3 +1,7 @@
+/* ===============================
+   FILE CARD CREATION
+================================ */
+
 function addCardToGrid(grid, file) {
   const card = document.createElement("a");
   card.className = "file-card";
@@ -5,58 +9,46 @@ function addCardToGrid(grid, file) {
   card.target = "_blank";
   card.rel = "noopener";
 
-  // Enable drag-to-new-tab
-  card.addEventListener("dragstart", (e) => {
-    e.dataTransfer.setData("text/uri-list", card.href);
-    e.dataTransfer.setData("text/plain", card.href);
-  });
-
-  // Click handling
   card.addEventListener("click", (e) => {
     const lower = file.fileName.toLowerCase();
 
     if (lower.endsWith(".pdf")) {
       e.preventDefault();
-      openPDFViewer(card.href);
-      return;
+      openPDFViewer(file.fileURL);
     }
 
     if (lower.endsWith(".stl")) {
       e.preventDefault();
-      openSTLViewer(card.href);
-      return;
+      openSTLViewer(file.fileURL);
     }
-    // all other files fall through and open normally
   });
 
-  // Thumbnail
   const thumbnail = document.createElement("img");
   thumbnail.src = file.thumbnail || getThumbnailForFile(file.fileName);
   thumbnail.className = "file-thumbnail";
-  thumbnail.alt = "File thumbnail";
   card.appendChild(thumbnail);
 
-  // Filename
-  const fileNameEl = document.createElement("p");
-  fileNameEl.textContent = file.fileName;
-  card.appendChild(fileNameEl);
+  const name = document.createElement("p");
+  name.textContent = file.fileName;
+  card.appendChild(name);
 
-  // Description
   if (file.description) {
-    const descEl = document.createElement("p");
-    descEl.className = "file-description";
-    descEl.textContent = file.description;
-    card.appendChild(descEl);
+    const desc = document.createElement("p");
+    desc.className = "file-description";
+    desc.textContent = file.description;
+    card.appendChild(desc);
   }
 
   grid.appendChild(card);
 }
 
+/* ===============================
+   VIEWER CONTROLS
+================================ */
+
 function openPDFViewer(url) {
   const viewer = document.getElementById("file-viewer");
   const body = document.getElementById("viewer-body");
-
-  if (!viewer || !body) return;
 
   body.innerHTML = `<iframe src="${url}"></iframe>`;
   viewer.classList.add("active");
@@ -71,150 +63,140 @@ function openSTLViewer(url) {
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
 
-  // ⬇️ WAIT for layout to exist
-  requestAnimationFrame(() => initSTLScene(body, url));}
+  // WAIT until viewer is visible
+  requestAnimationFrame(() => initSTL(body, url));
+}
 
-function initSTLScene(body, url) {
-  const width = body.clientWidth;
-  const height = body.clientHeight;
+/* ===============================
+   STL VIEWER (THREE.JS)
+================================ */
+
+function initSTL(container, url) {
+  const width = container.clientWidth;
+  const height = container.clientHeight;
+
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x111111);
 
-  const camera = new THREE.PerspectiveCamera(
-    60,
-    body.clientWidth / body.clientHeight,
-    0.1,
-    5000
-  );
+  const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 5000);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(body.clientWidth, body.clientHeight);
-  body.appendChild(renderer.domElement);
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  container.appendChild(renderer.domElement);
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
-  const light = new THREE.DirectionalLight(0xffffff, 0.8);
-  light.position.set(1, 1, 1);
-  scene.add(light);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+  dirLight.position.set(1, 1, 1);
+  scene.add(dirLight);
 
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
-  const loader = new THREE.STLLoader(); // 🔴 REQUIRED
+  const loader = new THREE.STLLoader();
 
-  loader.load(url, (geometry) => {
-    geometry.computeBoundingBox();
-    geometry.center();
+  loader.load(
+    url,
+    (geometry) => {
+      geometry.center();
+      geometry.computeBoundingBox();
 
-    const box = geometry.boundingBox;
-    const size = box.getSize(new THREE.Vector3()).length();
+      const size = geometry.boundingBox
+        .getSize(new THREE.Vector3())
+        .length();
 
-    const mesh = new THREE.Mesh(
-      geometry,
-      new THREE.MeshStandardMaterial({
-        color: 0xaaaaaa,
-        metalness: 0.1,
-        roughness: 0.6
-      })
-    );
+      const mesh = new THREE.Mesh(
+        geometry,
+        new THREE.MeshStandardMaterial({
+          color: 0xaaaaaa,
+          metalness: 0.15,
+          roughness: 0.65
+        })
+      );
 
-    scene.add(mesh);
+      scene.add(mesh);
 
-    controls.target.set(0, 0, 0);
-    camera.position.set(0, 0, size * 1.5);
-    camera.lookAt(0, 0, 0);
-  });
+      camera.position.set(0, 0, size * 1.5);
+      controls.target.set(0, 0, 0);
+      camera.lookAt(0, 0, 0);
+    },
+    undefined,
+    (err) => console.error("STL load error:", err)
+  );
 
   function animate() {
     requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
   }
+
   animate();
 }
 
+/* ===============================
+   PAGE INIT
+================================ */
+
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Select all "Add File" buttons
-  const addFileButtons = document.querySelectorAll(".add-file-btn");
-  
-  // === Load default content for History page ===
-  if (window.defaultHistoryFiles && Array.isArray(window.defaultHistoryFiles)) {
-
-    const historyGrid = document.querySelector("#historyGrid");
-
-    if (historyGrid) {
-      window.defaultHistoryFiles.forEach(item => addCardToGrid(historyGrid, item));
-    }
+  // Load default files
+  if (window.defaultHistoryFiles) {
+    const grid = document.getElementById("historyGrid");
+    window.defaultHistoryFiles.forEach(f => addCardToGrid(grid, f));
   }
 
-    // === Load default content for Manuals page ===
-  if (window.defaultManualFiles && Array.isArray(window.defaultManualFiles)) {
-
-    const manualGrid = document.querySelector("#manualGrid");
-
-    if (manualGrid) {
-      window.defaultManualFiles.forEach(item => addCardToGrid(manualGrid, item));
-    }
+  if (window.defaultManualFiles) {
+    const grid = document.getElementById("manualGrid");
+    window.defaultManualFiles.forEach(f => addCardToGrid(grid, f));
   }
-  addFileButtons.forEach(button => {
-    // Each button should have data attributes pointing to its input and grid
-    const fileInput = document.querySelector(button.dataset.input);
-    const grid = document.querySelector(button.dataset.grid);
 
-    if (!fileInput || !grid) return;
+  // Upload handling
+  document.querySelectorAll(".add-file-btn").forEach(btn => {
+    const input = document.querySelector(btn.dataset.input);
+    const grid = document.querySelector(btn.dataset.grid);
 
-    // Clicking the button triggers the file input
-    button.addEventListener("click", () => fileInput.click());
+    btn.addEventListener("click", () => input.click());
 
-    // Handle file selection
-    fileInput.addEventListener("change", event => {
-      const files = event.target.files;
-
-for (const file of files) {
-  const fileObj = {
-    fileName: file.name,
-    fileURL: URL.createObjectURL(file),
-    description: prompt("Enter a description (max 1000 characters):", ""),
-    thumbnail: getThumbnailForFile(file.name)
-  };
-
-  addCardToGrid(grid, fileObj);
-}
-      fileInput.value = ""; // reset input
+    input.addEventListener("change", () => {
+      [...input.files].forEach(file => {
+        addCardToGrid(grid, {
+          fileName: file.name,
+          fileURL: URL.createObjectURL(file),
+          thumbnail: getThumbnailForFile(file.name),
+          description: prompt("Enter a description:", "")
+        });
+      });
+      input.value = "";
     });
   });
 
-});
-
-// Helper function for thumbnails
-function getThumbnailForFile(filename) {
-  const ext = filename.split('.').pop().toLowerCase();
-
-  if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
-    return "../images/png-icon.webp";
-  } else if (["pdf"].includes(ext)) {
-    return "../images/pdf-icon.webp";
-  } else if (["zip", "rar"].includes(ext)) {
-    return "../images/archive-icon.webp";
-  } else {
-    return "../images/file-icon.webp";
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
+  // Close viewer
   const viewer = document.getElementById("file-viewer");
-  const closeBtn = document.getElementById("file-viewer-close");
+  const close = document.getElementById("file-viewer-close");
   const body = document.getElementById("viewer-body");
 
-  if (!viewer || !closeBtn) return;
-
-  closeBtn.addEventListener("click", () => {
+  close.addEventListener("click", () => {
     viewer.classList.remove("active");
     body.innerHTML = "";
     document.body.style.overflow = "";
   });
 
-  viewer.addEventListener("click", (e) => {
-    if (e.target === viewer) closeBtn.click();
+  viewer.addEventListener("click", e => {
+    if (e.target === viewer) close.click();
   });
 });
+
+/* ===============================
+   THUMBNAILS
+================================ */
+
+function getThumbnailForFile(name) {
+  const ext = name.split(".").pop().toLowerCase();
+
+  if (["pdf"].includes(ext)) return "../images/pdf-icon.webp";
+  if (["jpg","jpeg","png","gif","webp"].includes(ext)) return "../images/png-icon.webp";
+  if (["zip","rar"].includes(ext)) return "../images/archive-icon.webp";
+
+  return "../images/file-icon.webp";
+}
