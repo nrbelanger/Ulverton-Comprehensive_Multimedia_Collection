@@ -93,27 +93,38 @@ function openSTLViewer(url) {
   const controls = new THREE.OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
+  const loader = new THREE.STLLoader(); // 🔴 REQUIRED
+
   loader.load(url, (geometry) => {
-  geometry.computeBoundingBox();
-  geometry.center(); // <-- key line
+    geometry.computeBoundingBox();
+    geometry.center();
 
-  const box = geometry.boundingBox;
-  const size = box.getSize(new THREE.Vector3()).length();
+    const box = geometry.boundingBox;
+    const size = box.getSize(new THREE.Vector3()).length();
 
-  const material = new THREE.MeshStandardMaterial({
-    color: 0xaaaaaa,
-    metalness: 0.1,
-    roughness: 0.6
+    const mesh = new THREE.Mesh(
+      geometry,
+      new THREE.MeshStandardMaterial({
+        color: 0xaaaaaa,
+        metalness: 0.1,
+        roughness: 0.6
+      })
+    );
+
+    scene.add(mesh);
+
+    controls.target.set(0, 0, 0);
+    camera.position.set(0, 0, size * 1.5);
+    camera.lookAt(0, 0, 0);
   });
 
-  const mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
-
-  // Camera & controls now look at origin
-  controls.target.set(0, 0, 0);
-  camera.position.set(0, 0, size * 1.5);
-  camera.lookAt(0, 0, 0);
-});
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+}
 
 document.addEventListener("DOMContentLoaded", () => {
 
