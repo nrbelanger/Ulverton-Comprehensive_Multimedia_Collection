@@ -96,34 +96,34 @@ function initSTL(container, url) {
 
   const loader = new THREE.STLLoader();
 
-  loader.load(
-    url,
-    (geometry) => {
-      geometry.center();
-      geometry.computeBoundingBox();
+fetch(url)
+  .then(res => res.arrayBuffer())
+  .then(buffer => {
+    const geometry = loader.parse(buffer);
 
-      const size = geometry.boundingBox
-        .getSize(new THREE.Vector3())
-        .length();
+    geometry.center();
+    geometry.computeBoundingBox();
 
-      const mesh = new THREE.Mesh(
-        geometry,
-        new THREE.MeshStandardMaterial({
-          color: 0xaaaaaa,
-          metalness: 0.15,
-          roughness: 0.65
-        })
-      );
+    const size = geometry.boundingBox
+      .getSize(new THREE.Vector3())
+      .length();
 
-      scene.add(mesh);
+    const mesh = new THREE.Mesh(
+      geometry,
+      new THREE.MeshStandardMaterial({
+        color: 0xaaaaaa,
+        metalness: 0.15,
+        roughness: 0.65
+      })
+    );
 
-      camera.position.set(0, 0, size * 1.5);
-      controls.target.set(0, 0, 0);
-      camera.lookAt(0, 0, 0);
-    },
-    undefined,
-    (err) => console.error("STL load error:", err)
-  );
+    scene.add(mesh);
+
+    camera.position.set(0, 0, size * 1.5);
+    controls.target.set(0, 0, 0);
+    camera.lookAt(0, 0, 0);
+  })
+  .catch(err => console.error("STL fetch error:", err));
 
   function animate() {
     requestAnimationFrame(animate);
