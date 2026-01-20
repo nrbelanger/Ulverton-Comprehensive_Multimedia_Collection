@@ -54,31 +54,22 @@ function addCardToGrid(grid, file) {
 
 function openPDFViewer(url) {
   const viewer = document.getElementById("file-viewer");
-  const content = document.getElementById("viewer-body");
+  const body = document.getElementById("viewer-body");
 
-  if (!viewer || !content) return;
+  if (!viewer || !body) return;
 
-  content.innerHTML = `
-    <button id="file-viewer-close" class="file-viewer-close">✕</button>
-    <iframe src="${url}" style="width:100%; height:100%; border:none;"></iframe>
-  `;
-
+  body.innerHTML = `<iframe src="${url}"></iframe>`;
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
 }
 
-
-
 function openSTLViewer(url) {
   const viewer = document.getElementById("file-viewer");
-  const content = document.getElementById("viewer-body");
+  const body = document.getElementById("viewer-body");
 
-  if (!viewer || !content || !window.THREE) return;
+  if (!viewer || !body || !window.THREE) return;
 
-  content.innerHTML = `
-    <button id="file-viewer-close" class="file-viewer-close">✕</button>
-  `;
-
+  body.innerHTML = "";
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
 
@@ -87,15 +78,15 @@ function openSTLViewer(url) {
 
   const camera = new THREE.PerspectiveCamera(
     60,
-    content.clientWidth / content.clientHeight,
+    body.clientWidth / body.clientHeight,
     0.1,
     2000
   );
   camera.position.set(0, 0, 150);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
-  renderer.setSize(content.clientWidth, content.clientHeight);
-  content.appendChild(renderer.domElement);
+  renderer.setSize(body.clientWidth, body.clientHeight);
+  body.appendChild(renderer.domElement);
 
   scene.add(new THREE.AmbientLight(0xffffff, 0.6));
   const light = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -108,13 +99,11 @@ function openSTLViewer(url) {
   const loader = new THREE.STLLoader();
   loader.load(url, (geometry) => {
     geometry.center();
-
     const mesh = new THREE.Mesh(
       geometry,
       new THREE.MeshStandardMaterial({ color: 0xaaaaaa })
     );
     scene.add(mesh);
-
     camera.lookAt(mesh.position);
   });
 
@@ -198,22 +187,19 @@ function getThumbnailForFile(filename) {
 document.addEventListener("DOMContentLoaded", () => {
   const viewer = document.getElementById("file-viewer");
   const closeBtn = document.getElementById("file-viewer-close");
+  const body = document.getElementById("viewer-body");
 
   if (!viewer || !closeBtn) return;
 
   closeBtn.addEventListener("click", () => {
     viewer.classList.remove("active");
+    body.innerHTML = "";
     document.body.style.overflow = "";
-    document.getElementById("file-viewer-content").innerHTML = "";
   });
 
   viewer.addEventListener("click", (e) => {
     if (e.target === viewer) closeBtn.click();
   });
-  document.getElementById("file-viewer-close").addEventListener("click", () => {
-  document.getElementById("file-viewer").classList.remove("active");
-  document.getElementById("viewer-body").innerHTML = "";
-  document.body.style.overflow = "";
-  });
 });
+
 
