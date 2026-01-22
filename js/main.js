@@ -1,3 +1,21 @@
+const ADMIN_KEY = "ulverton_is_admin";
+const ADMIN_PASSWORD = "admin1"; // This is the Password
+
+function isAdmin() {
+  return sessionStorage.getItem(ADMIN_KEY) === "true";
+}
+
+function requireAdmin() {
+  const pwd = prompt("Admin password:");
+  if (pwd === ADMIN_PASSWORD) {
+    sessionStorage.setItem(ADMIN_KEY, "true");
+    alert("Admin mode enabled");
+    location.reload();
+  } else {
+    alert("Incorrect password");
+  }
+}
+
 /* ===============================
    FILE CARD CREATION
 ================================ */
@@ -216,7 +234,10 @@ function openVideoViewer(url) {
 ================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
-
+  if (isAdmin()) {
+    document.body.classList.add("admin-mode");
+  }
+});
   // Default files
   if (window.defaultHistoryFiles) {
     const grid = document.getElementById("historyGrid");
@@ -235,6 +256,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!input || !grid) return;
 
     btn.addEventListener("click", () => input.click());
+  if (!isAdmin()) return;
+  input.click();
+});
 
     input.addEventListener("change", () => {
       [...input.files].forEach(file => {
