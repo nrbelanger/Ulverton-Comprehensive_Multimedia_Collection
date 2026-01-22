@@ -53,21 +53,17 @@
   </footer>
 
 <!-- === Fullscreen File Viewer Overlay === -->
-<div id="fileViewer" class="file-viewer">
-
+<div id="file-viewer" class="file-viewer">
   <div class="file-viewer-content">
-    <button id="fileViewerClose" class="file-viewer-close" aria-label="Close viewer">✕</button>
-
-    <iframe
-      id="fileViewerFrame"
-      src=""
-      loading="lazy"
-      title="File Viewer">
-    </iframe>
+    <button id="file-viewer-close" class="file-viewer-close">✕</button>
+    <div id="viewer-body"></div>
   </div>
 </div>
-      
-  <script src="../js/main.js" defer></script>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script> 
+<script src="../js/main.js" defer></script>
 </body>
 </html>
 
