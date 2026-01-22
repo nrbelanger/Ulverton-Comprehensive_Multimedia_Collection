@@ -24,15 +24,25 @@
 
   <main class="section-page">
     <div class="container">
-      <!-- File Grid -->
-      <div class="file-grid" id="historyGrid">
-        <!-- Existing files or previews will appear here -->
-      </div>
 
-      <!-- Add Files Button -->
-      <button class="add-file-btn admin-only" data-input="#historyFileInput" data-grid="#historyGrid">
-        Add File
-      </button>
+  <!-- File Grid -->
+  <div class="file-grid" id="historyGrid">
+    <!-- Cards injected here -->
+  </div>
+
+  <!-- Add Files Button -->
+  <button
+    class="add-file-btn admin-only"
+    data-input="#historyFileInput"
+    data-grid="#historyGrid"
+  >
+    Add File
+  </button>
+
+  <input type="file" id="historyFileInput" multiple hidden>
+
+</div>
+
       <input type="file" id="historyFileInput" multiple style="display:none">
 <script>
   window.defaultHistoryFiles = [
