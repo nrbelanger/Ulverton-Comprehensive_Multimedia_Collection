@@ -37,6 +37,15 @@ if (
   openImageViewer(file.fileURL);
   return;
 }
+if (
+  lower.endsWith(".mp4") ||
+  lower.endsWith(".mov")
+) {
+  e.preventDefault();
+  openVideoViewer(file.fileURL);
+  return;
+}
+
 });
 
   const img = document.createElement("img");
@@ -177,6 +186,30 @@ function openImageViewer(url) {
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
 }
+function openVideoViewer(url) {
+  const viewer = document.getElementById("file-viewer");
+  const body = document.getElementById("viewer-body");
+  if (!viewer || !body) return;
+
+  body.innerHTML = `
+    <video
+      controls
+      autoplay
+      style="
+        width: 100%;
+        height: 100%;
+        background: #000;
+        object-fit: contain;
+      "
+    >
+      <source src="${url}">
+      Your browser does not support this video format.
+    </video>
+  `;
+
+  viewer.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
 
 /* ===============================
    PAGE INIT
@@ -244,4 +277,6 @@ function getThumbnailForFile(name) {
   if (["jpg","jpeg","png","gif","webp"].includes(ext)) return "../images/png-icon.webp";
   if (["zip","rar"].includes(ext)) return "../images/archive-icon.webp";
   return "../images/file-icon.webp";
+  if (["mp4", "mov"].includes(ext)) return "../images/video-icon.webp";
+
 }
