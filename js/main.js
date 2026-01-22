@@ -12,16 +12,32 @@ function addCardToGrid(grid, file) {
   card.rel = "noopener";
 
   card.addEventListener("click", (e) => {
-    const name = file.fileName.toLowerCase();
+const lower = file.fileName.toLowerCase();
 
-    if (name.endsWith(".pdf")) {
-      e.preventDefault();
-      openPDFViewer(file.fileURL);
-    } else if (name.endsWith(".stl")) {
-      e.preventDefault();
-      openSTLViewer(file.fileURL);
-    }
-  });
+if (lower.endsWith(".pdf")) {
+  e.preventDefault();
+  openPDFViewer(file.fileURL);
+  return;
+}
+
+if (lower.endsWith(".stl")) {
+  e.preventDefault();
+  openSTLViewer(file.fileURL);
+  return;
+}
+
+if (
+  lower.endsWith(".jpg") ||
+  lower.endsWith(".jpeg") ||
+  lower.endsWith(".png") ||
+  lower.endsWith(".gif") ||
+  lower.endsWith(".webp")
+) {
+  e.preventDefault();
+  openImageViewer(file.fileURL);
+  return;
+}
+
 
   const img = document.createElement("img");
   img.className = "file-thumbnail";
@@ -138,6 +154,28 @@ function initSTL(container, url) {
   }
 
   animate();
+}
+
+function openImageViewer(url) {
+  const viewer = document.getElementById("file-viewer");
+  const body = document.getElementById("viewer-body");
+  if (!viewer || !body) return;
+
+  body.innerHTML = `
+    <img
+      src="${url}"
+      alt="Image preview"
+      style="
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: #000;
+      "
+    />
+  `;
+
+  viewer.classList.add("active");
+  document.body.style.overflow = "hidden";
 }
 
 /* ===============================
