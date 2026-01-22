@@ -29,12 +29,19 @@
         <!-- Existing files or previews will appear here -->
       </div>
 
-      <!-- Add Files Button -->
-      <button class="add-file-btn" data-input="#manualFileInput" data-grid="#manualGrid">
-        Add File
-      </button>
-      <input type="file" id="manualFileInput" multiple style="display:none">
-      <div id="manualGrid" class="file-grid"></div>
+  <!-- Add Files Button -->
+  <div class="add-file-wrapper">
+  <button
+    class="add-file-btn admin-only"
+    data-input="#manualFileInput"
+    data-grid="#manualGrid"
+  >
+    Add File
+  </button>
+
+  <input type="file" id="manualFileInput" multiple hidden>
+
+</div>
 <script>
   window.defaultManualFiles = [
     {
