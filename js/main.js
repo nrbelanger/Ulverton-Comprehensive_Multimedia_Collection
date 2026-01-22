@@ -234,6 +234,12 @@ function openVideoViewer(url) {
 ================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
+const adminBtn = document.getElementById("admin-login-btn");
+if (adminBtn) {
+  adminBtn.addEventListener("click", () => {
+    requireAdmin();
+  });
+}
 
   // Enable admin mode styling
   if (isAdmin()) {
