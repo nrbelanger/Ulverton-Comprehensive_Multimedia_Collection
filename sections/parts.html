@@ -30,11 +30,19 @@
       </div>
 
       <!-- Add Files Button -->
-      <button class="add-file-btn admin-only" data-input="#partsFileInput" data-grid="#partsGrid">
-        Add File
-      </button>
-      <input type="file" id="partsFileInput" multiple style="display:none">
-      <div id="partsGrid" class="file-grid"></div>
+ <div class="add-file-wrapper">
+  <button
+    class="add-file-btn admin-only"
+    data-input="#partsFileInput"
+    data-grid="#partsGrid"
+  >
+    Add File
+  </button>
+
+  <input type="file" id="partsFileInput" multiple hidden>
+
+</div>
+<script>
 
 
   <footer class="site-footer">
