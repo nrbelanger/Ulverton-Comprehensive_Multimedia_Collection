@@ -234,11 +234,13 @@ function openVideoViewer(url) {
 ================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  // Enable admin mode styling
   if (isAdmin()) {
     document.body.classList.add("admin-mode");
   }
-});
-  // Default files
+
+  // Load default files
   if (window.defaultHistoryFiles) {
     const grid = document.getElementById("historyGrid");
     if (grid) window.defaultHistoryFiles.forEach(f => addCardToGrid(grid, f));
@@ -249,16 +251,19 @@ document.addEventListener("DOMContentLoaded", () => {
     if (grid) window.defaultManualFiles.forEach(f => addCardToGrid(grid, f));
   }
 
-  // Upload buttons
+  // Upload buttons (ADMIN ONLY)
   document.querySelectorAll(".add-file-btn").forEach(btn => {
     const input = document.querySelector(btn.dataset.input);
     const grid = document.querySelector(btn.dataset.grid);
     if (!input || !grid) return;
 
-    btn.addEventListener("click", () => input.click());
-  if (!isAdmin()) return;
-  input.click();
-});
+    btn.addEventListener("click", () => {
+      if (!isAdmin()) {
+        alert("Admin access required");
+        return;
+      }
+      input.click();
+    });
 
     input.addEventListener("change", () => {
       [...input.files].forEach(file => {
@@ -297,10 +302,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function getThumbnailForFile(name) {
   const ext = name.split(".").pop().toLowerCase();
+
   if (ext === "pdf") return "../images/pdf-icon.webp";
   if (["jpg","jpeg","png","gif","webp"].includes(ext)) return "../images/png-icon.webp";
+  if (["mp4","mov"].includes(ext)) return "../images/video-icon.webp";
   if (["zip","rar"].includes(ext)) return "../images/archive-icon.webp";
-  return "../images/file-icon.webp";
-  if (["mp4", "mov"].includes(ext)) return "../images/video-icon.webp";
 
+  return "../images/file-icon.webp";
 }
