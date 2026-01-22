@@ -209,6 +209,11 @@ body {
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
 }
+.add-file-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
 
 /* === Fullscreen File Viewer Overlay === */
 .file-viewer {
