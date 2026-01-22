@@ -37,7 +37,7 @@ if (
   openImageViewer(file.fileURL);
   return;
 }
-
+});
 
   const img = document.createElement("img");
   img.className = "file-thumbnail";
@@ -245,4 +245,3 @@ function getThumbnailForFile(name) {
   if (["zip","rar"].includes(ext)) return "../images/archive-icon.webp";
   return "../images/file-icon.webp";
 }
-
