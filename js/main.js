@@ -286,6 +286,52 @@ if (adminBtn) {
     });
   });
 
+  document.getElementById("viewer-edit")?.addEventListener("click", () => {
+  if (!isAdmin() || !activeCard || !activeFile) return;
+
+  const input = document.createElement("input");
+  input.type = "file";
+
+  input.onchange = () => {
+    const file = input.files[0];
+    if (!file) return;
+
+    const newURL = URL.createObjectURL(file);
+
+    // Update file object
+    activeFile.fileName = file.name;
+    activeFile.fileURL = newURL;
+    activeFile.thumbnail = getThumbnailForFile(file.name);
+
+    // Update card UI
+    activeCard.querySelector("img").src = activeFile.thumbnail;
+    activeCard.querySelector("p").textContent = activeFile.fileName;
+
+    // Reopen viewer with new file
+    document.getElementById("viewer-body").innerHTML = "";
+    openFileByType(activeFile);
+
+    alert("File replaced successfully");
+  };
+
+  input.click();
+});
+
+  document.getElementById("viewer-delete")?.addEventListener("click", () => {
+  if (!isAdmin() || !activeCard) return;
+
+  if (!confirm("Delete this file permanently?")) return;
+
+  // Remove card
+  activeCard.remove();
+
+  // Close viewer
+  document.getElementById("file-viewer-close").click();
+
+  activeCard = null;
+  activeFile = null;
+});
+
   // Viewer close
   const viewer = document.getElementById("file-viewer");
   const close = document.getElementById("file-viewer-close");
