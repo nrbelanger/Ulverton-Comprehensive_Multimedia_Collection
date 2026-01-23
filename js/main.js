@@ -32,6 +32,9 @@ function addCardToGrid(grid, file) {
   card.rel = "noopener";
 
   card.addEventListener("click", (e) => {
+  e.preventDefault();
+  activeCard = card;
+  activeFile = file;
 const lower = file.fileName.toLowerCase();
 
 if (lower.endsWith(".pdf")) {
@@ -90,6 +93,16 @@ if (
 /* ===============================
    VIEWER CONTROLS
 ================================ */
+function openFileByType(file) {
+  const lower = file.fileName.toLowerCase();
+
+  if (lower.endsWith(".pdf")) openPDFViewer(file.fileURL);
+  else if (lower.endsWith(".stl")) openSTLViewer(file.fileURL);
+  else if ([".jpg",".jpeg",".png",".gif",".webp"].some(e => lower.endsWith(e)))
+    openImageViewer(file.fileURL);
+  else if ([".mp4",".mov"].some(e => lower.endsWith(e)))
+    openVideoViewer(file.fileURL);
+}
 
 function openPDFViewer(url) {
   const viewer = document.getElementById("file-viewer");
@@ -305,8 +318,8 @@ if (adminBtn) {
 
     // Update card UI
     activeCard.querySelector("img").src = activeFile.thumbnail;
-    activeCard.querySelector("p").textContent = activeFile.fileName;
-
+    activeCard.querySelector("p:not(.file-description)").textContent =
+    activeFile.fileName;
     // Reopen viewer with new file
     document.getElementById("viewer-body").innerHTML = "";
     openFileByType(activeFile);
@@ -338,12 +351,13 @@ if (adminBtn) {
   const body = document.getElementById("viewer-body");
 
   if (viewer && close && body) {
-    close.addEventListener("click", () => {
-      viewer.classList.remove("active");
-      body.innerHTML = "";
-      document.body.style.overflow = "";
-    });
-
+close.addEventListener("click", () => {
+  viewer.classList.remove("active");
+  body.innerHTML = "";
+  document.body.style.overflow = "";
+  activeCard = null;
+  activeFile = null;
+});
     viewer.addEventListener("click", e => {
       if (e.target === viewer) close.click();
     });
