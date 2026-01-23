@@ -1,5 +1,7 @@
 const ADMIN_KEY = "ulverton_is_admin";
 const ADMIN_PASSWORD = "admin1"; // This is the Password
+let activeCard = null;
+let activeFile = null;
 
 function isAdmin() {
   return sessionStorage.getItem(ADMIN_KEY) === "true";
