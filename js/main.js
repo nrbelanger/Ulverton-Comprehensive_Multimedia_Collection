@@ -1,5 +1,5 @@
 const ADMIN_KEY = "ulverton_is_admin";
-const ADMIN_PASSWORD = "admin1"; // This is the Password
+const ADMIN_PASSWORD = "ulverton1"; // This is the Password
 let activeCard = null;
 let activeFile = null;
 
