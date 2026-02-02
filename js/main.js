@@ -32,29 +32,41 @@ function isVideoFile(name) {
 
 function generateVideoThumbnail(videoURL, imgElement) {
   const video = document.createElement("video");
+
   video.src = videoURL;
   video.muted = true;
   video.playsInline = true;
-  video.crossOrigin = "anonymous";
-
-  // Important: don't attach to DOM
   video.preload = "metadata";
 
+  // Optional: placeholder so you never see white
+  imgElement.src = "../images/video-icon.webp";
+
   video.addEventListener("loadeddata", () => {
-    // Seek slightly forward to guarantee a frame
-    video.currentTime = 0.1;
+    // Force decode
+    video.currentTime = Math.min(0.1, video.duration || 0.1);
   });
 
   video.addEventListener("seeked", () => {
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    requestAnimationFrame(() => {
+      if (!video.videoWidth || !video.videoHeight) return;
 
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
 
-    imgElement.src = canvas.toDataURL("image/png");
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      try {
+        imgElement.src = canvas.toDataURL("image/png");
+      } catch {
+        // Fallback if canvas is blocked
+        imgElement.src = "../images/video-icon.webp";
+      }
+    });
   });
+
+  video.load(); // 🔴 THIS WAS MISSING
 }
 
 /* ===============================
