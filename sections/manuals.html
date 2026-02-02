@@ -61,11 +61,11 @@
 
 <!-- === Fullscreen File Viewer Overlay === -->
 <div id="file-viewer" class="file-viewer">
+  <div class="file-viewer-content">
   <div class="viewer-admin-controls admin-only">
   <button id="viewer-edit" title="Replace file">✏️</button>
   <button id="viewer-delete" title="Delete file">🗑️</button>
   </div>
-  <div class="file-viewer-content">
     <button id="file-viewer-close" class="file-viewer-close">✕</button>
     <div id="viewer-body"></div>
   </div>
@@ -73,7 +73,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script> 
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+
 <script src="../js/main.js" defer></script>
 </body>
 </html>
