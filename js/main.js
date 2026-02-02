@@ -18,6 +18,40 @@ function requireAdmin() {
   }
 }
 
+function isImageFile(name) {
+  return ["jpg","jpeg","png","gif","webp"]
+    .includes(name.split(".").pop().toLowerCase());
+}
+
+function isVideoFile(name) {
+  return ["mp4","mov"]
+    .includes(name.split(".").pop().toLowerCase());
+}
+
+function generateVideoThumbnail(url, imgElement) {
+  const video = document.createElement("video");
+  video.src = url;
+  video.crossOrigin = "anonymous";
+  video.muted = true;
+  video.preload = "metadata";
+
+  video.addEventListener("loadeddata", () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    imgElement.src = canvas.toDataURL("image/png");
+  });
+
+  // fallback icon if something fails
+  video.addEventListener("error", () => {
+    imgElement.src = getThumbnailForFile("video.mp4");
+  });
+}
+
 /* ===============================
    FILE CARD CREATION
 ================================ */
@@ -73,7 +107,14 @@ if (
 
   const img = document.createElement("img");
   img.className = "file-thumbnail";
-  img.src = file.thumbnail || getThumbnailForFile(file.fileName);
+  if (isImageFile(file.fileName)) {
+  img.src = file.fileURL;           // 👈 actual image
+} else if (isVideoFile(file.fileName)) {
+  generateVideoThumbnail(file.fileURL, img);
+} else {
+  img.src = getThumbnailForFile(file.fileName);
+}
+
   card.appendChild(img);
 
   const title = document.createElement("p");
