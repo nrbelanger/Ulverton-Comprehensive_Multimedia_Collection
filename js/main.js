@@ -19,13 +19,15 @@ function requireAdmin() {
 }
 
 function isImageFile(name) {
-  return ["jpg","jpeg","png","gif","webp"]
-    .includes(name.split(".").pop().toLowerCase());
+  return ["jpg","jpeg","png","gif","webp"].includes(
+    name.split(".").pop().toLowerCase()
+  );
 }
 
 function isVideoFile(name) {
-  return ["mp4","mov"]
-    .includes(name.split(".").pop().toLowerCase());
+  return ["mp4","mov"].includes(
+    name.split(".").pop().toLowerCase()
+  );
 }
 
 function generateVideoThumbnail(videoURL, imgElement) {
@@ -109,16 +111,24 @@ if (
 });
 
   const img = document.createElement("img");
-  img.className = "file-thumbnail";
-  if (isImageFile(file.fileName)) {
-  img.src = file.fileURL;           // 👈 actual image
-} else if (isVideoFile(file.fileName)) {
+img.className = "file-thumbnail";
+
+// Images → use file directly
+if (isImageFile(file.fileName)) {
+  img.src = file.fileURL;
+}
+
+// Videos → generate thumbnail
+else if (isVideoFile(file.fileName)) {
   generateVideoThumbnail(file.fileURL, img);
-} else {
+}
+
+// Everything else → icon
+else {
   img.src = getThumbnailForFile(file.fileName);
 }
 
-  card.appendChild(img);
+card.appendChild(img);
 
   const title = document.createElement("p");
   title.textContent = file.fileName;
