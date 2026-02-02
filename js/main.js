@@ -132,8 +132,10 @@ if (isImageFile(file.fileName)) {
 
 // Videos → generate thumbnail
 else if (isVideoFile(file.fileName)) {
+  img.src = "../images/video-icon.webp"; // HARD fallback
   generateVideoThumbnail(file.fileURL, img);
 }
+
 
 // Everything else → icon
 else {
