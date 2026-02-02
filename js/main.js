@@ -28,14 +28,22 @@ function isVideoFile(name) {
     .includes(name.split(".").pop().toLowerCase());
 }
 
-function generateVideoThumbnail(url, imgElement) {
+function generateVideoThumbnail(videoURL, imgElement) {
   const video = document.createElement("video");
-  video.src = url;
-  video.crossOrigin = "anonymous";
+  video.src = videoURL;
   video.muted = true;
+  video.playsInline = true;
+  video.crossOrigin = "anonymous";
+
+  // Important: don't attach to DOM
   video.preload = "metadata";
 
   video.addEventListener("loadeddata", () => {
+    // Seek slightly forward to guarantee a frame
+    video.currentTime = 0.1;
+  });
+
+  video.addEventListener("seeked", () => {
     const canvas = document.createElement("canvas");
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
@@ -44,11 +52,6 @@ function generateVideoThumbnail(url, imgElement) {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     imgElement.src = canvas.toDataURL("image/png");
-  });
-
-  // fallback icon if something fails
-  video.addEventListener("error", () => {
-    imgElement.src = getThumbnailForFile("video.mp4");
   });
 }
 
