@@ -4,9 +4,6 @@ let activeCard = null;
 let activeFile = null;
 console.time("Page launch time");
 console.time("Full page load");
-window.addEventListener("load", () => {
-  console.timeEnd("Full page load");
-});
 
 function isAdmin() {
   return sessionStorage.getItem(ADMIN_KEY) === "true";
@@ -320,7 +317,9 @@ if (adminBtn) {
       input.value = "";
     });
   });
-
+window.addEventListener("load", () => {
+  console.timeEnd("Full page load");
+});
   document.getElementById("viewer-edit")?.addEventListener("click", () => {
   if (!isAdmin() || !activeCard || !activeFile) return;
 
