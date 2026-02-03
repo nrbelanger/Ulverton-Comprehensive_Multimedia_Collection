@@ -24,51 +24,6 @@ function isImageFile(name) {
   );
 }
 
-function isVideoFile(name) {
-  return ["mp4","mov"].includes(
-    name.split(".").pop().toLowerCase()
-  );
-}
-
-function generateVideoThumbnail(videoURL, imgElement) {
-  const video = document.createElement("video");
-
-  video.src = videoURL;
-  video.muted = true;
-  video.playsInline = true;
-  video.preload = "metadata";
-
-  // Optional: placeholder so you never see white
-  imgElement.src = "../images/video-icon.webp";
-
-  video.addEventListener("loadeddata", () => {
-    // Force decode
-    video.currentTime = Math.min(0.1, video.duration || 0.1);
-  });
-
-  video.addEventListener("seeked", () => {
-    requestAnimationFrame(() => {
-      if (!video.videoWidth || !video.videoHeight) return;
-
-      const canvas = document.createElement("canvas");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      try {
-        imgElement.src = canvas.toDataURL("image/png");
-      } catch {
-        // Fallback if canvas is blocked
-        imgElement.src = "../images/video-icon.webp";
-      }
-    });
-  });
-
-  video.load(); // 🔴 THIS WAS MISSING
-}
-
 /* ===============================
    FILE CARD CREATION
 ================================ */
@@ -128,17 +83,6 @@ img.className = "file-thumbnail";
 // Images → use file directly
 if (isImageFile(file.fileName)) {
   img.src = file.fileURL;
-}
-
-// Videos → generate thumbnail
-else if (isVideoFile(file.fileName)) {
-  // Blob URLs = safe for canvas
-  if (file.fileURL.startsWith("blob:")) {
-    generateVideoThumbnail(file.fileURL, img);
-  } else {
-    // Hosted videos (GitHub Pages) → icon only
-    img.src = "../images/video-icon.webp";
-  }
 }
 
 // Everything else → icon
