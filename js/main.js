@@ -3,6 +3,10 @@ const ADMIN_PASSWORD = "ulverton1"; // This is the Password
 let activeCard = null;
 let activeFile = null;
 console.time("Page launch time");
+console.time("Full page load");
+window.addEventListener("load", () => {
+  console.timeEnd("Full page load");
+});
 
 function isAdmin() {
   return sessionStorage.getItem(ADMIN_KEY) === "true";
