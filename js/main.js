@@ -389,7 +389,7 @@ function getThumbnailForFile(name) {
 
   if (ext === "pdf") return "../images/pdf-icon.webp";
   if (["jpg","jpeg","png","gif","webp"].includes(ext)) return "../images/png-icon.webp";
-  if (["mp4","mov"].includes(ext)) return "../images/video-icon.webp";
+  if (["mp4","mov"].includes(ext)) return "../images/mp4-icon.webp";
   if (["zip","rar"].includes(ext)) return "../images/archive-icon.webp";
 
   return "../images/file-icon.webp";
