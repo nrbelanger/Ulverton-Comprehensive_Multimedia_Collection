@@ -2,6 +2,7 @@ const ADMIN_KEY = "ulverton_is_admin";
 const ADMIN_PASSWORD = "ulverton1"; // This is the Password
 let activeCard = null;
 let activeFile = null;
+console.time("Page launch time");
 
 function isAdmin() {
   return sessionStorage.getItem(ADMIN_KEY) === "true";
@@ -270,6 +271,7 @@ if (adminBtn) {
   adminBtn.addEventListener("click", () => {
     requireAdmin();
   });
+  console.timeEnd("Page launch time");
 }
 
   // Enable admin mode styling
