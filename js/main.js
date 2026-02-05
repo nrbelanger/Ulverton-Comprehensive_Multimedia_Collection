@@ -365,6 +365,16 @@ window.addEventListener("load", () => {
   activeCard = null;
   activeFile = null;
 });
+document.getElementById("viewer-download")?.addEventListener("click", () => {
+  if (!activeFile) return;
+
+  const a = document.createElement("a");
+  a.href = activeFile.fileURL;
+  a.download = activeFile.fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+});
 
   // Viewer close
   const viewer = document.getElementById("file-viewer");
