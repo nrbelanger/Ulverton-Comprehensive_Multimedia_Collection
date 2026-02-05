@@ -291,6 +291,11 @@ if (adminBtn) {
     if (grid) window.defaultManualFiles.forEach(f => addCardToGrid(grid, f));
   }
 
+  if (window.defaultPartsFiles) {
+    const grid = document.getElementById("partsGrid");
+    if (grid) window.defaultPartsFiles.forEach(f => addCardToGrid(grid, f));
+  }
+  
   // Upload buttons (ADMIN ONLY)
   document.querySelectorAll(".add-file-btn").forEach(btn => {
     const input = document.querySelector(btn.dataset.input);
