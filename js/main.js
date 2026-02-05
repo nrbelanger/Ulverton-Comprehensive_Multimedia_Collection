@@ -133,16 +133,17 @@ function openPDFViewer(url) {
 }
 
 function openSTLViewer(url) {
+  console.log("Opening STL:", url);
   const viewer = document.getElementById("file-viewer");
   const body = document.getElementById("viewer-body");
   if (!viewer || !body) return;
-
   body.innerHTML = "";
   viewer.classList.add("active");
   document.body.style.overflow = "hidden";
 
   requestAnimationFrame(() => initSTL(body, url));
 }
+
 
 /* ===============================
    STL VIEWER (NO CORB)
@@ -411,6 +412,7 @@ function getThumbnailForFile(name) {
   if (["jpg","jpeg","png","gif","webp"].includes(ext)) return "../images/png-icon.webp";
   if (["mp4","mov"].includes(ext)) return "../images/mp4-icon.webp";
   if (["zip","rar"].includes(ext)) return "../images/archive-icon.webp";
+  if (["stl","obj"].includes(ext)) return "../images/stl-icon.webp";
 
   return "../images/file-icon.webp";
 }
