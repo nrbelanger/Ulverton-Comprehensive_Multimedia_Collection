@@ -180,10 +180,10 @@ function initSTL(container, url) {
   const loader = new THREE.STLLoader();
 
   loader.load(
-    url,
-    (geometry) => {
-      geometry.center();
-      geometry.computeBoundingBox();
+  url,
+  geometry => {
+    geometry.center();
+    geometry.computeBoundingBox();
 
       const size = geometry.boundingBox
         .getSize(new THREE.Vector3())
@@ -204,9 +204,11 @@ function initSTL(container, url) {
       controls.target.set(0, 0, 0);
       camera.lookAt(0, 0, 0);
     },
-    undefined,
-    (err) => console.error("STL load error:", err)
-  );
+  undefined,
+  error => {
+    console.error("STL load error:", error, url);
+  }
+);
 
   function animate() {
     requestAnimationFrame(animate);
