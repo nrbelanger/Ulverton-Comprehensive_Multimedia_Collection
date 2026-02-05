@@ -309,6 +309,19 @@ body {
   cursor: pointer;
 }
 
+/* Hide admin controls by default */
+#viewer-edit,
+#viewer-delete {
+  display: none;
+}
+
+/* Show them only in admin mode */
+body.admin-mode #viewer-edit,
+body.admin-mode #viewer-delete {
+  display: inline-flex; /* or inline-block if you prefer */
+}
+
+
 .viewer-admin-controls button:hover {
   background: rgba(255,255,255,0.15);
 }
