@@ -298,7 +298,11 @@ if (adminBtn) {
     const grid = document.getElementById("partsGrid");
     if (grid) window.defaultPartsFiles.forEach(f => addCardToGrid(grid, f));
   }
-  
+
+  if (window.defaultCadSimFiles) {
+    const grid = document.getElementById("cadSimGrid");
+    if (grid) window.defaultCadSimFiles.forEach(f => addCardToGrid(grid, f));
+  }
   // Upload buttons (ADMIN ONLY)
   document.querySelectorAll(".add-file-btn").forEach(btn => {
     const input = document.querySelector(btn.dataset.input);
