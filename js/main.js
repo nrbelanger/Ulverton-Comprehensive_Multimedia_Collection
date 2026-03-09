@@ -303,6 +303,7 @@ if (adminBtn) {
     const grid = document.getElementById("cadSimGrid");
     if (grid) window.defaultCadSimFiles.forEach(f => addCardToGrid(grid, f));
   }
+  
   // Upload buttons (ADMIN ONLY)
   document.querySelectorAll(".add-file-btn").forEach(btn => {
     const input = document.querySelector(btn.dataset.input);
