@@ -337,9 +337,23 @@ body {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* Placeholder for the empty 4th slot until you add the 4th button */
-.card-btn-group::after {
-  content: "";
-  display: block;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+/* === Drag and Drop States === */
+
+/* Card is ready to be dragged (Move button clicked) */
+.file-card.drag-ready {
+  outline: 3px dashed #888;
+  outline-offset: 3px;
+  cursor: grab;
+}
+
+/* Card is actively being dragged */
+.file-card.drag-ghost {
+  opacity: 0.4;
+}
+
+/* Card is a valid drop target */
+.file-card.drag-over {
+  outline: 3px solid #4a90d9;
+  outline-offset: 3px;
+  background: #e8f0fb;
 }
