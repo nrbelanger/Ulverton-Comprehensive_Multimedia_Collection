@@ -400,3 +400,158 @@ body {
   opacity: 0;
   transform: translateX(-50%) translateY(20px);
 }
+
+/* =============================================
+   TABLET LAYOUT (768px and above)
+   Three-panel app shell:
+   [Left: header/nav] [Centre: content] [Right: footer/logos]
+=============================================== */
+
+@media (min-width: 768px) {
+
+  /* Full viewport grid — three fixed columns, full height */
+  body.tablet-layout {
+    display: grid;
+    grid-template-columns: 200px 1fr 160px;
+    grid-template-rows: 100vh;
+    height: 100vh;
+    overflow: hidden;
+    background-size: 300px 300px;
+  }
+
+  /* === LEFT SIDEBAR — Header & Nav === */
+  body.tablet-layout .site-header {
+    grid-column: 1;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1.5rem 0.75rem;
+    overflow-y: auto;
+    height: 100vh;
+    box-sizing: border-box;
+    border-right: 1px solid #ccc;
+  }
+
+  /* Hide the page title in tablet mode */
+  body.tablet-layout .site-header h1 {
+    display: none;
+  }
+
+  body.tablet-layout .nav {
+    flex-direction: column;
+    align-items: stretch;
+    margin: 0;
+    gap: 0.25rem;
+  }
+
+  body.tablet-layout .nav li {
+    margin: 0;
+  }
+
+  body.tablet-layout .nav a {
+    display: block;
+    padding: 0.65rem 0.85rem;
+    border-radius: 6px;
+    font-size: 1rem;
+  }
+
+  body.tablet-layout .nav a:hover,
+  body.tablet-layout .nav a.active {
+    background-color: #444;
+    color: #fff;
+  }
+
+  /* === CENTRE — Scrolling content area === */
+  body.tablet-layout main {
+    grid-column: 2;
+    grid-row: 1;
+    overflow-y: auto;
+    padding: 1.5rem 1rem;
+    box-sizing: border-box;
+  }
+
+  /* Single-column filecard layout, cards fill the centre width */
+  body.tablet-layout .file-grid {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    padding: 0;
+  }
+
+  body.tablet-layout .file-card {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  body.tablet-layout .file-card img.file-thumbnail {
+    height: 220px;
+  }
+
+  /* Homepage section grid also goes single column */
+  body.tablet-layout .section-grid {
+    grid-template-columns: 1fr;
+    padding: 0;
+    max-width: 100%;
+  }
+
+  /* === RIGHT SIDEBAR — Footer, logos, admin button === */
+  body.tablet-layout .site-footer {
+    grid-column: 3;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 0.75rem;
+    margin: 0;
+    height: 100vh;
+    box-sizing: border-box;
+    border-left: 1px solid #ccc;
+  }
+
+  /* Logo placeholder boxes */
+  body.tablet-layout .tablet-logo {
+    width: 110px;
+    height: 110px;
+    background: #ccc;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: #666;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  /* Admin button sits at the bottom of the right sidebar */
+  body.tablet-layout .admin-login-btn {
+    margin-top: auto;
+    width: 100%;
+    padding: 0.65rem 0;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 6px;
+    background-color: #000;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  body.tablet-layout .admin-login-btn:hover {
+    background-color: #444;
+  }
+
+  /* Copyright text */
+  body.tablet-layout .site-footer .container p {
+    font-size: 0.7rem;
+    color: #888;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+#uc-toast.toast-hide {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+}
