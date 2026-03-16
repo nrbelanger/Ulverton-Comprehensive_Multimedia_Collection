@@ -100,7 +100,77 @@ function addCardToGrid(grid, file) {
   });
   btnGroup.appendChild(delBtn);
 
+  // Move — admin only
+  const moveBtn = document.createElement("button");
+  moveBtn.className = "card-btn admin-only";
+  moveBtn.title = "Move card";
+  moveBtn.textContent = "✥";
+  moveBtn.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAdmin()) return;
+
+    // Toggle drag mode on this card
+    const isAlreadyDragging = card.classList.contains("drag-ready");
+    // Cancel any other card currently in drag-ready state
+    document.querySelectorAll(".file-card.drag-ready").forEach(c => {
+      c.classList.remove("drag-ready");
+      c.draggable = false;
+    });
+    if (!isAlreadyDragging) {
+      card.classList.add("drag-ready");
+      card.draggable = true;
+      card.focus();
+    }
+  });
+  btnGroup.appendChild(moveBtn);
+
   card.appendChild(btnGroup);
+
+  // --- Drag and drop handlers ---
+  card.addEventListener("dragstart", e => {
+    if (!card.classList.contains("drag-ready")) { e.preventDefault(); return; }
+    e.dataTransfer.effectAllowed = "move";
+    card.classList.add("dragging");
+    // Small timeout so the drag image doesn't show the highlight
+    setTimeout(() => card.classList.add("drag-ghost"), 0);
+  });
+
+  card.addEventListener("dragend", () => {
+    card.classList.remove("dragging", "drag-ghost", "drag-ready");
+    card.draggable = false;
+    document.querySelectorAll(".file-card.drag-over").forEach(c => c.classList.remove("drag-over"));
+  });
+
+  card.addEventListener("dragover", e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    const dragging = document.querySelector(".file-card.dragging");
+    if (!dragging || dragging === card) return;
+    card.classList.add("drag-over");
+  });
+
+  card.addEventListener("dragleave", () => {
+    card.classList.remove("drag-over");
+  });
+
+  card.addEventListener("drop", e => {
+    e.preventDefault();
+    card.classList.remove("drag-over");
+    const dragging = document.querySelector(".file-card.dragging");
+    if (!dragging || dragging === card) return;
+
+    const grid = card.parentNode;
+    const cards = [...grid.querySelectorAll(".file-card")];
+    const fromIndex = cards.indexOf(dragging);
+    const toIndex = cards.indexOf(card);
+
+    if (fromIndex < toIndex) {
+      grid.insertBefore(dragging, card.nextSibling);
+    } else {
+      grid.insertBefore(dragging, card);
+    }
+  });
 
   // --- Touch support: first tap reveals buttons, second tap on a button acts ---
   let touchActivated = false;
