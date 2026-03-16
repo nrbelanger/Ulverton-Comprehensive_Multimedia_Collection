@@ -100,86 +100,27 @@ function addCardToGrid(grid, file) {
   });
   btnGroup.appendChild(delBtn);
 
-  // Move — admin only
-  const moveBtn = document.createElement("button");
-  moveBtn.className = "card-btn admin-only";
-  moveBtn.title = "Move card";
-  moveBtn.textContent = "✥";
-  moveBtn.addEventListener("click", e => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!isAdmin()) return;
-
-    // Toggle drag mode on this card
-    const isAlreadyDragging = card.classList.contains("drag-ready");
-    // Cancel any other card currently in drag-ready state
-    document.querySelectorAll(".file-card.drag-ready").forEach(c => {
-      c.classList.remove("drag-ready");
-      c.draggable = false;
-    });
-    if (!isAlreadyDragging) {
-      card.classList.add("drag-ready");
-      card.draggable = true;
-      card.focus();
-    }
-  });
-  btnGroup.appendChild(moveBtn);
-
   card.appendChild(btnGroup);
 
-  // --- Drag and drop handlers ---
-  card.addEventListener("dragstart", e => {
-    if (!card.classList.contains("drag-ready")) { e.preventDefault(); return; }
-    e.dataTransfer.effectAllowed = "move";
-    card.classList.add("dragging");
-    // Small timeout so the drag image doesn't show the highlight
-    setTimeout(() => card.classList.add("drag-ghost"), 0);
-  });
-
-  card.addEventListener("dragend", () => {
-    card.classList.remove("dragging", "drag-ghost", "drag-ready");
-    card.draggable = false;
-    document.querySelectorAll(".file-card.drag-over").forEach(c => c.classList.remove("drag-over"));
-  });
-
-  card.addEventListener("dragover", e => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-    const dragging = document.querySelector(".file-card.dragging");
-    if (!dragging || dragging === card) return;
-    card.classList.add("drag-over");
-  });
-
-  card.addEventListener("dragleave", () => {
-    card.classList.remove("drag-over");
-  });
-
-  card.addEventListener("drop", e => {
-    e.preventDefault();
-    card.classList.remove("drag-over");
-    const dragging = document.querySelector(".file-card.dragging");
-    if (!dragging || dragging === card) return;
-
-    const grid = card.parentNode;
-    const cards = [...grid.querySelectorAll(".file-card")];
-    const fromIndex = cards.indexOf(dragging);
-    const toIndex = cards.indexOf(card);
-
-    if (fromIndex < toIndex) {
-      grid.insertBefore(dragging, card.nextSibling);
-    } else {
-      grid.insertBefore(dragging, card);
-    }
-  });
-
-  // --- Touch support: first tap reveals buttons, second tap on a button acts ---
+  // --- Touch support ---
+  // First tap: reveal buttons only (suppress the click that follows)
+  // Second tap on card background: open viewer
+  // Tapping a button: act normally
   let touchActivated = false;
+  let suppressNextClick = false;
+
   card.addEventListener("touchstart", e => {
+    // If tapping a button, let it act — don't interfere
+    if (e.target.closest(".card-btn")) return;
+
     if (!touchActivated) {
+      // First tap — reveal buttons, suppress the click event that follows
       e.preventDefault();
+      suppressNextClick = true;
       touchActivated = true;
       card.classList.add("touch-active");
-      // Dismiss when tapping anywhere else
+
+      // Dismiss when tapping anywhere outside this card
       const dismiss = ev => {
         if (!card.contains(ev.target)) {
           touchActivated = false;
@@ -189,11 +130,19 @@ function addCardToGrid(grid, file) {
       };
       document.addEventListener("touchstart", dismiss);
     }
+    // Second tap on card background — allow the click to fire naturally
   }, { passive: false });
 
   // --- Click handler: open viewer for supported types, ignore for unsupported ---
   card.addEventListener("click", e => {
     e.preventDefault();
+
+    // Swallow the click that immediately follows the first reveal tap
+    if (suppressNextClick) {
+      suppressNextClick = false;
+      return;
+    }
+
     activeCard = card;
     activeFile = file;
     const lower = file.fileName.toLowerCase();
@@ -206,7 +155,7 @@ function addCardToGrid(grid, file) {
     if ([".mp4",".mov"].some(ext => lower.endsWith(ext))) {
       openVideoViewer(file.fileURL); return;
     }
-    // Unsupported type — do nothing (touch users use the download button)
+    // Unsupported type — do nothing
   });
 
   // --- Thumbnail ---
