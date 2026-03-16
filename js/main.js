@@ -437,6 +437,18 @@ function openVideoViewer(url) {
 ================================ */
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  // === Tablet layout ===
+  const TABLET_BP = 768;
+  function applyTabletLayout() {
+    if (window.innerWidth >= TABLET_BP) {
+      document.body.classList.add("tablet-layout");
+    } else {
+      document.body.classList.remove("tablet-layout");
+    }
+  }
+  applyTabletLayout();
+  window.addEventListener("resize", applyTabletLayout);
 const adminBtn = document.getElementById("admin-login-btn");
 if (adminBtn) {
   adminBtn.addEventListener("click", () => {
