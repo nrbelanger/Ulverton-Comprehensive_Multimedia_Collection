@@ -292,36 +292,43 @@ body {
   display: inline-block;
 }
 
-.viewer-admin-controls {
+/* === Card Hover / Tap Button Group === */
+.card-btn-group {
   position: absolute;
-  top: 10px;
-  right: 50px;
+  top: 8px;
+  right: 8px;
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 10;
 }
 
-.viewer-admin-controls button {
-  background: rgba(0,0,0,0.6);
+/* Show on mouse hover */
+.file-card:hover .card-btn-group {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Show on touch tap (class toggled by JS) */
+.file-card.touch-active .card-btn-group {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.card-btn {
+  background: rgba(0, 0, 0, 0.65);
   color: white;
   border: none;
   border-radius: 6px;
-  padding: 6px;
+  padding: 5px 7px;
   cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1;
+  transition: background 0.2s ease;
 }
 
-/* Hide admin controls by default */
-#viewer-edit,
-#viewer-delete {
-  display: none;
-}
-
-/* Show them only in admin mode */
-body.admin-mode #viewer-edit,
-body.admin-mode #viewer-delete {
-  display: inline-flex; /* or inline-block if you prefer */
-}
-
-
-.viewer-admin-controls button:hover {
-  background: rgba(255,255,255,0.15);
+.card-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
