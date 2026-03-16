@@ -295,14 +295,17 @@ body {
 /* === Card Hover / Tap Button Group === */
 .card-btn-group {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  display: flex;
-  gap: 6px;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
   z-index: 10;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.55);
 }
 
 /* Show on mouse hover */
@@ -318,17 +321,25 @@ body {
 }
 
 .card-btn {
-  background: rgba(0, 0, 0, 0.65);
+  background: transparent;
   color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 5px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   cursor: pointer;
-  font-size: 0.95rem;
-  line-height: 1;
-  transition: background 0.2s ease;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+  padding: 0;
 }
 
 .card-btn:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+/* Placeholder for the empty 4th slot until you add the 4th button */
+.card-btn-group::after {
+  content: "";
+  display: block;
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
