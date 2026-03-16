@@ -39,60 +39,111 @@ function addCardToGrid(grid, file) {
   card.target = "_blank";
   card.rel = "noopener";
 
-  card.addEventListener("click", (e) => {
-  e.preventDefault();
-  activeCard = card;
-  activeFile = file;
-const lower = file.fileName.toLowerCase();
+  // --- Hover/tap button group ---
+  const btnGroup = document.createElement("div");
+  btnGroup.className = "card-btn-group";
 
-if (lower.endsWith(".pdf")) {
-  e.preventDefault();
-  openPDFViewer(file.fileURL);
-  return;
-}
+  // Download — visible to all users
+  const dlBtn = document.createElement("button");
+  dlBtn.className = "card-btn";
+  dlBtn.title = "Download";
+  dlBtn.textContent = "💾";
+  dlBtn.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    const a = document.createElement("a");
+    a.href = file.fileURL;
+    a.download = file.fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+  btnGroup.appendChild(dlBtn);
 
-if (lower.endsWith(".stl")) {
-  e.preventDefault();
-  openSTLViewer(file.fileURL);
-  return;
-}
+  // Edit — admin only
+  const editBtn = document.createElement("button");
+  editBtn.className = "card-btn admin-only";
+  editBtn.title = "Replace file";
+  editBtn.textContent = "✏️";
+  editBtn.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    const input = document.createElement("input");
+    input.type = "file";
+    input.onchange = () => {
+      const newFile = input.files[0];
+      if (!newFile) return;
+      const newURL = URL.createObjectURL(newFile);
+      file.fileName = newFile.name;
+      file.fileURL = newURL;
+      file.thumbnail = getThumbnailForFile(newFile.name);
+      card.querySelector("img.file-thumbnail").src = isImageFile(newFile.name)
+        ? newURL
+        : file.thumbnail;
+      card.querySelector("p:not(.file-description)").textContent = file.fileName;
+      alert("File replaced successfully");
+    };
+    input.click();
+  });
+  btnGroup.appendChild(editBtn);
 
-if (
-  lower.endsWith(".jpg") ||
-  lower.endsWith(".jpeg") ||
-  lower.endsWith(".png") ||
-  lower.endsWith(".gif") ||
-  lower.endsWith(".webp")
-) {
-  e.preventDefault();
-  openImageViewer(file.fileURL);
-  return;
-}
-if (
-  lower.endsWith(".mp4") ||
-  lower.endsWith(".mov")
-) {
-  e.preventDefault();
-  openVideoViewer(file.fileURL);
-  return;
-}
+  // Delete — admin only
+  const delBtn = document.createElement("button");
+  delBtn.className = "card-btn admin-only";
+  delBtn.title = "Delete file";
+  delBtn.textContent = "🗑️";
+  delBtn.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!confirm("Delete this file permanently?")) return;
+    card.remove();
+  });
+  btnGroup.appendChild(delBtn);
 
-});
+  card.appendChild(btnGroup);
 
+  // --- Touch support: first tap reveals buttons, second tap on a button acts ---
+  let touchActivated = false;
+  card.addEventListener("touchstart", e => {
+    if (!touchActivated) {
+      e.preventDefault();
+      touchActivated = true;
+      card.classList.add("touch-active");
+      // Dismiss when tapping anywhere else
+      const dismiss = ev => {
+        if (!card.contains(ev.target)) {
+          touchActivated = false;
+          card.classList.remove("touch-active");
+          document.removeEventListener("touchstart", dismiss);
+        }
+      };
+      document.addEventListener("touchstart", dismiss);
+    }
+  }, { passive: false });
+
+  // --- Click handler: open viewer for supported types, ignore for unsupported ---
+  card.addEventListener("click", e => {
+    e.preventDefault();
+    activeCard = card;
+    activeFile = file;
+    const lower = file.fileName.toLowerCase();
+
+    if (lower.endsWith(".pdf"))   { openPDFViewer(file.fileURL);   return; }
+    if (lower.endsWith(".stl"))   { openSTLViewer(file.fileURL);   return; }
+    if ([".jpg",".jpeg",".png",".gif",".webp"].some(ext => lower.endsWith(ext))) {
+      openImageViewer(file.fileURL); return;
+    }
+    if ([".mp4",".mov"].some(ext => lower.endsWith(ext))) {
+      openVideoViewer(file.fileURL); return;
+    }
+    // Unsupported type — do nothing (touch users use the download button)
+  });
+
+  // --- Thumbnail ---
   const img = document.createElement("img");
-img.className = "file-thumbnail";
-
-// Images → use file directly
-if (isImageFile(file.fileName)) {
-  img.src = file.fileURL;
-}
-
-// Everything else → icon
-else {
-  img.src = getThumbnailForFile(file.fileName);
-}
-
-card.appendChild(img);
+  img.className = "file-thumbnail";
+  img.src = isImageFile(file.fileName) ? file.fileURL : getThumbnailForFile(file.fileName);
+  card.appendChild(img);
 
   const title = document.createElement("p");
   title.textContent = file.fileName;
@@ -333,61 +384,7 @@ if (adminBtn) {
 window.addEventListener("load", () => {
   console.timeEnd("Full page load");
 });
-  document.getElementById("viewer-edit")?.addEventListener("click", () => {
-  if (!isAdmin() || !activeCard || !activeFile) return;
 
-  const input = document.createElement("input");
-  input.type = "file";
-
-  input.onchange = () => {
-    const file = input.files[0];
-    if (!file) return;
-
-    const newURL = URL.createObjectURL(file);
-
-    // Update file object
-    activeFile.fileName = file.name;
-    activeFile.fileURL = newURL;
-    activeFile.thumbnail = getThumbnailForFile(file.name);
-
-    // Update card UI
-    activeCard.querySelector("img").src = activeFile.thumbnail;
-    activeCard.querySelector("p:not(.file-description)").textContent =
-    activeFile.fileName;
-    // Reopen viewer with new file
-    document.getElementById("viewer-body").innerHTML = "";
-    openFileByType(activeFile);
-
-    alert("File replaced successfully");
-  };
-
-  input.click();
-});
-
-  document.getElementById("viewer-delete")?.addEventListener("click", () => {
-  if (!isAdmin() || !activeCard) return;
-
-  if (!confirm("Delete this file permanently?")) return;
-
-  // Remove card
-  activeCard.remove();
-
-  // Close viewer
-  document.getElementById("file-viewer-close").click();
-
-  activeCard = null;
-  activeFile = null;
-});
-document.getElementById("viewer-download")?.addEventListener("click", () => {
-  if (!activeFile) return;
-
-  const a = document.createElement("a");
-  a.href = activeFile.fileURL;
-  a.download = activeFile.fileName;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-});
 
   // Viewer close
   const viewer = document.getElementById("file-viewer");
