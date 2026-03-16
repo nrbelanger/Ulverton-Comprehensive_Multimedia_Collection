@@ -27,6 +27,27 @@ function isImageFile(name) {
 }
 
 /* ===============================
+   TOAST NOTIFICATION
+================================ */
+
+function showToast(message) {
+  let toast = document.getElementById("uc-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "uc-toast";
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.classList.remove("toast-hide");
+  toast.classList.add("toast-show");
+  clearTimeout(toast._hideTimer);
+  toast._hideTimer = setTimeout(() => {
+    toast.classList.remove("toast-show");
+    toast.classList.add("toast-hide");
+  }, 2800);
+}
+
+/* ===============================
    FILE CARD CREATION
 ================================ */
 
@@ -43,7 +64,7 @@ function addCardToGrid(grid, file) {
   const btnGroup = document.createElement("div");
   btnGroup.className = "card-btn-group";
 
-  // Download — visible to all users
+  // Download — visible to all users (top-left)
   const dlBtn = document.createElement("button");
   dlBtn.className = "card-btn";
   dlBtn.title = "Download";
@@ -60,7 +81,7 @@ function addCardToGrid(grid, file) {
   });
   btnGroup.appendChild(dlBtn);
 
-  // Edit — admin only
+  // Edit — admin only (top-right)
   const editBtn = document.createElement("button");
   editBtn.className = "card-btn admin-only";
   editBtn.title = "Replace file";
@@ -87,7 +108,7 @@ function addCardToGrid(grid, file) {
   });
   btnGroup.appendChild(editBtn);
 
-  // Delete — admin only
+  // Delete — admin only (bottom-left)
   const delBtn = document.createElement("button");
   delBtn.className = "card-btn admin-only";
   delBtn.title = "Delete file";
@@ -100,27 +121,108 @@ function addCardToGrid(grid, file) {
   });
   btnGroup.appendChild(delBtn);
 
+  // Move — admin only (bottom-right)
+  const moveBtn = document.createElement("button");
+  moveBtn.className = "card-btn admin-only";
+  moveBtn.title = "Move card";
+  moveBtn.textContent = "✥";
+  moveBtn.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAdmin()) return;
+    const isAlreadyDragging = card.classList.contains("drag-ready");
+    document.querySelectorAll(".file-card.drag-ready").forEach(c => {
+      c.classList.remove("drag-ready");
+      c.draggable = false;
+    });
+    if (!isAlreadyDragging) {
+      card.classList.add("drag-ready");
+      card.draggable = true;
+      card.focus();
+    }
+  });
+  btnGroup.appendChild(moveBtn);
+
+  // Open — centre button, visible to all users
+  const openBtn = document.createElement("button");
+  openBtn.className = "card-btn card-btn-open";
+  openBtn.title = "Open file";
+  openBtn.textContent = "👁️";
+  openBtn.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    activeCard = card;
+    activeFile = file;
+    const lower = file.fileName.toLowerCase();
+    if (lower.endsWith(".pdf"))   { openPDFViewer(file.fileURL);   return; }
+    if (lower.endsWith(".stl"))   { openSTLViewer(file.fileURL);   return; }
+    if ([".jpg",".jpeg",".png",".gif",".webp"].some(ext => lower.endsWith(ext))) {
+      openImageViewer(file.fileURL); return;
+    }
+    if ([".mp4",".mov"].some(ext => lower.endsWith(ext))) {
+      openVideoViewer(file.fileURL); return;
+    }
+    showToast("File type not supported");
+  });
+  btnGroup.appendChild(openBtn);
+
   card.appendChild(btnGroup);
+
+  // --- Drag and drop handlers ---
+  card.addEventListener("dragstart", e => {
+    if (!card.classList.contains("drag-ready")) { e.preventDefault(); return; }
+    e.dataTransfer.effectAllowed = "move";
+    card.classList.add("dragging");
+    setTimeout(() => card.classList.add("drag-ghost"), 0);
+  });
+
+  card.addEventListener("dragend", () => {
+    card.classList.remove("dragging", "drag-ghost", "drag-ready");
+    card.draggable = false;
+    document.querySelectorAll(".file-card.drag-over").forEach(c => c.classList.remove("drag-over"));
+  });
+
+  card.addEventListener("dragover", e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    const dragging = document.querySelector(".file-card.dragging");
+    if (!dragging || dragging === card) return;
+    card.classList.add("drag-over");
+  });
+
+  card.addEventListener("dragleave", () => {
+    card.classList.remove("drag-over");
+  });
+
+  card.addEventListener("drop", e => {
+    e.preventDefault();
+    card.classList.remove("drag-over");
+    const dragging = document.querySelector(".file-card.dragging");
+    if (!dragging || dragging === card) return;
+    const grid = card.parentNode;
+    const cards = [...grid.querySelectorAll(".file-card")];
+    const fromIndex = cards.indexOf(dragging);
+    const toIndex = cards.indexOf(card);
+    if (fromIndex < toIndex) {
+      grid.insertBefore(dragging, card.nextSibling);
+    } else {
+      grid.insertBefore(dragging, card);
+    }
+  });
 
   // --- Touch support ---
   // First tap: reveal buttons only (suppress the click that follows)
   // Second tap on card background: open viewer
-  // Tapping a button: act normally
   let touchActivated = false;
   let suppressNextClick = false;
 
   card.addEventListener("touchstart", e => {
-    // If tapping a button, let it act — don't interfere
     if (e.target.closest(".card-btn")) return;
-
     if (!touchActivated) {
-      // First tap — reveal buttons, suppress the click event that follows
       e.preventDefault();
       suppressNextClick = true;
       touchActivated = true;
       card.classList.add("touch-active");
-
-      // Dismiss when tapping anywhere outside this card
       const dismiss = ev => {
         if (!card.contains(ev.target)) {
           touchActivated = false;
@@ -130,23 +232,18 @@ function addCardToGrid(grid, file) {
       };
       document.addEventListener("touchstart", dismiss);
     }
-    // Second tap on card background — allow the click to fire naturally
   }, { passive: false });
 
-  // --- Click handler: open viewer for supported types, ignore for unsupported ---
+  // --- Click handler: desktop click or second touch tap ---
   card.addEventListener("click", e => {
     e.preventDefault();
-
-    // Swallow the click that immediately follows the first reveal tap
     if (suppressNextClick) {
       suppressNextClick = false;
       return;
     }
-
     activeCard = card;
     activeFile = file;
     const lower = file.fileName.toLowerCase();
-
     if (lower.endsWith(".pdf"))   { openPDFViewer(file.fileURL);   return; }
     if (lower.endsWith(".stl"))   { openSTLViewer(file.fileURL);   return; }
     if ([".jpg",".jpeg",".png",".gif",".webp"].some(ext => lower.endsWith(ext))) {
