@@ -337,23 +337,66 @@ body {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* === Drag and Drop States === */
+/* Centre open button — sits over the grid intersection */
+.card-btn-open {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.75);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  font-size: 1.5rem;
+  z-index: 11;
+}
 
-/* Card is ready to be dragged (Move button clicked) */
+.card-btn-open:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* === Drag and Drop States === */
 .file-card.drag-ready {
   outline: 3px dashed #888;
   outline-offset: 3px;
   cursor: grab;
 }
 
-/* Card is actively being dragged */
 .file-card.drag-ghost {
   opacity: 0.4;
 }
 
-/* Card is a valid drop target */
 .file-card.drag-over {
   outline: 3px solid #4a90d9;
   outline-offset: 3px;
   background: #e8f0fb;
+}
+
+/* === Toast Notification === */
+#uc-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #222;
+  color: #fff;
+  padding: 0.65rem 1.4rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 99999;
+  white-space: nowrap;
+}
+
+#uc-toast.toast-show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+#uc-toast.toast-hide {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
 }
