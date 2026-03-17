@@ -144,7 +144,7 @@ body {
   gap: 8px;
   height: auto;
   overflow: visible;
-  cursor: pointer; /* clickable cards */
+  cursor: pointer;
   text-decoration: none;
   color: inherit;
   position: relative;
@@ -180,18 +180,14 @@ body {
 .file-card::before {
   content: "";
   position: absolute;
-
   width: 26px;
   height: 26px;
-
   top: -5px;
   left: 50%;
   transform: translateX(-50%);
-
   background-image: url("../images/thumbtack__1_-removebg-preview.png");
   background-size: contain;
   background-repeat: no-repeat;
-
   pointer-events: none;
   z-index: 5;
 }
@@ -220,18 +216,16 @@ body {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.85);
-  display: none; /* hidden by default */
+  display: none;
   align-items: center;
   justify-content: center;
   z-index: 9999;
 }
 
-/* Active state */
 .file-viewer.active {
   display: flex;
 }
 
-/* Viewer content box */
 .file-viewer-content {
   position: relative;
   width: 90%;
@@ -246,7 +240,6 @@ body {
   height: 100%;
 }
 
-/* PDFs / images / video */
 #viewer-body iframe,
 #viewer-body img,
 #viewer-body video {
@@ -255,8 +248,6 @@ body {
   border: none;
 }
 
-
-/* Close button */
 .file-viewer-close {
   position: absolute;
   top: 16px;
@@ -268,7 +259,6 @@ body {
   background: #ddd;
 }
 
-/* === PDF / Image / Video base styles === */
 .file-viewer iframe,
 .file-viewer img,
 .file-viewer video {
@@ -308,13 +298,11 @@ body {
   background: rgba(0, 0, 0, 0.55);
 }
 
-/* Show on mouse hover */
 .file-card:hover .card-btn-group {
   opacity: 1;
   pointer-events: all;
 }
 
-/* Show on touch tap (class toggled by JS) */
 .file-card.touch-active .card-btn-group {
   opacity: 1;
   pointer-events: all;
@@ -337,7 +325,6 @@ body {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* Centre open button — sits over the grid intersection */
 .card-btn-open {
   position: absolute;
   top: 50%;
@@ -402,14 +389,11 @@ body {
 }
 
 /* =============================================
-   TABLET LAYOUT (768px and above)
-   Three-panel app shell:
-   [Left: header/nav] [Centre: content] [Right: footer/logos]
+   TABLET LAYOUT (768px - 1199px)
 =============================================== */
 
 @media (min-width: 768px) and (max-width: 1199px) {
 
-  /* Full viewport grid — three fixed columns, full height */
   body.tablet-layout {
     display: grid;
     grid-template-columns: 200px 1fr 160px;
@@ -419,7 +403,6 @@ body {
     background-size: 300px 300px;
   }
 
-  /* === LEFT SIDEBAR — Header & Nav === */
   body.tablet-layout .site-header {
     grid-column: 1;
     grid-row: 1;
@@ -433,7 +416,6 @@ body {
     border-right: 1px solid #ccc;
   }
 
-  /* Hide the page title in tablet mode */
   body.tablet-layout .site-header h1 {
     display: none;
   }
@@ -462,7 +444,6 @@ body {
     color: #fff;
   }
 
-  /* === CENTRE — Scrolling content area === */
   body.tablet-layout main {
     grid-column: 2;
     grid-row: 1;
@@ -471,7 +452,6 @@ body {
     box-sizing: border-box;
   }
 
-  /* Single-column filecard layout, cards fill the centre width */
   body.tablet-layout .file-grid {
     grid-template-columns: 1fr;
     max-width: 100%;
@@ -487,14 +467,12 @@ body {
     height: 220px;
   }
 
-  /* Homepage section grid also goes single column */
   body.tablet-layout .section-grid {
     grid-template-columns: 1fr;
     padding: 0;
     max-width: 100%;
   }
 
-  /* === RIGHT SIDEBAR — Footer, logos, admin button === */
   body.tablet-layout .site-footer {
     grid-column: 3;
     grid-row: 1;
@@ -509,7 +487,6 @@ body {
     border-left: 1px solid #ccc;
   }
 
-  /* Logo placeholder boxes */
   body.tablet-layout .tablet-logo {
     width: 110px;
     height: 110px;
@@ -524,7 +501,6 @@ body {
     flex-shrink: 0;
   }
 
-  /* Admin button sits at the bottom of the right sidebar */
   body.tablet-layout .admin-login-btn {
     margin-top: auto;
     width: 100%;
@@ -542,7 +518,6 @@ body {
     background-color: #444;
   }
 
-  /* Copyright text */
   body.tablet-layout .site-footer .container p {
     font-size: 0.7rem;
     color: #888;
@@ -551,7 +526,40 @@ body {
   }
 }
 
-#uc-toast.toast-hide {
-  opacity: 0;
-  transform: translateX(-50%) translateY(20px);
+/* === STL Thumbnail Loading Spinner === */
+.thumb-wrap {
+  width: 100%;
+  height: 160px;
+  display: block;
+  overflow: hidden;
+}
+
+.thumb-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.thumb-wrap.thumb-loading {
+  background: #1a1a2e;
+  position: relative;
+}
+
+.thumb-wrap.thumb-loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border: 3px solid rgba(255,255,255,0.15);
+  border-top-color: #88aacc;
+  border-radius: 50%;
+  animation: thumb-spin 0.8s linear infinite;
+}
+
+@keyframes thumb-spin {
+  to { transform: rotate(360deg); }
 }
