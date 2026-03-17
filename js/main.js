@@ -487,21 +487,26 @@ function generateSTLThumbnail(url, imgElement, wrapper) {
 
 function generateVideoThumbnail(url, imgElement, wrapper) {
   const video = document.createElement("video");
-  // No crossOrigin — same-origin GitHub Pages files don't need it
-  // and setting it can actually break canvas capture
   video.muted = true;
   video.playsInline = true;
   video.preload = "metadata";
 
-  let seeked = false;
+  let done = false;
+
+  const onError = () => {
+    if (done) return; // ignore errors after successful capture
+    console.warn("Video thumbnail failed to load:", url);
+    imgElement.src = "../images/mp4-icon.webp";
+    if (wrapper) wrapper.classList.remove("thumb-loading");
+  };
 
   video.addEventListener("loadedmetadata", () => {
     video.currentTime = Math.min(Math.max(video.duration * 0.1, 1), video.duration - 0.1);
   });
 
   video.addEventListener("seeked", () => {
-    if (seeked) return; // guard against double-fire
-    seeked = true;
+    if (done) return; // guard against double-fire
+    done = true;
 
     try {
       const canvas = document.createElement("canvas");
@@ -543,7 +548,6 @@ function generateVideoThumbnail(url, imgElement, wrapper) {
       ctx.closePath();
       ctx.fill();
 
-      // toDataURL throws if canvas is tainted by CORS
       const dataURL = canvas.toDataURL("image/jpeg", 0.85);
       imgElement.src = dataURL;
     } catch (err) {
@@ -552,16 +556,14 @@ function generateVideoThumbnail(url, imgElement, wrapper) {
     }
 
     if (wrapper) wrapper.classList.remove("thumb-loading");
+
+    // Clear src AFTER marking done — prevents the error handler from firing
+    video.removeEventListener("error", onError);
     video.src = "";
   });
 
-  video.addEventListener("error", () => {
-    console.warn("Video thumbnail failed to load:", url);
-    imgElement.src = "../images/mp4-icon.webp";
-    if (wrapper) wrapper.classList.remove("thumb-loading");
-  });
+  video.addEventListener("error", onError);
 
-  // Set src last, after all listeners are attached
   video.src = url;
 }
 
