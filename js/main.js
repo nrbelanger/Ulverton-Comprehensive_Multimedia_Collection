@@ -439,7 +439,8 @@ function openVideoViewer(url) {
 document.addEventListener("DOMContentLoaded", () => {
 
   // === Tablet layout ===
-  const TABLET_BP = 768;
+  const TABLET_BP_MIN = 768;
+  const TABLET_BP_MAX = 1199;
   function applyTabletLayout() {
     if (window.innerWidth >= TABLET_BP) {
       document.body.classList.add("tablet-layout");
