@@ -1,565 +1,732 @@
-/* === Base Styles === */
-body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
-  color: #222;
-  background-image: url("../images/close-up-white-fabric-texture-and-background-free-photo.jpg");
-  background-repeat: repeat;
-  background-size: 300px 300px;
+const ADMIN_KEY = "ulverton_is_admin";
+const ADMIN_PASSWORD = "ulverton1"; // This is the Password
+let activeCard = null;
+let activeFile = null;
+console.time("Page launch time");
+console.time("Full page load");
+
+function isAdmin() {
+  return sessionStorage.getItem(ADMIN_KEY) === "true";
 }
 
-/* Header */
-.site-header {
-  background-color: #e6e6fa;
-  color: #000;
-  padding: 1rem 0;
-}
-
-.site-header h1 {
-  margin: 0;
-  text-align: center;
-  font-size: 1.5rem;
-}
-
-.nav {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  list-style: none;
-  margin: 0.5rem 0 0;
-  padding: 0;
-}
-
-.nav li {
-  margin: 0.5rem;
-}
-
-.nav a {
-  color: #000;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 0.3rem 0.6rem;
-  border-radius: 4px;
-}
-
-.nav a:hover,
-.nav a.active {
-  background-color: #444;
-}
-
-/* === Grid Section === */
-.section-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  padding: 2rem;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-@media (max-width: 700px) {
-  .section-grid {
-    grid-template-columns: 1fr;
+function requireAdmin() {
+  const pwd = prompt("Admin password:");
+  if (pwd === ADMIN_PASSWORD) {
+    sessionStorage.setItem(ADMIN_KEY, "true");
+    alert("Admin mode enabled");
+    location.reload();
+  } else {
+    alert("Incorrect password");
   }
 }
 
-.section-card {
-  position: relative;
-  height: 250px;
-  border-radius: 10px;
-  overflow: hidden;
-  text-decoration: none;
-  color: white;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+function isImageFile(name) {
+  return ["jpg","jpeg","png","gif","webp"].includes(
+    name.split(".").pop().toLowerCase()
+  );
 }
 
-.card-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  transition: transform 0.3s ease;
-}
+/* ===============================
+   TOAST NOTIFICATION
+================================ */
 
-.section-card:hover .card-bg {
-  transform: scale(1.05);
-}
-
-.card-overlay {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.3s ease;
-}
-
-.section-card:hover .card-overlay {
-  background: rgba(0, 0, 0, 0.6);
-}
-
-.card-overlay h2 {
-  font-size: 1.5rem;
-  text-align: center;
-  padding: 0 1rem;
-}
-
-/* === Footer === */
-.site-footer {
-  background-color: #e6e6fa;
-  color: #000;
-  text-align: center;
-  padding: 1rem 0;
-  margin-top: 2rem;
-  font-size: 0.9rem;
-}
-
-/* === File Grid and Cards === */
-.file-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 10px;
-}
-
-@media (max-width: 600px) {
-  .file-grid {
-    grid-template-columns: 1fr;
+function showToast(message) {
+  let toast = document.getElementById("uc-toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "uc-toast";
+    document.body.appendChild(toast);
   }
+  toast.textContent = message;
+  toast.classList.remove("toast-hide");
+  toast.classList.add("toast-show");
+  clearTimeout(toast._hideTimer);
+  toast._hideTimer = setTimeout(() => {
+    toast.classList.remove("toast-show");
+    toast.classList.add("toast-hide");
+  }, 2800);
 }
 
-.file-card {
-  background: #f4f4f4;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  height: auto;
-  overflow: visible;
-  cursor: pointer;
-  text-decoration: none;
-  color: inherit;
-  position: relative;
-}
+/* ===============================
+   FILE CARD CREATION
+================================ */
 
-.file-card img.file-thumbnail {
-  width: 100%;
-  height: 160px;
-  object-fit: cover;
-  display: block;
-  pointer-events:none;
-  user-select: none;
-}
+function addCardToGrid(grid, file) {
+  if (!grid || !file) return;
 
-.file-card p,
-.file-description {
-  margin: 6px 10px;
-  font-size: 0.9rem;
-  color: #222;
-  line-height: 1.3;
-  text-align: center;
-  word-wrap: break-word;
-  background: #e0e0e0;
-  padding: 6px 10px;
-  border-radius: 6px;
-}
+  const card = document.createElement("a");
+  card.className = "file-card";
+  card.href = file.fileURL;
+  card.target = "_blank";
+  card.rel = "noopener";
 
-.file-card * {
-  user-select: none;
-  -webkit-user-drag: none;
-}
+  // --- Hover/tap button group ---
+  const btnGroup = document.createElement("div");
+  btnGroup.className = "card-btn-group";
 
-.file-card::before {
-  content: "";
-  position: absolute;
-  width: 26px;
-  height: 26px;
-  top: -5px;
-  left: 50%;
-  transform: translateX(-50%);
-  background-image: url("../images/thumbtack__1_-removebg-preview.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  pointer-events: none;
-  z-index: 5;
-}
+  // Download — visible to all users (top-left)
+  const dlBtn = document.createElement("button");
+  dlBtn.className = "card-btn";
+  dlBtn.title = "Download";
+  dlBtn.textContent = "💾";
+  dlBtn.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    const a = document.createElement("a");
+    a.href = file.fileURL;
+    a.download = file.fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+  btnGroup.appendChild(dlBtn);
 
-/* === Buttons === */
-.add-file-btn {
-  display: block;
-  margin: 20px auto;
-  padding: 10px 20px;
-  font-size: 1.1rem;
-  border: none;
-  border-radius: 6px;
-  background-color: #000;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-.add-file-wrapper {
-  display: flex;
-  justify-content: center;
-  margin: 2rem 0;
-}
+  // Edit — admin only (top-right)
+  const editBtn = document.createElement("button");
+  editBtn.className = "card-btn admin-only";
+  editBtn.title = "Replace file";
+  editBtn.textContent = "✏️";
+  editBtn.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    const input = document.createElement("input");
+    input.type = "file";
+    input.onchange = () => {
+      const newFile = input.files[0];
+      if (!newFile) return;
+      const newURL = URL.createObjectURL(newFile);
+      file.fileName = newFile.name;
+      file.fileURL = newURL;
+      file.thumbnail = getThumbnailForFile(newFile.name);
+      card.querySelector("img.file-thumbnail").src = isImageFile(newFile.name)
+        ? newURL
+        : file.thumbnail;
+      card.querySelector("p:not(.file-description)").textContent = file.fileName;
+      alert("File replaced successfully");
+    };
+    input.click();
+  });
+  btnGroup.appendChild(editBtn);
 
-/* === Fullscreen File Viewer Overlay === */
-.file-viewer {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
+  // Delete — admin only (bottom-left)
+  const delBtn = document.createElement("button");
+  delBtn.className = "card-btn admin-only";
+  delBtn.title = "Delete file";
+  delBtn.textContent = "🗑️";
+  delBtn.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!confirm("Delete this file permanently?")) return;
+    card.remove();
+  });
+  btnGroup.appendChild(delBtn);
 
-.file-viewer.active {
-  display: flex;
-}
+  // Move — admin only (bottom-right)
+  const moveBtn = document.createElement("button");
+  moveBtn.className = "card-btn admin-only";
+  moveBtn.title = "Move card";
+  moveBtn.textContent = "✥";
+  moveBtn.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAdmin()) return;
+    const isAlreadyDragging = card.classList.contains("drag-ready");
+    document.querySelectorAll(".file-card.drag-ready").forEach(c => {
+      c.classList.remove("drag-ready");
+      c.draggable = false;
+    });
+    if (!isAlreadyDragging) {
+      card.classList.add("drag-ready");
+      card.draggable = true;
+      card.focus();
+    }
+  });
+  btnGroup.appendChild(moveBtn);
 
-.file-viewer-content {
-  position: relative;
-  width: 90%;
-  height: 90%;
-  background: #111;
-  border-radius: 12px;
-  overflow: hidden;
-}
+  // Open — centre button, visible to all users
+  const openBtn = document.createElement("button");
+  openBtn.className = "card-btn card-btn-open";
+  openBtn.title = "Open file";
+  openBtn.textContent = "👁️";
+  openBtn.addEventListener("click", e => {
+    e.preventDefault();
+    e.stopPropagation();
+    activeCard = card;
+    activeFile = file;
+    const lower = file.fileName.toLowerCase();
+    if (lower.endsWith(".pdf"))   { openPDFViewer(file.fileURL);   return; }
+    if (lower.endsWith(".stl"))   { openSTLViewer(file.fileURL);   return; }
+    if ([".jpg",".jpeg",".png",".gif",".webp"].some(ext => lower.endsWith(ext))) {
+      openImageViewer(file.fileURL); return;
+    }
+    if ([".mp4",".mov"].some(ext => lower.endsWith(ext))) {
+      openVideoViewer(file.fileURL); return;
+    }
+    showToast("File type not supported");
+  });
+  btnGroup.appendChild(openBtn);
 
-#viewer-body {
-  width: 100%;
-  height: 100%;
-}
+  card.appendChild(btnGroup);
 
-#viewer-body iframe,
-#viewer-body img,
-#viewer-body video {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
+  // --- Drag and drop handlers ---
+  card.addEventListener("dragstart", e => {
+    if (!card.classList.contains("drag-ready")) { e.preventDefault(); return; }
+    e.dataTransfer.effectAllowed = "move";
+    card.classList.add("dragging");
+    setTimeout(() => card.classList.add("drag-ghost"), 0);
+  });
 
-.file-viewer-close {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 10000;
-}
+  card.addEventListener("dragend", () => {
+    card.classList.remove("dragging", "drag-ghost", "drag-ready");
+    card.draggable = false;
+    document.querySelectorAll(".file-card.drag-over").forEach(c => c.classList.remove("drag-over"));
+  });
 
-.file-viewer-close:hover {
-  background: #ddd;
-}
+  card.addEventListener("dragover", e => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    const dragging = document.querySelector(".file-card.dragging");
+    if (!dragging || dragging === card) return;
+    card.classList.add("drag-over");
+  });
 
-.file-viewer iframe,
-.file-viewer img,
-.file-viewer video {
-  width: 100%;
-  height: 100%;
-  border: none;
-  object-fit: contain;
-  background: #000;
-}
+  card.addEventListener("dragleave", () => {
+    card.classList.remove("drag-over");
+  });
 
-.add-file-btn:hover {
-  background-color: #444;
-  color: #fff;
-}
+  card.addEventListener("drop", e => {
+    e.preventDefault();
+    card.classList.remove("drag-over");
+    const dragging = document.querySelector(".file-card.dragging");
+    if (!dragging || dragging === card) return;
+    const grid = card.parentNode;
+    const cards = [...grid.querySelectorAll(".file-card")];
+    const fromIndex = cards.indexOf(dragging);
+    const toIndex = cards.indexOf(card);
+    if (fromIndex < toIndex) {
+      grid.insertBefore(dragging, card.nextSibling);
+    } else {
+      grid.insertBefore(dragging, card);
+    }
+  });
 
-.admin-only {
-  display: none;
-}
+  // --- Touch support ---
+  // First tap: reveal buttons only (suppress the click that follows)
+  // Second tap on card background: open viewer
+  let touchActivated = false;
+  let suppressNextClick = false;
 
-.admin-mode .admin-only {
-  display: inline-block;
-}
+  card.addEventListener("touchstart", e => {
+    if (e.target.closest(".card-btn")) return;
+    if (!touchActivated) {
+      e.preventDefault();
+      suppressNextClick = true;
+      touchActivated = true;
+      card.classList.add("touch-active");
+      const dismiss = ev => {
+        if (!card.contains(ev.target)) {
+          touchActivated = false;
+          card.classList.remove("touch-active");
+          document.removeEventListener("touchstart", dismiss);
+        }
+      };
+      document.addEventListener("touchstart", dismiss);
+    }
+  }, { passive: false });
 
-/* === Card Hover / Tap Button Group === */
-.card-btn-group {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-  z-index: 10;
-  border-radius: 8px;
-  overflow: hidden;
-  background: rgba(0, 0, 0, 0.55);
-}
+  // --- Click handler: desktop click or second touch tap ---
+  card.addEventListener("click", e => {
+    e.preventDefault();
+    if (suppressNextClick) {
+      suppressNextClick = false;
+      return;
+    }
+    activeCard = card;
+    activeFile = file;
+    const lower = file.fileName.toLowerCase();
+    if (lower.endsWith(".pdf"))   { openPDFViewer(file.fileURL);   return; }
+    if (lower.endsWith(".stl"))   { openSTLViewer(file.fileURL);   return; }
+    if ([".jpg",".jpeg",".png",".gif",".webp"].some(ext => lower.endsWith(ext))) {
+      openImageViewer(file.fileURL); return;
+    }
+    if ([".mp4",".mov"].some(ext => lower.endsWith(ext))) {
+      openVideoViewer(file.fileURL); return;
+    }
+    // Unsupported type — do nothing
+  });
 
-.file-card:hover .card-btn-group {
-  opacity: 1;
-  pointer-events: all;
-}
+  // --- Thumbnail ---
+  const img = document.createElement("img");
+  img.className = "file-thumbnail";
+  const lower = file.fileName.toLowerCase();
 
-.file-card.touch-active .card-btn-group {
-  opacity: 1;
-  pointer-events: all;
-}
-
-.card-btn {
-  background: transparent;
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  cursor: pointer;
-  font-size: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s ease;
-  padding: 0;
-}
-
-.card-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.card-btn-open {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.75);
-  border: 2px solid rgba(255, 255, 255, 0.4);
-  font-size: 1.5rem;
-  z-index: 11;
-}
-
-.card-btn-open:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
-/* === Drag and Drop States === */
-.file-card.drag-ready {
-  outline: 3px dashed #888;
-  outline-offset: 3px;
-  cursor: grab;
-}
-
-.file-card.drag-ghost {
-  opacity: 0.4;
-}
-
-.file-card.drag-over {
-  outline: 3px solid #4a90d9;
-  outline-offset: 3px;
-  background: #e8f0fb;
-}
-
-/* === Toast Notification === */
-#uc-toast {
-  position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: #222;
-  color: #fff;
-  padding: 0.65rem 1.4rem;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  z-index: 99999;
-  white-space: nowrap;
-}
-
-#uc-toast.toast-show {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
-#uc-toast.toast-hide {
-  opacity: 0;
-  transform: translateX(-50%) translateY(20px);
-}
-
-/* =============================================
-   TABLET LAYOUT (768px - 1199px)
-=============================================== */
-
-@media (min-width: 768px) and (max-width: 1199px) {
-
-  body.tablet-layout {
-    display: grid;
-    grid-template-columns: 200px 1fr 160px;
-    grid-template-rows: 100vh;
-    height: 100vh;
-    overflow: hidden;
-    background-size: 300px 300px;
+  if (isImageFile(file.fileName)) {
+    img.src = file.fileURL;
+    card.appendChild(img);
+  } else if (lower.endsWith(".stl")) {
+    // Wrap in a div so we can show a spinner while generating
+    const thumbWrap = document.createElement("div");
+    thumbWrap.className = "thumb-wrap thumb-loading";
+    img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+    thumbWrap.appendChild(img);
+    card.appendChild(thumbWrap);
+    requestAnimationFrame(() => generateSTLThumbnail(file.fileURL, img, thumbWrap));
+  } else if (lower.endsWith(".mp4") || lower.endsWith(".mov")) {
+    const thumbWrap = document.createElement("div");
+    thumbWrap.className = "thumb-wrap thumb-loading";
+    img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+    thumbWrap.appendChild(img);
+    card.appendChild(thumbWrap);
+    requestAnimationFrame(() => generateVideoThumbnail(file.fileURL, img, thumbWrap));
+  } else {
+    img.src = getThumbnailForFile(file.fileName);
+    card.appendChild(img);
   }
 
-  body.tablet-layout .site-header {
-    grid-column: 1;
-    grid-row: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    padding: 1.5rem 0.75rem;
-    overflow-y: auto;
-    height: 100vh;
-    box-sizing: border-box;
-    border-right: 1px solid #ccc;
+  const title = document.createElement("p");
+  title.textContent = file.fileName;
+  card.appendChild(title);
+
+  if (file.description) {
+    const desc = document.createElement("p");
+    desc.className = "file-description";
+    desc.textContent = file.description;
+    card.appendChild(desc);
   }
 
-  body.tablet-layout .site-header h1 {
-    display: none;
-  }
-
-  body.tablet-layout .nav {
-    flex-direction: column;
-    align-items: stretch;
-    margin: 0;
-    gap: 0.25rem;
-  }
-
-  body.tablet-layout .nav li {
-    margin: 0;
-  }
-
-  body.tablet-layout .nav a {
-    display: block;
-    padding: 0.65rem 0.85rem;
-    border-radius: 6px;
-    font-size: 1rem;
-  }
-
-  body.tablet-layout .nav a:hover,
-  body.tablet-layout .nav a.active {
-    background-color: #444;
-    color: #fff;
-  }
-
-  body.tablet-layout main {
-    grid-column: 2;
-    grid-row: 1;
-    overflow-y: auto;
-    padding: 1.5rem 1rem;
-    box-sizing: border-box;
-  }
-
-  body.tablet-layout .file-grid {
-    grid-template-columns: 1fr;
-    max-width: 100%;
-    padding: 0;
-  }
-
-  body.tablet-layout .file-card {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  body.tablet-layout .file-card img.file-thumbnail {
-    height: 220px;
-  }
-
-  body.tablet-layout .section-grid {
-    grid-template-columns: 1fr;
-    padding: 0;
-    max-width: 100%;
-  }
-
-  body.tablet-layout .site-footer {
-    grid-column: 3;
-    grid-row: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.5rem 0.75rem;
-    margin: 0;
-    height: 100vh;
-    box-sizing: border-box;
-    border-left: 1px solid #ccc;
-  }
-
-  body.tablet-layout .tablet-logo {
-    width: 110px;
-    height: 110px;
-    background: #ccc;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    color: #666;
-    text-align: center;
-    flex-shrink: 0;
-  }
-
-  body.tablet-layout .admin-login-btn {
-    margin-top: auto;
-    width: 100%;
-    padding: 0.65rem 0;
-    font-size: 0.9rem;
-    border: none;
-    border-radius: 6px;
-    background-color: #000;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-
-  body.tablet-layout .admin-login-btn:hover {
-    background-color: #444;
-  }
-
-  body.tablet-layout .site-footer .container p {
-    font-size: 0.7rem;
-    color: #888;
-    text-align: center;
-    margin: 0;
-  }
+  grid.appendChild(card);
 }
 
-/* === STL Thumbnail Loading Spinner === */
-.thumb-wrap {
-  width: 100%;
-  height: 160px;
-  display: block;
-  overflow: hidden;
+/* ===============================
+   VIEWER CONTROLS
+================================ */
+function openFileByType(file) {
+  const lower = file.fileName.toLowerCase();
+
+  if (lower.endsWith(".pdf")) openPDFViewer(file.fileURL);
+  else if (lower.endsWith(".stl")) openSTLViewer(file.fileURL);
+  else if ([".jpg",".jpeg",".png",".gif",".webp"].some(e => lower.endsWith(e)))
+    openImageViewer(file.fileURL);
+  else if ([".mp4",".mov"].some(e => lower.endsWith(e)))
+    openVideoViewer(file.fileURL);
 }
 
-.thumb-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+function openPDFViewer(url) {
+  const viewer = document.getElementById("file-viewer");
+  const body = document.getElementById("viewer-body");
+  if (!viewer || !body) return;
+
+  body.innerHTML = `<iframe src="${url}" loading="lazy"></iframe>`;
+  viewer.classList.add("active");
+  document.body.style.overflow = "hidden";
 }
 
-.thumb-wrap.thumb-loading {
-  background: #1a1a2e;
-  position: relative;
+function openSTLViewer(url) {
+  console.log("Opening STL:", url);
+  const viewer = document.getElementById("file-viewer");
+  const body = document.getElementById("viewer-body");
+  if (!viewer || !body) return;
+  body.innerHTML = "";
+  viewer.classList.add("active");
+  document.body.style.overflow = "hidden";
+
+  requestAnimationFrame(() => initSTL(body, url));
 }
 
-.thumb-wrap.thumb-loading::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 32px;
-  height: 32px;
-  margin: -16px 0 0 -16px;
-  border: 3px solid rgba(255,255,255,0.15);
-  border-top-color: #88aacc;
-  border-radius: 50%;
-  animation: thumb-spin 0.8s linear infinite;
+
+/* ===============================
+   STL VIEWER (NO CORB)
+================================ */
+
+function initSTL(container, url) {
+  if (!window.THREE || !THREE.STLLoader || !THREE.OrbitControls) {
+    console.error("Three.js loaders not available");
+    return;
+  }
+
+  const width = container.clientWidth || 600;
+  const height = container.clientHeight || 400;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x111111);
+
+  const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 5000);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  container.appendChild(renderer.domElement);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+
+  const light = new THREE.DirectionalLight(0xffffff, 0.9);
+  light.position.set(1, 1, 1);
+  scene.add(light);
+
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+
+  const loader = new THREE.STLLoader();
+
+  loader.load(
+  url,
+  geometry => {
+    geometry.center();
+    geometry.computeBoundingBox();
+
+      const size = geometry.boundingBox
+        .getSize(new THREE.Vector3())
+        .length();
+
+      const mesh = new THREE.Mesh(
+        geometry,
+        new THREE.MeshStandardMaterial({
+          color: 0xaaaaaa,
+          metalness: 0.15,
+          roughness: 0.65
+        })
+      );
+
+      scene.add(mesh);
+
+      // Isometric-style angle: elevated and rotated 45° for depth
+      camera.position.set(size * 1.1, size * 0.9, size * 1.1);
+      controls.target.set(0, 0, 0);
+      camera.lookAt(0, 0, 0);
+    },
+  undefined,
+  error => {
+    console.error("STL load error:", error, url);
+  }
+);
+
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+
+  animate();
 }
 
-@keyframes thumb-spin {
-  to { transform: rotate(360deg); }
+/* ===============================
+   STL THUMBNAIL GENERATOR
+================================ */
+
+function generateSTLThumbnail(url, imgElement, wrapper) {
+  if (!window.THREE || !THREE.STLLoader) return;
+
+  // Offscreen canvas — small size is fine for a thumbnail
+  const W = 400, H = 260;
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(1);
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x1a1a2e);
+
+  const camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 5000);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+  const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
+  keyLight.position.set(1, 1.5, 1);
+  scene.add(keyLight);
+  const fillLight = new THREE.DirectionalLight(0x8888ff, 0.3);
+  fillLight.position.set(-1, -0.5, -1);
+  scene.add(fillLight);
+
+  const loader = new THREE.STLLoader();
+  loader.load(
+    url,
+    geometry => {
+      geometry.center();
+      geometry.computeBoundingBox();
+      const size = geometry.boundingBox.getSize(new THREE.Vector3()).length();
+
+      const mesh = new THREE.Mesh(
+        geometry,
+        new THREE.MeshStandardMaterial({
+          color: 0x88aacc,
+          metalness: 0.2,
+          roughness: 0.55
+        })
+      );
+      scene.add(mesh);
+
+      // Isometric angle matching the viewer
+      camera.position.set(size * 1.1, size * 0.9, size * 1.1);
+      camera.lookAt(0, 0, 0);
+
+      // Render a single frame and capture it
+      renderer.render(scene, camera);
+      const dataURL = canvas.toDataURL("image/png");
+      imgElement.src = dataURL;
+      if (wrapper) wrapper.classList.remove("thumb-loading");
+
+      // Clean up
+      renderer.dispose();
+      geometry.dispose();
+    },
+    undefined,
+    err => {
+      console.warn("STL thumbnail failed:", err);
+      imgElement.src = "../images/stl-icon.webp";
+      if (wrapper) wrapper.classList.remove("thumb-loading");
+      renderer.dispose();
+    }
+  );
+}
+
+/* ===============================
+   VIDEO THUMBNAIL GENERATOR
+================================ */
+
+function generateVideoThumbnail(url, imgElement, wrapper) {
+  const video = document.createElement("video");
+  video.muted = true;
+  video.playsInline = true;
+  video.preload = "metadata";
+
+  let done = false;
+
+  const onError = () => {
+    if (done) return; // ignore errors after successful capture
+    console.warn("Video thumbnail failed to load:", url);
+    imgElement.src = "../images/mp4-icon.webp";
+    if (wrapper) wrapper.classList.remove("thumb-loading");
+  };
+
+  video.addEventListener("loadedmetadata", () => {
+    video.currentTime = Math.min(Math.max(video.duration * 0.1, 1), video.duration - 0.1);
+  });
+
+  video.addEventListener("seeked", () => {
+    if (done) return; // guard against double-fire
+    done = true;
+
+    try {
+      const canvas = document.createElement("canvas");
+      canvas.width = 400;
+      canvas.height = 260;
+      const ctx = canvas.getContext("2d");
+
+      const vRatio = video.videoWidth / video.videoHeight;
+      const cRatio = canvas.width / canvas.height;
+      let drawW, drawH, drawX, drawY;
+
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      if (vRatio > cRatio) {
+        drawW = canvas.width;
+        drawH = canvas.width / vRatio;
+        drawX = 0;
+        drawY = (canvas.height - drawH) / 2;
+      } else {
+        drawH = canvas.height;
+        drawW = canvas.height * vRatio;
+        drawX = (canvas.width - drawW) / 2;
+        drawY = 0;
+      }
+
+      ctx.drawImage(video, drawX, drawY, drawW, drawH);
+
+      // Play button overlay
+      ctx.fillStyle = "rgba(0,0,0,0.45)";
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, 28, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,0.9)";
+      ctx.beginPath();
+      ctx.moveTo(canvas.width / 2 - 10, canvas.height / 2 - 14);
+      ctx.lineTo(canvas.width / 2 + 18, canvas.height / 2);
+      ctx.lineTo(canvas.width / 2 - 10, canvas.height / 2 + 14);
+      ctx.closePath();
+      ctx.fill();
+
+      const dataURL = canvas.toDataURL("image/jpeg", 0.85);
+      imgElement.src = dataURL;
+    } catch (err) {
+      console.warn("Video thumbnail canvas capture failed:", err);
+      imgElement.src = "../images/mp4-icon.webp";
+    }
+
+    if (wrapper) wrapper.classList.remove("thumb-loading");
+
+    // Clear src AFTER marking done — prevents the error handler from firing
+    video.removeEventListener("error", onError);
+    video.src = "";
+  });
+
+  video.addEventListener("error", onError);
+
+  video.src = url;
+}
+
+function openImageViewer(url) {
+  const viewer = document.getElementById("file-viewer");
+  const body = document.getElementById("viewer-body");
+  if (!viewer || !body) return;
+
+  body.innerHTML = `
+    <img
+      src="${url}"
+      alt="Image preview"
+      style="
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: #000;
+      "
+    />
+  `;
+
+  viewer.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+function openVideoViewer(url) {
+  const viewer = document.getElementById("file-viewer");
+  const body = document.getElementById("viewer-body");
+  if (!viewer || !body) return;
+
+  body.innerHTML = `
+    <video
+      controls
+      autoplay
+      style="
+        width: 100%;
+        height: 100%;
+        background: #000;
+        object-fit: contain;
+      "
+    >
+      <source src="${url}">
+      Your browser does not support this video format.
+    </video>
+  `;
+
+  viewer.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+/* ===============================
+   PAGE INIT
+================================ */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // === Tablet layout ===
+  const TABLET_BP_MIN = 768;
+  const TABLET_BP_MAX = 1199;
+  function applyTabletLayout() {
+    if (window.innerWidth >= TABLET_BP_MIN && window.innerWidth <= TABLET_BP_MAX) {
+      document.body.classList.add("tablet-layout");
+    } else {
+      document.body.classList.remove("tablet-layout");
+    }
+  }
+  applyTabletLayout();
+  window.addEventListener("resize", applyTabletLayout);
+const adminBtn = document.getElementById("admin-login-btn");
+if (adminBtn) {
+  adminBtn.addEventListener("click", () => {
+    requireAdmin();
+  });
+  console.timeEnd("Page launch time");
+}
+
+  // Enable admin mode styling
+  if (isAdmin()) {
+    document.body.classList.add("admin-mode");
+  }
+
+  // Load default files
+  if (window.defaultHistoryFiles) {
+    const grid = document.getElementById("historyGrid");
+    if (grid) window.defaultHistoryFiles.forEach(f => addCardToGrid(grid, f));
+  }
+
+  if (window.defaultManualFiles) {
+    const grid = document.getElementById("manualGrid");
+    if (grid) window.defaultManualFiles.forEach(f => addCardToGrid(grid, f));
+  }
+
+  if (window.defaultPartsFiles) {
+    const grid = document.getElementById("partsGrid");
+    if (grid) window.defaultPartsFiles.forEach(f => addCardToGrid(grid, f));
+  }
+
+  if (window.defaultCadSimFiles) {
+    const grid = document.getElementById("cadSimGrid");
+    if (grid) window.defaultCadSimFiles.forEach(f => addCardToGrid(grid, f));
+  }
+  
+  // Upload buttons (ADMIN ONLY)
+  document.querySelectorAll(".add-file-btn").forEach(btn => {
+    const input = document.querySelector(btn.dataset.input);
+    const grid = document.querySelector(btn.dataset.grid);
+    if (!input || !grid) return;
+
+    btn.addEventListener("click", () => {
+      if (!isAdmin()) {
+        alert("Admin access required");
+        return;
+      }
+      input.click();
+    });
+
+    input.addEventListener("change", () => {
+      [...input.files].forEach(file => {
+        addCardToGrid(grid, {
+          fileName: file.name,
+          fileURL: URL.createObjectURL(file),
+          thumbnail: getThumbnailForFile(file.name),
+          description: prompt("Enter a description:", "")
+        });
+      });
+      input.value = "";
+    });
+  });
+window.addEventListener("load", () => {
+  console.timeEnd("Full page load");
+});
+
+
+  // Viewer close
+  const viewer = document.getElementById("file-viewer");
+  const close = document.getElementById("file-viewer-close");
+  const body = document.getElementById("viewer-body");
+
+  if (viewer && close && body) {
+close.addEventListener("click", () => {
+  viewer.classList.remove("active");
+  body.innerHTML = "";
+  document.body.style.overflow = "";
+  activeCard = null;
+  activeFile = null;
+});
+    viewer.addEventListener("click", e => {
+      if (e.target === viewer) close.click();
+    });
+  }
+});
+
+/* ===============================
+   THUMBNAILS
+================================ */
+
+function getThumbnailForFile(name) {
+  const ext = name.split(".").pop().toLowerCase();
+
+  if (ext === "pdf") return "../images/pdf-icon.webp";
+  if (["jpg","jpeg","png","gif","webp"].includes(ext)) return "../images/png-icon.webp";
+  if (["mp4","mov"].includes(ext)) return "../images/mp4-icon.webp";
+  if (["zip","rar"].includes(ext)) return "../images/archive-icon.webp";
+  if (["stl","obj"].includes(ext)) return "../images/stl-icon.webp";
+
+  return "../images/file-icon.webp";
 }
