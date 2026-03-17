@@ -407,7 +407,7 @@ body {
    [Left: header/nav] [Centre: content] [Right: footer/logos]
 =============================================== */
 
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 1199px) {
 
   /* Full viewport grid — three fixed columns, full height */
   body.tablet-layout {
