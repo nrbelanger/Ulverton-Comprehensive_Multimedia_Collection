@@ -264,7 +264,6 @@ function addCardToGrid(grid, file) {
     img.src = file.fileURL;
     card.appendChild(img);
   } else if (lower.endsWith(".stl")) {
-    // Wrap in a div so we can show a spinner while generating
     const thumbWrap = document.createElement("div");
     thumbWrap.className = "thumb-wrap thumb-loading";
     img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
@@ -278,6 +277,14 @@ function addCardToGrid(grid, file) {
     thumbWrap.appendChild(img);
     card.appendChild(thumbWrap);
     requestAnimationFrame(() => generateVideoThumbnail(file.fileURL, img, thumbWrap));
+  } else if (lower.endsWith(".pdf")) {
+    const thumbWrap = document.createElement("div");
+    thumbWrap.className = "thumb-wrap thumb-loading";
+    img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+    thumbWrap.appendChild(img);
+    card.appendChild(thumbWrap);
+    // Deferred — pdf.js is loaded lazily on first use
+    requestAnimationFrame(() => generatePDFThumbnail(file.fileURL, img, thumbWrap));
   } else {
     img.src = getThumbnailForFile(file.fileName);
     card.appendChild(img);
@@ -565,6 +572,88 @@ function generateVideoThumbnail(url, imgElement, wrapper) {
   video.addEventListener("error", onError);
 
   video.src = url;
+}
+
+/* ===============================
+   PDF THUMBNAIL GENERATOR
+   pdf.js is loaded lazily — only fetched the first time a PDF
+   card needs a thumbnail. Subsequent calls reuse the same instance.
+================================ */
+
+// Module-level state for lazy loading
+let pdfJsLoading = false;
+let pdfJsReady = false;
+const pdfJsQueue = []; // callbacks waiting for pdf.js to finish loading
+
+const PDFJS_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+const PDFJS_WORKER_URL = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+function ensurePdfJs(callback) {
+  // Already loaded — call immediately
+  if (pdfJsReady) {
+    callback();
+    return;
+  }
+
+  // Queue the callback for when loading finishes
+  pdfJsQueue.push(callback);
+
+  // Already loading — just wait in the queue
+  if (pdfJsLoading) return;
+
+  // First caller — kick off the load
+  pdfJsLoading = true;
+  const script = document.createElement("script");
+  script.src = PDFJS_URL;
+  script.onload = () => {
+    // Point pdf.js at its worker file
+    pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER_URL;
+    pdfJsReady = true;
+    pdfJsLoading = false;
+    // Drain the queue
+    pdfJsQueue.forEach(cb => cb());
+    pdfJsQueue.length = 0;
+  };
+  script.onerror = () => {
+    console.warn("pdf.js failed to load");
+    pdfJsLoading = false;
+    // Drain queue with a null signal so callers can fall back
+    pdfJsQueue.forEach(cb => cb(true));
+    pdfJsQueue.length = 0;
+  };
+  document.head.appendChild(script);
+}
+
+function generatePDFThumbnail(url, imgElement, wrapper) {
+  ensurePdfJs(failed => {
+    if (failed) {
+      imgElement.src = "../images/pdf-icon.webp";
+      if (wrapper) wrapper.classList.remove("thumb-loading");
+      return;
+    }
+
+    pdfjsLib.getDocument(url).promise.then(pdf => {
+      // Render page 1 only
+      return pdf.getPage(1);
+    }).then(page => {
+      // Low resolution is fine for a thumbnail — scale 0.5 keeps it fast
+      const viewport = page.getViewport({ scale: 0.5 });
+
+      const canvas = document.createElement("canvas");
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+      const ctx = canvas.getContext("2d");
+
+      return page.render({ canvasContext: ctx, viewport }).promise.then(() => {
+        imgElement.src = canvas.toDataURL("image/jpeg", 0.85);
+        if (wrapper) wrapper.classList.remove("thumb-loading");
+      });
+    }).catch(err => {
+      console.warn("PDF thumbnail failed:", err);
+      imgElement.src = "../images/pdf-icon.webp";
+      if (wrapper) wrapper.classList.remove("thumb-loading");
+    });
+  });
 }
 
 function openImageViewer(url) {
