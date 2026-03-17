@@ -442,7 +442,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const TABLET_BP_MIN = 768;
   const TABLET_BP_MAX = 1199;
   function applyTabletLayout() {
-    if (window.innerWidth >= TABLET_BP) {
+    if (window.innerWidth >= TABLET_BP_MIN && window.innerwidth <= TABLET_BP_MAX) {
       document.body.classList.add("tablet-layout");
     } else {
       document.body.classList.remove("tablet-layout");
