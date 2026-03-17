@@ -271,6 +271,14 @@ function addCardToGrid(grid, file) {
     thumbWrap.appendChild(img);
     card.appendChild(thumbWrap);
     requestAnimationFrame(() => generateSTLThumbnail(file.fileURL, img, thumbWrap));
+  } else if (lower.endsWith(".mp4") || lower.endsWith(".mov")) {
+    // Wrap in a div for spinner while video frame is captured
+    const thumbWrap = document.createElement("div");
+    thumbWrap.className = "thumb-wrap thumb-loading";
+    img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+    thumbWrap.appendChild(img);
+    card.appendChild(thumbWrap);
+    requestAnimationFrame(() => generateVideoThumbnail(file.fileURL, img, thumbWrap));
   } else {
     img.src = getThumbnailForFile(file.fileName);
     card.appendChild(img);
@@ -472,6 +480,80 @@ function generateSTLThumbnail(url, imgElement, wrapper) {
       renderer.dispose();
     }
   );
+}
+
+/* ===============================
+   VIDEO THUMBNAIL GENERATOR
+================================ */
+
+function generateVideoThumbnail(url, imgElement, wrapper) {
+  const video = document.createElement("video");
+  video.crossOrigin = "anonymous";
+  video.muted = true;
+  video.playsInline = true;
+  video.preload = "metadata";
+  video.src = url;
+
+  // Once metadata is loaded we know the duration — seek to 10% in
+  video.addEventListener("loadedmetadata", () => {
+    // Seek to 10% of duration, minimum 1s, so we avoid black opening frames
+    video.currentTime = Math.min(Math.max(video.duration * 0.1, 1), video.duration - 0.1);
+  });
+
+  // Once the seek is complete, capture the frame
+  video.addEventListener("seeked", () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 400;
+    canvas.height = 260;
+    const ctx = canvas.getContext("2d");
+
+    // Draw video frame, letterboxed with black bars if needed
+    const vRatio = video.videoWidth / video.videoHeight;
+    const cRatio = canvas.width / canvas.height;
+    let drawW, drawH, drawX, drawY;
+
+    ctx.fillStyle = "#000";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    if (vRatio > cRatio) {
+      drawW = canvas.width;
+      drawH = canvas.width / vRatio;
+      drawX = 0;
+      drawY = (canvas.height - drawH) / 2;
+    } else {
+      drawH = canvas.height;
+      drawW = canvas.height * vRatio;
+      drawX = (canvas.width - drawW) / 2;
+      drawY = 0;
+    }
+
+    ctx.drawImage(video, drawX, drawY, drawW, drawH);
+
+    // Overlay a subtle play icon so it's clear this is a video
+    ctx.fillStyle = "rgba(0,0,0,0.45)";
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, 28, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.9)";
+    ctx.beginPath();
+    ctx.moveTo(canvas.width / 2 - 10, canvas.height / 2 - 14);
+    ctx.lineTo(canvas.width / 2 + 18, canvas.height / 2);
+    ctx.lineTo(canvas.width / 2 - 10, canvas.height / 2 + 14);
+    ctx.closePath();
+    ctx.fill();
+
+    imgElement.src = canvas.toDataURL("image/jpeg", 0.85);
+    if (wrapper) wrapper.classList.remove("thumb-loading");
+
+    // Clean up
+    video.src = "";
+  });
+
+  video.addEventListener("error", () => {
+    console.warn("Video thumbnail failed:", url);
+    imgElement.src = "../images/mp4-icon.webp";
+    if (wrapper) wrapper.classList.remove("thumb-loading");
+  });
 }
 
 function openImageViewer(url) {
