@@ -258,8 +258,23 @@ function addCardToGrid(grid, file) {
   // --- Thumbnail ---
   const img = document.createElement("img");
   img.className = "file-thumbnail";
-  img.src = isImageFile(file.fileName) ? file.fileURL : getThumbnailForFile(file.fileName);
-  card.appendChild(img);
+  const lower = file.fileName.toLowerCase();
+
+  if (isImageFile(file.fileName)) {
+    img.src = file.fileURL;
+    card.appendChild(img);
+  } else if (lower.endsWith(".stl")) {
+    // Wrap in a div so we can show a spinner while generating
+    const thumbWrap = document.createElement("div");
+    thumbWrap.className = "thumb-wrap thumb-loading";
+    img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+    thumbWrap.appendChild(img);
+    card.appendChild(thumbWrap);
+    requestAnimationFrame(() => generateSTLThumbnail(file.fileURL, img, thumbWrap));
+  } else {
+    img.src = getThumbnailForFile(file.fileName);
+    card.appendChild(img);
+  }
 
   const title = document.createElement("p");
   title.textContent = file.fileName;
@@ -367,7 +382,8 @@ function initSTL(container, url) {
 
       scene.add(mesh);
 
-      camera.position.set(0, 0, size * 1.5);
+      // Isometric-style angle: elevated and rotated 45° for depth
+      camera.position.set(size * 1.1, size * 0.9, size * 1.1);
       controls.target.set(0, 0, 0);
       camera.lookAt(0, 0, 0);
     },
@@ -384,6 +400,78 @@ function initSTL(container, url) {
   }
 
   animate();
+}
+
+/* ===============================
+   STL THUMBNAIL GENERATOR
+================================ */
+
+function generateSTLThumbnail(url, imgElement, wrapper) {
+  if (!window.THREE || !THREE.STLLoader) return;
+
+  // Offscreen canvas — small size is fine for a thumbnail
+  const W = 400, H = 260;
+  const canvas = document.createElement("canvas");
+  canvas.width = W;
+  canvas.height = H;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(1);
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x1a1a2e);
+
+  const camera = new THREE.PerspectiveCamera(50, W / H, 0.1, 5000);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+  const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
+  keyLight.position.set(1, 1.5, 1);
+  scene.add(keyLight);
+  const fillLight = new THREE.DirectionalLight(0x8888ff, 0.3);
+  fillLight.position.set(-1, -0.5, -1);
+  scene.add(fillLight);
+
+  const loader = new THREE.STLLoader();
+  loader.load(
+    url,
+    geometry => {
+      geometry.center();
+      geometry.computeBoundingBox();
+      const size = geometry.boundingBox.getSize(new THREE.Vector3()).length();
+
+      const mesh = new THREE.Mesh(
+        geometry,
+        new THREE.MeshStandardMaterial({
+          color: 0x88aacc,
+          metalness: 0.2,
+          roughness: 0.55
+        })
+      );
+      scene.add(mesh);
+
+      // Isometric angle matching the viewer
+      camera.position.set(size * 1.1, size * 0.9, size * 1.1);
+      camera.lookAt(0, 0, 0);
+
+      // Render a single frame and capture it
+      renderer.render(scene, camera);
+      const dataURL = canvas.toDataURL("image/png");
+      imgElement.src = dataURL;
+      if (wrapper) wrapper.classList.remove("thumb-loading");
+
+      // Clean up
+      renderer.dispose();
+      geometry.dispose();
+    },
+    undefined,
+    err => {
+      console.warn("STL thumbnail failed:", err);
+      imgElement.src = "../images/stl-icon.webp";
+      if (wrapper) wrapper.classList.remove("thumb-loading");
+      renderer.dispose();
+    }
+  );
 }
 
 function openImageViewer(url) {
