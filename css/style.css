@@ -563,3 +563,14 @@ body {
 @keyframes thumb-spin {
   to { transform: rotate(360deg); }
 }
+
+/* === Page Description === */
+.page-description {
+  max-width: 900px;
+  margin: 1.5rem auto 0.5rem;
+  padding: 0 10px;
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.6;
+  text-align: left;
+}
