@@ -720,14 +720,13 @@ body {
   font-size: 1rem;
   color: #444;
   line-height: 1.6;
-  text-align: left;
 }
 
-/* === Timeline Add Button === */
+/* === Timeline Add / New Button === */
 .timeline-add-wrapper {
   display: flex;
   justify-content: flex-end;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto 1rem;
   padding: 0 10px;
 }
@@ -743,9 +742,7 @@ body {
   transition: background 0.2s ease;
 }
 
-.timeline-add-btn:hover {
-  background: #444;
-}
+.timeline-add-btn:hover { background: #444; }
 
 /* === Event Edit/Delete Controls === */
 .timeline-event-controls {
@@ -757,9 +754,7 @@ body {
   transition: opacity 0.15s ease;
 }
 
-.timeline-event:hover .timeline-event-controls {
-  opacity: 1;
-}
+.timeline-event:hover .timeline-event-controls { opacity: 1; }
 
 .tl-ev-btn {
   background: rgba(0,0,0,0.07);
@@ -771,15 +766,12 @@ body {
   transition: background 0.15s ease;
 }
 
-.tl-ev-btn:hover {
-  background: rgba(0,0,0,0.15);
-}
+.tl-ev-btn:hover { background: rgba(0,0,0,0.15); }
 
 /* === Event Editor Side Panel === */
 .event-panel {
   position: fixed;
-  top: 0;
-  right: 0;
+  top: 0; right: 0;
   width: 360px;
   max-width: 95vw;
   height: 100vh;
@@ -792,9 +784,7 @@ body {
   flex-direction: column;
 }
 
-.event-panel.open {
-  transform: translateX(0);
-}
+.event-panel.open { transform: translateX(0); }
 
 .event-panel-backdrop {
   position: fixed;
@@ -818,10 +808,7 @@ body {
   flex-shrink: 0;
 }
 
-.event-panel-header h2 {
-  margin: 0;
-  font-size: 1.1rem;
-}
+.event-panel-header h2 { margin: 0; font-size: 1.1rem; }
 
 .event-panel-close {
   background: none;
@@ -834,9 +821,7 @@ body {
   transition: background 0.15s ease;
 }
 
-.event-panel-close:hover {
-  background: #eee;
-}
+.event-panel-close:hover { background: #eee; }
 
 .event-panel-body {
   flex: 1;
@@ -854,9 +839,7 @@ body {
   margin-top: 0.5rem;
 }
 
-.ep-required {
-  color: #c00;
-}
+.ep-required { color: #c00; }
 
 .event-panel-input,
 .event-panel-textarea {
@@ -876,10 +859,7 @@ body {
   border-color: #444;
 }
 
-.event-panel-textarea {
-  resize: vertical;
-  min-height: 90px;
-}
+.event-panel-textarea { resize: vertical; min-height: 90px; }
 
 .ep-image-row {
   display: flex;
@@ -895,13 +875,11 @@ body {
   border-radius: 6px;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: background 0.15s ease;
   white-space: nowrap;
+  transition: background 0.15s ease;
 }
 
-.ep-image-pick-btn:hover {
-  background: #e0e0e0;
-}
+.ep-image-pick-btn:hover { background: #e0e0e0; }
 
 .ep-image-name {
   font-size: 0.8rem;
@@ -922,10 +900,7 @@ body {
   border-radius: 4px;
 }
 
-.ep-image-clear:hover {
-  color: #333;
-  background: #eee;
-}
+.ep-image-clear:hover { color: #333; background: #eee; }
 
 .ep-image-preview {
   width: 100%;
@@ -961,9 +936,7 @@ body {
   transition: background 0.2s ease;
 }
 
-.ep-save-btn:hover {
-  background: #444;
-}
+.ep-save-btn:hover { background: #444; }
 
 .ep-cancel-btn {
   padding: 0.65rem 1rem;
@@ -976,11 +949,6 @@ body {
   transition: background 0.2s ease;
 }
 
-.ep-cancel-btn:hover {
-  background: #e0e0e0;
-}
+.ep-cancel-btn:hover { background: #e0e0e0; }
 
-/* Prevent body scroll when panel is open */
-body.panel-open {
-  overflow: hidden;
-}
+body.panel-open { overflow: hidden; }
