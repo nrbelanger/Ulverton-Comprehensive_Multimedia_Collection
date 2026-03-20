@@ -587,9 +587,29 @@ body {
   background-color: #444;
 }
 
+/* === Timeline Back Button === */
+.timeline-back-wrapper {
+  margin: 1.5rem 0 0.5rem;
+}
+
+.timeline-back-btn {
+  background: none;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #444;
+  cursor: pointer;
+  padding: 0.3rem 0;
+  transition: color 0.15s ease;
+}
+
+.timeline-back-btn:hover {
+  color: #000;
+}
+
 /* === Timeline Page === */
 .timeline-section {
-  margin: 2.5rem 0 3rem;
+  margin: 2rem 0 3rem;
 }
 
 .timeline-title {
@@ -601,7 +621,6 @@ body {
   color: #222;
 }
 
-/* The vertical line running down the centre-left */
 .timeline {
   position: relative;
   padding-left: 2rem;
@@ -617,13 +636,11 @@ body {
   background: #ccc;
 }
 
-/* Individual event row */
 .timeline-event {
   position: relative;
   margin-bottom: 2rem;
 }
 
-/* Dot on the line */
 .timeline-marker {
   position: absolute;
   left: -1.65rem;
@@ -636,7 +653,6 @@ body {
   box-shadow: 0 0 0 2px #ccc;
 }
 
-/* Content box */
 .timeline-content {
   background: #f4f4f4;
   border-radius: 8px;
