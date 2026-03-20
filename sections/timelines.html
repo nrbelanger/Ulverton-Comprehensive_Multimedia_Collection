@@ -31,9 +31,8 @@
 
       <!-- =====================
            TIMELINE SELECTOR
-           Shows when no timeline is active.
            To add a new timeline:
-             1. Add a new <a> card here pointing to the new timeline's data-open-timeline id
+             1. Add a card here with data-open-timeline="your-id"
              2. Add a matching <section data-timeline="your-id"> below
       ===================== -->
       <section class="section-grid" id="timeline-selector">
@@ -63,8 +62,36 @@
 
       <!-- =====================
            TIMELINE VIEWS
-           Each section is hidden until its card is clicked.
-           data-timeline must match data-open-timeline on the card above.
+           Each section hidden until its card is clicked.
+
+           EVENT TEMPLATE — copy this block for each new event:
+
+           WITHOUT image:
+           ==================
+           <div class="timeline-event">
+             <div class="timeline-marker"></div>
+             <div class="timeline-content">
+               <div class="timeline-text">
+                 <span class="timeline-date">YEAR</span>
+                 <h3 class="timeline-event-title">Event Title</h3>
+                 <p class="timeline-event-body">Description goes here.</p>
+               </div>
+             </div>
+           </div>
+
+           WITH image:
+           ==================
+           <div class="timeline-event">
+             <div class="timeline-marker"></div>
+             <div class="timeline-content">
+               <img class="timeline-image" src="../images/YOUR-IMAGE.jpg" alt="Description of image" />
+               <div class="timeline-text">
+                 <span class="timeline-date">YEAR</span>
+                 <h3 class="timeline-event-title">Event Title</h3>
+                 <p class="timeline-event-body">Description goes here.</p>
+               </div>
+             </div>
+           </div>
       ===================== -->
 
       <!-- TIMELINE: History of the Spinning Mule -->
@@ -72,25 +99,21 @@
         <h2 class="timeline-title">History of the Spinning Mule</h2>
         <div class="timeline">
 
+          <!-- Example event WITH image -->
           <div class="timeline-event">
             <div class="timeline-marker"></div>
             <div class="timeline-content">
-              <span class="timeline-date">1779</span>
-              <h3 class="timeline-event-title">Invention of the Spinning Mule</h3>
-              <p class="timeline-event-body">Samuel Crompton invented the spinning mule in Bolton, England, combining the spinning jenny and the water frame to produce a finer, stronger thread.</p>
+              <!-- TODO: Replace with a real image, or remove the <img> tag if no image -->
+              <img class="timeline-image" src="../images/DSCN0845.JPG" alt="Spinning mule at Ulverton" />
+              <div class="timeline-text">
+                <span class="timeline-date">1779</span>
+                <h3 class="timeline-event-title">Invention of the Spinning Mule</h3>
+                <p class="timeline-event-body">Samuel Crompton invented the spinning mule in Bolton, England, combining the spinning jenny and the water frame to produce a finer, stronger thread.</p>
+              </div>
             </div>
           </div>
 
-          <!-- TODO: Add more events using this template:
-          <div class="timeline-event">
-            <div class="timeline-marker"></div>
-            <div class="timeline-content">
-              <span class="timeline-date">YEAR</span>
-              <h3 class="timeline-event-title">Event Title</h3>
-              <p class="timeline-event-body">Description goes here.</p>
-            </div>
-          </div>
-          -->
+          <!-- TODO: Add more events here -->
 
         </div>
       </section>
@@ -100,23 +123,15 @@
         <h2 class="timeline-title">History of Ulverton Mill</h2>
         <div class="timeline">
 
-          <!-- TODO: Add events using this template:
+          <!-- TODO: Add events here -->
           <div class="timeline-event">
             <div class="timeline-marker"></div>
             <div class="timeline-content">
-              <span class="timeline-date">YEAR</span>
-              <h3 class="timeline-event-title">Event Title</h3>
-              <p class="timeline-event-body">Description goes here.</p>
-            </div>
-          </div>
-          -->
-
-          <div class="timeline-event">
-            <div class="timeline-marker"></div>
-            <div class="timeline-content">
-              <span class="timeline-date"><!-- TODO --></span>
-              <h3 class="timeline-event-title"><!-- TODO: Event title --></h3>
-              <p class="timeline-event-body"><!-- TODO: Event description --></p>
+              <div class="timeline-text">
+                <span class="timeline-date"><!-- TODO --></span>
+                <h3 class="timeline-event-title"><!-- TODO: Event title --></h3>
+                <p class="timeline-event-body"><!-- TODO: Event description --></p>
+              </div>
             </div>
           </div>
 
