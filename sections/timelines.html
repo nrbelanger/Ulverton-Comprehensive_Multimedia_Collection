@@ -143,8 +143,51 @@
         </div>
       </section>
 
+      <!-- Add Event button — shown when a timeline is open, admin only -->
+      <div id="timeline-add-wrapper" class="timeline-add-wrapper" hidden>
+        <button id="timeline-add-btn" class="timeline-add-btn admin-only">+ Add Event</button>
+      </div>
+
     </div>
   </main>
+
+  <!-- === Event Editor Side Panel === -->
+  <div id="event-panel" class="event-panel" aria-label="Event editor">
+    <div class="event-panel-inner">
+      <div class="event-panel-header">
+        <h2 id="event-panel-title">Add Event</h2>
+        <button id="event-panel-close" class="event-panel-close" aria-label="Close panel">✕</button>
+      </div>
+
+      <div class="event-panel-body">
+        <label class="event-panel-label" for="ep-year">Year <span class="ep-required">*</span></label>
+        <input id="ep-year" class="event-panel-input" type="text" placeholder="e.g. 1779 or c. 1800" maxlength="20" />
+
+        <label class="event-panel-label" for="ep-title">Title <span class="ep-required">*</span></label>
+        <input id="ep-title" class="event-panel-input" type="text" placeholder="Event title" maxlength="120" />
+
+        <label class="event-panel-label" for="ep-desc">Description</label>
+        <textarea id="ep-desc" class="event-panel-textarea" placeholder="Describe the event..." rows="5"></textarea>
+
+        <label class="event-panel-label" for="ep-image">Image (optional)</label>
+        <div class="ep-image-row">
+          <button id="ep-image-btn" class="ep-image-pick-btn" type="button">Choose Image</button>
+          <span id="ep-image-name" class="ep-image-name">No image selected</span>
+          <button id="ep-image-clear" class="ep-image-clear" type="button" hidden>✕</button>
+        </div>
+        <input id="ep-image-input" type="file" accept="image/*" hidden />
+        <img id="ep-image-preview" class="ep-image-preview" hidden alt="Image preview" />
+
+        <p id="ep-error" class="ep-error" hidden>Please fill in Year and Title.</p>
+      </div>
+
+      <div class="event-panel-footer">
+        <button id="ep-save-btn" class="ep-save-btn">Save Event</button>
+        <button id="ep-cancel-btn" class="ep-cancel-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <div id="event-panel-backdrop" class="event-panel-backdrop" hidden></div>
 
   <footer class="site-footer">
     <div class="tablet-logo">Ulverton Mill Logo</div>
@@ -167,53 +210,251 @@
   <script src="../js/main.js" defer></script>
 
   <script>
-    // Extract the first 4-digit year found in a string, or Infinity if none
+    // =====================
+    // UTILITIES
+    // =====================
+
     function extractYear(dateText) {
       const match = dateText.match(/\d{4}/);
       return match ? parseInt(match[0], 10) : Infinity;
     }
 
-    // Sort all .timeline-event elements inside a .timeline container by year
     function sortTimeline(timelineEl) {
       const events = [...timelineEl.querySelectorAll(".timeline-event")];
       events.sort((a, b) => {
-        const yearA = extractYear(
-          a.querySelector(".timeline-date")?.textContent || ""
-        );
-        const yearB = extractYear(
-          b.querySelector(".timeline-date")?.textContent || ""
-        );
-        return yearA - yearB; // ascending — oldest first
+        const yearA = extractYear(a.querySelector(".timeline-date")?.textContent || "");
+        const yearB = extractYear(b.querySelector(".timeline-date")?.textContent || "");
+        return yearA - yearB;
       });
-      // Re-append in sorted order (moves existing nodes, no cloning needed)
       events.forEach(ev => timelineEl.appendChild(ev));
     }
 
+    // =====================
+    // EVENT CARD BUILDER
+    // Builds a .timeline-event DOM node from data
+    // =====================
+
+    function buildEventNode({ year, title, desc, imageSrc, imageAlt }) {
+      const ev = document.createElement("div");
+      ev.className = "timeline-event";
+
+      ev.innerHTML = `
+        <div class="timeline-marker"></div>
+        <div class="timeline-content">
+          ${imageSrc ? `<img class="timeline-image" src="${imageSrc}" alt="${imageAlt || ''}" />` : ""}
+          <div class="timeline-text">
+            <span class="timeline-date">${year}</span>
+            <h3 class="timeline-event-title">${title}</h3>
+            <p class="timeline-event-body">${desc || ""}</p>
+          </div>
+        </div>
+        <div class="timeline-event-controls admin-only">
+          <button class="tl-ev-btn tl-ev-edit" title="Edit event">✏️</button>
+          <button class="tl-ev-btn tl-ev-delete" title="Delete event">🗑️</button>
+        </div>
+      `;
+
+      // Wire edit/delete
+      ev.querySelector(".tl-ev-edit").addEventListener("click", () => openPanel("edit", ev));
+      ev.querySelector(".tl-ev-delete").addEventListener("click", () => {
+        if (confirm("Delete this event?")) ev.remove();
+      });
+
+      return ev;
+    }
+
+    // Attach edit/delete buttons to existing HTML events on page load
+    function attachControlsToExisting(timelineEl) {
+      timelineEl.querySelectorAll(".timeline-event").forEach(ev => {
+        if (ev.querySelector(".timeline-event-controls")) return; // already attached
+        const controls = document.createElement("div");
+        controls.className = "timeline-event-controls admin-only";
+        controls.innerHTML = `
+          <button class="tl-ev-btn tl-ev-edit" title="Edit event">✏️</button>
+          <button class="tl-ev-btn tl-ev-delete" title="Delete event">🗑️</button>
+        `;
+        controls.querySelector(".tl-ev-edit").addEventListener("click", () => openPanel("edit", ev));
+        controls.querySelector(".tl-ev-delete").addEventListener("click", () => {
+          if (confirm("Delete this event?")) ev.remove();
+        });
+        ev.appendChild(controls);
+      });
+    }
+
+    // =====================
+    // SIDE PANEL
+    // =====================
+
+    let panelMode = "add";       // "add" | "edit"
+    let editTarget = null;       // the .timeline-event node being edited
+    let activeTimeline = null;   // the .timeline container currently open
+    let pendingImageSrc = null;  // data URL of newly picked image
+    let pendingImageAlt = null;
+
+    const panel        = document.getElementById("event-panel");
+    const backdrop     = document.getElementById("event-panel-backdrop");
+    const panelTitle   = document.getElementById("event-panel-title");
+    const closeBtn     = document.getElementById("event-panel-close");
+    const epYear       = document.getElementById("ep-year");
+    const epTitle      = document.getElementById("ep-title");
+    const epDesc       = document.getElementById("ep-desc");
+    const epImageBtn   = document.getElementById("ep-image-btn");
+    const epImageInput = document.getElementById("ep-image-input");
+    const epImageName  = document.getElementById("ep-image-name");
+    const epImageClear = document.getElementById("ep-image-clear");
+    const epPreview    = document.getElementById("ep-image-preview");
+    const epError      = document.getElementById("ep-error");
+    const epSave       = document.getElementById("ep-save-btn");
+    const epCancel     = document.getElementById("ep-cancel-btn");
+
+    function openPanel(mode, targetNode) {
+      panelMode = mode;
+      editTarget = targetNode || null;
+      epError.hidden = true;
+      pendingImageSrc = null;
+      pendingImageAlt = null;
+
+      if (mode === "add") {
+        panelTitle.textContent = "Add Event";
+        epYear.value = "";
+        epTitle.value = "";
+        epDesc.value = "";
+        clearImagePreview();
+      } else {
+        // Pre-fill from existing event
+        panelTitle.textContent = "Edit Event";
+        epYear.value  = targetNode.querySelector(".timeline-date")?.textContent.trim() || "";
+        epTitle.value = targetNode.querySelector(".timeline-event-title")?.textContent.trim() || "";
+        epDesc.value  = targetNode.querySelector(".timeline-event-body")?.textContent.trim() || "";
+        const existingImg = targetNode.querySelector(".timeline-image");
+        if (existingImg) {
+          setImagePreview(existingImg.src, existingImg.alt);
+          pendingImageSrc = existingImg.src;
+          pendingImageAlt = existingImg.alt;
+        } else {
+          clearImagePreview();
+        }
+      }
+
+      panel.classList.add("open");
+      backdrop.hidden = false;
+      document.body.classList.add("panel-open");
+      epYear.focus();
+    }
+
+    function closePanel() {
+      panel.classList.remove("open");
+      backdrop.hidden = true;
+      document.body.classList.remove("panel-open");
+      epImageInput.value = "";
+    }
+
+    function setImagePreview(src, alt) {
+      epPreview.src = src;
+      epPreview.alt = alt || "";
+      epPreview.hidden = false;
+      epImageName.textContent = alt || "Image selected";
+      epImageClear.hidden = false;
+    }
+
+    function clearImagePreview() {
+      epPreview.src = "";
+      epPreview.hidden = true;
+      epImageName.textContent = "No image selected";
+      epImageClear.hidden = true;
+      pendingImageSrc = null;
+      pendingImageAlt = null;
+    }
+
+    // Image pick
+    epImageBtn.addEventListener("click", () => epImageInput.click());
+    epImageInput.addEventListener("change", () => {
+      const file = epImageInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        pendingImageSrc = e.target.result;
+        pendingImageAlt = file.name;
+        setImagePreview(pendingImageSrc, pendingImageAlt);
+      };
+      reader.readAsDataURL(file);
+    });
+    epImageClear.addEventListener("click", () => {
+      clearImagePreview();
+      epImageInput.value = "";
+    });
+
+    // Save
+    epSave.addEventListener("click", () => {
+      const year  = epYear.value.trim();
+      const title = epTitle.value.trim();
+      if (!year || !title) {
+        epError.hidden = false;
+        return;
+      }
+      epError.hidden = true;
+
+      const data = {
+        year,
+        title,
+        desc: epDesc.value.trim(),
+        imageSrc: pendingImageSrc,
+        imageAlt: pendingImageAlt
+      };
+
+      if (panelMode === "add") {
+        const newNode = buildEventNode(data);
+        activeTimeline.appendChild(newNode);
+      } else {
+        // Replace existing event node in place
+        const newNode = buildEventNode(data);
+        editTarget.replaceWith(newNode);
+      }
+
+      sortTimeline(activeTimeline);
+      closePanel();
+    });
+
+    // Close handlers
+    closeBtn.addEventListener("click", closePanel);
+    epCancel.addEventListener("click", closePanel);
+    backdrop.addEventListener("click", closePanel);
+
+    // =====================
+    // TIMELINE SELECTOR
+    // =====================
+
     document.addEventListener("DOMContentLoaded", () => {
-      const selector = document.getElementById("timeline-selector");
+      const selector    = document.getElementById("timeline-selector");
       const backWrapper = document.getElementById("timeline-back-wrapper");
-      const backBtn = document.getElementById("timeline-back-btn");
+      const backBtn     = document.getElementById("timeline-back-btn");
+      const addWrapper  = document.getElementById("timeline-add-wrapper");
+      const addBtn      = document.getElementById("timeline-add-btn");
 
       function openTimeline(id) {
-        selector.hidden = true;
+        selector.hidden   = true;
         backWrapper.hidden = false;
+        addWrapper.hidden  = false;
+
         document.querySelectorAll(".timeline-section").forEach(s => {
           const isTarget = s.dataset.timeline === id;
           s.hidden = !isTarget;
-          // Sort on first open
           if (isTarget) {
-            sortTimeline(s.querySelector(".timeline"));
+            activeTimeline = s.querySelector(".timeline");
+            sortTimeline(activeTimeline);
+            attachControlsToExisting(activeTimeline);
           }
         });
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
       function showSelector() {
-        selector.hidden = false;
+        selector.hidden    = false;
         backWrapper.hidden = true;
-        document.querySelectorAll(".timeline-section").forEach(s => {
-          s.hidden = true;
-        });
+        addWrapper.hidden  = true;
+        activeTimeline     = null;
+        document.querySelectorAll(".timeline-section").forEach(s => s.hidden = true);
+        closePanel();
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
@@ -225,6 +466,7 @@
       });
 
       backBtn.addEventListener("click", showSelector);
+      addBtn.addEventListener("click", () => openPanel("add"));
     });
   </script>
 
