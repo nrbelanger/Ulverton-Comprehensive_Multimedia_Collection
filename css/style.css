@@ -663,7 +663,6 @@ body {
   align-items: flex-start;
 }
 
-/* Image — only visible when present */
 .timeline-image {
   width: 140px;
   flex-shrink: 0;
@@ -673,7 +672,6 @@ body {
   display: block;
 }
 
-/* Text side */
 .timeline-text {
   flex: 1;
   min-width: 0;
