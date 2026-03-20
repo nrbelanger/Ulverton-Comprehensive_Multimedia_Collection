@@ -564,13 +564,107 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* === Page Description === */
-.page-description {
-  max-width: 900px;
-  margin: 1.5rem auto 0.5rem;
-  padding: 0 10px;
+/* === Timelines Link Button (on History page) === */
+.timelines-link-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.timelines-link-btn {
+  display: inline-block;
+  padding: 0.75rem 1.75rem;
+  background-color: #000;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.timelines-link-btn:hover {
+  background-color: #444;
+}
+
+/* === Timeline Page === */
+.timeline-section {
+  margin: 2.5rem 0 3rem;
+}
+
+.timeline-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #ccc;
+  color: #222;
+}
+
+/* The vertical line running down the centre-left */
+.timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #ccc;
+}
+
+/* Individual event row */
+.timeline-event {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+/* Dot on the line */
+.timeline-marker {
+  position: absolute;
+  left: -1.65rem;
+  top: 4px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #444;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px #ccc;
+}
+
+/* Content box */
+.timeline-content {
+  background: #f4f4f4;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.timeline-date {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  background: #444;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 0.4rem;
+}
+
+.timeline-event-title {
+  margin: 0.4rem 0 0.3rem;
   font-size: 1rem;
+  font-weight: 600;
+  color: #222;
+}
+
+.timeline-event-body {
+  margin: 0;
+  font-size: 0.9rem;
   color: #444;
-  line-height: 1.6;
-  text-align: left;
+  line-height: 1.5;
 }
