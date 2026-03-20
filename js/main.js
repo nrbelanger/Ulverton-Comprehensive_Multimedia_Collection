@@ -20,6 +20,11 @@ function requireAdmin() {
   }
 }
 
+function logoutAdmin() {
+  sessionStorage.removeItem(ADMIN_KEY);
+  location.reload();
+}
+
 function isImageFile(name) {
   return ["jpg","jpeg","png","gif","webp"].includes(
     name.split(".").pop().toLowerCase()
@@ -381,9 +386,9 @@ function initSTL(container, url) {
     geometry.center();
     geometry.computeBoundingBox();
 
-      const bbox = geometry.boundingBox;
-      const size = bbox.getSize(new THREE.Vector3()).length();
-      const modelHeight = bbox.getSize(new THREE.Vector3()).y;
+      const size = geometry.boundingBox
+        .getSize(new THREE.Vector3())
+        .length();
 
       const mesh = new THREE.Mesh(
         geometry,
@@ -395,43 +400,6 @@ function initSTL(container, url) {
       );
 
       scene.add(mesh);
-
-      // --- Grid floor ---
-      // Pick a grid cell size that gives ~10 divisions across the model's
-      // longest dimension, rounded to a clean mm value (1, 2, 5, 10, 20, 50…)
-      const span = bbox.getSize(new THREE.Vector3()).length();
-      const rawCell = span / 10;
-      const magnitude = Math.pow(10, Math.floor(Math.log10(rawCell)));
-      const nice = [1, 2, 5, 10];
-      const cellSize = magnitude * nice.reduce((prev, curr) =>
-        Math.abs(curr - rawCell / magnitude) < Math.abs(prev - rawCell / magnitude) ? curr : prev
-      );
-
-      const gridDivisions = Math.ceil((span * 3) / cellSize);
-      const gridSize = gridDivisions * cellSize;
-
-      const grid = new THREE.GridHelper(gridSize, gridDivisions, 0x555555, 0x333333);
-
-      // Sit the grid just below the model's lowest point
-      grid.position.y = bbox.min.y - 0.5;
-      scene.add(grid);
-
-      // Label showing the grid spacing so users know the scale
-      const label = document.createElement("div");
-      label.style.cssText = `
-        position: absolute;
-        bottom: 12px;
-        left: 14px;
-        color: rgba(255,255,255,0.55);
-        font-size: 0.78rem;
-        font-family: system-ui, sans-serif;
-        pointer-events: none;
-        user-select: none;
-      `;
-      label.textContent = `Grid: ${cellSize % 1 === 0 ? cellSize : cellSize.toFixed(1)} mm`;
-      // container is position:relative via CSS so absolute children work
-      container.style.position = "relative";
-      container.appendChild(label);
 
       // Isometric-style angle: elevated and rotated 45° for depth
       camera.position.set(size * 1.1, size * 0.9, size * 1.1);
@@ -759,9 +727,13 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("resize", applyTabletLayout);
 const adminBtn = document.getElementById("admin-login-btn");
 if (adminBtn) {
-  adminBtn.addEventListener("click", () => {
-    requireAdmin();
-  });
+  if (isAdmin()) {
+    adminBtn.textContent = "Admin Logout";
+    adminBtn.addEventListener("click", () => logoutAdmin());
+  } else {
+    adminBtn.textContent = "Admin Login";
+    adminBtn.addEventListener("click", () => requireAdmin());
+  }
   console.timeEnd("Page launch time");
 }
 
