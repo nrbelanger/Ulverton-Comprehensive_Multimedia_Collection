@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Timelines — Ulverton Collection</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>Timelines</h1>
+      <nav aria-label="Main navigation">
+        <ul class="nav">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="history.html">History</a></li>
+          <li><a href="parts.html">Parts List</a></li>
+          <li><a href="manuals.html">Manuals</a></li>
+          <li><a href="cad.html">CAD Assemblies &amp; Simulations</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section-page">
+    <div class="container">
+
+      <!-- PAGE DESCRIPTION -->
+      <!-- TODO: Add a short description of this page's content here. -->
+      <!-- Example: <p class="page-description">Explore the history of the spinning mule and Ulverton Mill through interactive timelines...</p> -->
+
+      <!-- =====================
+           TIMELINE: History of Spinning Mules
+      ===================== -->
+      <section class="timeline-section">
+        <h2 class="timeline-title">History of the Spinning Mule</h2>
+
+        <!-- TODO: Add timeline events below using the template structure.
+             Copy and paste the block below for each new event:
+
+          <div class="timeline-event">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <span class="timeline-date">YEAR</span>
+              <h3 class="timeline-event-title">Event Title</h3>
+              <p class="timeline-event-body">Description of the event goes here.</p>
+            </div>
+          </div>
+
+        -->
+
+        <div class="timeline">
+          <div class="timeline-event">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <span class="timeline-date">1779</span>
+              <h3 class="timeline-event-title">Invention of the Spinning Mule</h3>
+              <p class="timeline-event-body">Samuel Crompton invented the spinning mule in Bolton, England, combining the spinning jenny and the water frame to produce a finer, stronger thread.</p>
+            </div>
+          </div>
+
+          <div class="timeline-event">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <span class="timeline-date"><!-- TODO --></span>
+              <h3 class="timeline-event-title"><!-- TODO: Event title --></h3>
+              <p class="timeline-event-body"><!-- TODO: Event description --></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================
+           TIMELINE: History of Ulverton Mill
+      ===================== -->
+      <section class="timeline-section">
+        <h2 class="timeline-title">History of Ulverton Mill</h2>
+
+        <!-- TODO: Add timeline events below using the same template structure above. -->
+
+        <div class="timeline">
+          <div class="timeline-event">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <span class="timeline-date"><!-- TODO --></span>
+              <h3 class="timeline-event-title"><!-- TODO: Event title --></h3>
+              <p class="timeline-event-body"><!-- TODO: Event description --></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="tablet-logo">Ulverton Mill Logo</div>
+    <div class="tablet-logo">UPEI Logo</div>
+    <div class="container">
+      <p>&copy; <span id="year"></span> Ulverton Multimedia Collection</p>
+    </div>
+  </footer>
+
+  <!-- === Fullscreen File Viewer Overlay === -->
+  <div id="file-viewer" class="file-viewer">
+    <div class="file-viewer-content">
+      <button id="file-viewer-close" class="file-viewer-close">✕</button>
+      <div id="viewer-body"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+  <script src="../js/main.js" defer></script>
+</body>
+</html>
