@@ -63,6 +63,8 @@
       <!-- =====================
            TIMELINE VIEWS
            Each section hidden until its card is clicked.
+           Events are sorted chronologically by year automatically —
+           you can add them in any order.
 
            EVENT TEMPLATE — copy this block for each new event:
 
@@ -92,6 +94,10 @@
                </div>
              </div>
            </div>
+
+           Dates can be plain years (1779) or include text like
+           "c. 1780" or "circa 1800" — the year will be extracted
+           automatically for sorting.
       ===================== -->
 
       <!-- TIMELINE: History of the Spinning Mule -->
@@ -99,7 +105,6 @@
         <h2 class="timeline-title">History of the Spinning Mule</h2>
         <div class="timeline">
 
-          <!-- Example event WITH image -->
           <div class="timeline-event">
             <div class="timeline-marker"></div>
             <div class="timeline-content">
@@ -113,7 +118,7 @@
             </div>
           </div>
 
-          <!-- TODO: Add more events here -->
+          <!-- TODO: Add more events here — they will be sorted by year automatically -->
 
         </div>
       </section>
@@ -123,7 +128,7 @@
         <h2 class="timeline-title">History of Ulverton Mill</h2>
         <div class="timeline">
 
-          <!-- TODO: Add events here -->
+          <!-- TODO: Add events here — they will be sorted by year automatically -->
           <div class="timeline-event">
             <div class="timeline-marker"></div>
             <div class="timeline-content">
@@ -162,6 +167,28 @@
   <script src="../js/main.js" defer></script>
 
   <script>
+    // Extract the first 4-digit year found in a string, or Infinity if none
+    function extractYear(dateText) {
+      const match = dateText.match(/\d{4}/);
+      return match ? parseInt(match[0], 10) : Infinity;
+    }
+
+    // Sort all .timeline-event elements inside a .timeline container by year
+    function sortTimeline(timelineEl) {
+      const events = [...timelineEl.querySelectorAll(".timeline-event")];
+      events.sort((a, b) => {
+        const yearA = extractYear(
+          a.querySelector(".timeline-date")?.textContent || ""
+        );
+        const yearB = extractYear(
+          b.querySelector(".timeline-date")?.textContent || ""
+        );
+        return yearA - yearB; // ascending — oldest first
+      });
+      // Re-append in sorted order (moves existing nodes, no cloning needed)
+      events.forEach(ev => timelineEl.appendChild(ev));
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       const selector = document.getElementById("timeline-selector");
       const backWrapper = document.getElementById("timeline-back-wrapper");
@@ -171,7 +198,12 @@
         selector.hidden = true;
         backWrapper.hidden = false;
         document.querySelectorAll(".timeline-section").forEach(s => {
-          s.hidden = s.dataset.timeline !== id;
+          const isTarget = s.dataset.timeline === id;
+          s.hidden = !isTarget;
+          // Sort on first open
+          if (isTarget) {
+            sortTimeline(s.querySelector(".timeline"));
+          }
         });
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
