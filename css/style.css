@@ -952,3 +952,18 @@ body {
 .ep-cancel-btn:hover { background: #e0e0e0; }
 
 body.panel-open { overflow: hidden; }
+
+/* === Footer Logos === */
+.footer-logos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 0.75rem 0 0.25rem;
+}
+
+.footer-logo {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+}
