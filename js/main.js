@@ -386,9 +386,8 @@ function initSTL(container, url) {
     geometry.center();
     geometry.computeBoundingBox();
 
-      const size = geometry.boundingBox
-        .getSize(new THREE.Vector3())
-        .length();
+      const bbox = geometry.boundingBox;
+      const size = bbox.getSize(new THREE.Vector3()).length();
 
       const mesh = new THREE.Mesh(
         geometry,
@@ -400,6 +399,37 @@ function initSTL(container, url) {
       );
 
       scene.add(mesh);
+
+      // --- Grid floor ---
+      // Pick a clean mm cell size giving ~10 divisions across the model
+      const span = bbox.getSize(new THREE.Vector3()).length();
+      const rawCell = span / 10;
+      const magnitude = Math.pow(10, Math.floor(Math.log10(rawCell)));
+      const nice = [1, 2, 5, 10];
+      const cellSize = magnitude * nice.reduce((prev, curr) =>
+        Math.abs(curr - rawCell / magnitude) < Math.abs(prev - rawCell / magnitude) ? curr : prev
+      );
+      const gridDivisions = Math.ceil((span * 3) / cellSize);
+      const gridSize = gridDivisions * cellSize;
+      const grid = new THREE.GridHelper(gridSize, gridDivisions, 0x555555, 0x333333);
+      grid.position.y = bbox.min.y - 0.5;
+      scene.add(grid);
+
+      // Scale label
+      const label = document.createElement("div");
+      label.style.cssText = `
+        position: absolute;
+        bottom: 12px;
+        left: 14px;
+        color: rgba(255,255,255,0.55);
+        font-size: 0.78rem;
+        font-family: system-ui, sans-serif;
+        pointer-events: none;
+        user-select: none;
+      `;
+      label.textContent = `Grid: ${cellSize % 1 === 0 ? cellSize : cellSize.toFixed(1)} mm`;
+      container.style.position = "relative";
+      container.appendChild(label);
 
       // Isometric-style angle: elevated and rotated 45° for depth
       camera.position.set(size * 1.1, size * 0.9, size * 1.1);
