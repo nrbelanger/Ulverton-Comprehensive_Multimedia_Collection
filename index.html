@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ulverton Multimedia Collection</title>
 
+  <!-- Preconnect to CDNs used later so connections are ready -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://unpkg.com">
+
+  <!-- Preload the four section card background images — biggest load win -->
+  <link rel="preload" as="image" href="images/DSCN0845.JPG" fetchpriority="high">
+  <link rel="preload" as="image" href="images/DSCN0859 (1).JPG" fetchpriority="high">
+  <link rel="preload" as="image" href="images/DSCN1029.JPG" fetchpriority="high">
+  <link rel="preload" as="image" href="images/DSCN0995.JPG" fetchpriority="high">
+
   <!-- Link to external stylesheet -->
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -25,11 +37,12 @@
     </div>
   </header>
 
-  <!-- PAGE DESCRIPTION -->
-      <!-- TODO: Add a short description of this page's content here. -->
-      <!-- Example: <p class="page-description">Explore the history of the Ulverton spinning mule...</p> -->
-  
   <main class="homepage">
+
+    <!-- PAGE DESCRIPTION -->
+    <!-- TODO: Add a short description of this page's content here. -->
+    <!-- Example: <p class="page-description">Explore the Ulverton Multimedia Collection...</p> -->
+
     <section class="section-grid">
       <!-- Card 1: History -->
       <a href="sections/history.html" class="section-card">
@@ -89,11 +102,10 @@
 
 </div>
 
-  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-<script src="https://unpkg.com/three@0.160.0/examples/js/loaders/STLLoader.js"></script>
-<script src="https://unpkg.com/three@0.160.0/examples/js/controls/OrbitControls.js"></script>
-
-<script src="js/main.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js" defer></script>
+  <script src="js/main.js" defer></script>
 
 </body>
 </html>
