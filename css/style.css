@@ -501,6 +501,21 @@ body {
     flex-shrink: 0;
   }
 
+  /* Stack logos vertically in the narrow right sidebar */
+  body.tablet-layout .footer-logos {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0;
+    width: 100%;
+  }
+
+  body.tablet-layout .footer-logo {
+    width: 100%;
+    height: auto;
+    max-height: 80px;
+    object-fit: contain;
+  }
+
   body.tablet-layout .admin-login-btn {
     margin-top: auto;
     width: 100%;
