@@ -94,6 +94,7 @@ function addCardToGrid(grid, file) {
   editBtn.addEventListener("click", e => {
     e.preventDefault();
     e.stopPropagation();
+    if (!isAdmin()) return;
     const input = document.createElement("input");
     input.type = "file";
     input.onchange = () => {
@@ -121,6 +122,7 @@ function addCardToGrid(grid, file) {
   delBtn.addEventListener("click", e => {
     e.preventDefault();
     e.stopPropagation();
+    if (!isAdmin()) return;
     if (!confirm("Delete this file permanently?")) return;
     card.remove();
   });
