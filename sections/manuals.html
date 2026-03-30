@@ -23,300 +23,174 @@
   </header>
 
   <!-- PAGE DESCRIPTION -->
-      <!-- TODO: Add a short description of this page's content here. -->
-      <!-- Example: <p class="page-description">Explore the history of the Ulverton spinning mule...</p> -->
-  
+  <!-- TODO: Add a short description of this page's content here. -->
+  <!-- Example: <p class="page-description">Access safety and maintenance manuals for the Ulverton spinning mule...</p> -->
+
   <main class="section-page">
     <div class="container">
+
       <!-- File Grid -->
       <div class="file-grid" id="manualGrid">
         <!-- Existing files or previews will appear here -->
       </div>
-  </main>
-      <section class="section-grid" id="guide-selector">
 
+      <!-- =====================
+           MAINTENANCE GUIDES SELECTOR
+           Same pattern as timelines — click a card to open a guide,
+           back button returns to selector.
+           To add a new guide:
+             1. Add a card here with data-open-guide="your-id"
+             2. Add a matching <section data-guide="your-id"> below
+      ===================== -->
+
+      <h2 class="guides-section-title">Maintenance Guides</h2>
+
+      <section class="section-grid" id="guide-selector">
         <a href="#" class="section-card" data-open-guide="maintenance">
           <div class="card-bg" style="background-image: url('../images/DSCN0845.JPG');"></div>
           <div class="card-overlay">
             <h2>Spinning Mule Maintenance</h2>
           </div>
         </a>
-
-        <!-- TODO: Add more timeline cards here following the same pattern -->
-           <div class="guide">
-             <div class="guide-marker"></div>
-             <div class="guide-content">
-               <div class="guide-text">
-                 <span class="guide-type">Lubricants</span>
-                 <h3 class="guide-event-title">Lubricant Guide</h3>
-                 <p class="guide-event-body">Lubrication is the most common form of preventative maintenance, lubricants are used on gears,
-pins and bushings, chains, pullies, and rollers. There are many different types of lubricants with
-different applications and purposes. Early lubricants used on the mill were likely to be seed oils,
-whale oils and later petroleum derivatives. Grease was also used in situations of higher loads and
-greater temperatures.</p>
-               </div>
-             </div>
-           </div>
-        
-            <div class="guide">
-             <div class="guide-marker"></div>
-             <div class="guide-content">
-               <div class="guide-text">
-                 <span class="guide-type">Gears</span>
-                 <h3 class="guide-event-title">Gears Guide</h3>
-                 <p class="guide-event-body">Gears are the most common component of the mills main drive head and are the primary way the forces are distributed in the mill. The best practice for the preventative maintenance of gears is a methodical visual inspection before attempting to start the mill.
-                 Similar to other mechanical components, all types of gears including spur gears, helical gears, bevel gears, and racks should be well maintained so they can perform efficiently. This means carrying out regular maintenance checks and making sure that any issues whether big or small are handled proactively. Here are some things to look out for when conducting maintenance for your spur gears: 
-
-  
-
-<b>Lubrication</b>
-
-  
-
-Lubrication is necessary for any gear mechanism to function at its best. It enables gears to move smoothly and limits the temperature increase resulting from friction. Lack of lubrication or using the wrong type of lubricant can damage even high quality manufactured gears including tooth wear and premature failure. 
-
-  
-
-The lubricant choice depends on the gear’s rotating speed and the tangential speed. Generally, grease lubricants are used for maintenance purposes as it is good for low-speed gears, while splash lubrication and forced oil lubrication benefits medium and high-speed gears. Also, make sure lubricants are clean and do not contain any contaminants like dust. 
-
-  
-
-<b>Wear and tear signs </b>
-
-  
-
-Due to constant friction, gear teeth may wear out sooner. Check your gears carefully for any signs of wear and tear, so you can replace the parts as needed. It is also important to use the proper type of lubricant at proper intervals. Specifically, the gear flanks in spur gears, as they are always in contact with the teeth of another gear and will result in normal wear and tear.  
-
-  
-
-<b>Broken or chipped gear teeth</b>
-
-  
-
-Although certain machines can still function with a chipped or broken gear tooth, it could affect the performance and output of the machine. So, replacing the gear might be the best option here. However, you can avoid broken teeth by making sure the gear is applied with sufficient lubricant and avoid high stress or excessive loads. Ensuring that your gears are maintained properly will help prevent or minimize system downtime, allowing your business to operate properly. 
-
-  
-
-Knowing the Conditions 
-
-- Nothing lasts forever, but many types of gears can last for decades without the need for ongoing maintenance. Everything comes down to the nature of the gear and the conditions of its use. Pay close attention to: 
-
-- Gear materials. Some gear materials are more durable than others. For example, phosphor bronze is sometimes used for its high tolerance of wear, while ceramic gears may be more vulnerable to damage over time. 
-
-- Loads. Gears that are forced to bear heavy loads are naturally more vulnerable to wear, though this can be compensated for with the design of the gear. 
-
-- Speeds. As you might imagine, high-speed applications tend to wear gears out faster than low-speed applications; the sheer amount of contact and number of rotations are responsible for this. 
-
-- Temperatures. Though most gears are tolerant of a wide temperature range, some materials break down faster at high temperatures. 
-
-- Other harsh conditions. Other harsh conditions, such as exposure to water or other elements, may cause gears to wear down faster. 
-
-- In some cases, you may need to lubricate and/or clean your gears regularly. You’ll also want to inspect all gears for any signs of damage on a regular basis; small imperfections can quickly add up to be problematic, so it pays to catch them early. In some cases, you’ll need to replace your gears periodically. </p>
-               </div>
-             </div>
-           </div>
-            <div class="guide">
-             <div class="guide-marker"></div>
-             <div class="guide-content">
-               <div class="guide-text">
-                 <span class="guide-type">Ropes</span>
-                 <h3 class="guide-event-title">Rope and Pulley Maintenance Guide</h3>
-                 <p class="guide-event-body">Manmade fibers, as well as being much stronger than natural fibers, are very tolerant of those factors that reduced the working life of the latter. For example, synthetic lines can be stored while still damp and they won't rot (although you may see mildew on them). Physical damage must be guaranteed against (as with natural fibers); you should particularly bear in mind that rope under tension is easily damaged by chafe. Lines that are under tension but static (e.g., mooring lines) should be protected at any angular point or rough service by placing plastic tubing over the rope or parcelling it with canvas. 
-
-The effects of chafe from normal friction surfaces such as sheaves, fairleads, and cleats is considerably reduced if the bearing surfaces are large. In the case of sheaves, the diameter should not be less than five times the diameter of the rope - and preferably more. The groove of a sheave should have such a radius that it supports one-third of the rope's circumference. Whenever possible, avoid making sharp "nips" in a rope. If, however, you have to lead a line through a sharp angle, the bearing surface of the lead should be smooth and at least that required of a sheave. Rope can be severely damaged if led through a thin shackle or eye bolt, particularly if the angle is sharp. 
-
-handling and care of rope fibers in a winchIf possible, always avoid heavy shock loads. For example, when passing a towline between a stationary vessel and a moving one, never make both ends fast at once. The resulting jerk imposes a tremendous strain on the line which, if it does not damage it, may rip a cleat or bollard out. When one end has been made fast, the correct procedure at the other end is to make a figure-eight turn around the cleat or bitts, and allow the line to ease out smoothly as the load comes on. Then, check steadily and make fast as the vessel gathers way. 
-
-Riding turns on a winch, must be avoided. They are caused by a line wrongly lead or tailed. Often they can only be undone by using another winch and a rolling hitch to take the strain off the line. 
-
-Securing a Coil 
-
-When coiling a line, always begin at the end that is made fast so that and twists or kinks can be chased along and run out at the far end. It is particularly important to ensure that load is never applied to a line when there is a kink in it; doing so will almost inevitably damage and weaken it. Rope that has been badly overloaded in any way may be identified by being usually hard in parts. The hardness is caused by the heat that is produced by the overload friction that fuses some of the filaments together. 
-
-Unless lines are properly coiled, kinks will occur - with subsequent snags - when the line is run out. Nearly all laid ropes are right-handed and should be coiled clockwise to ensure smooth running out. 
-
-To make sure that your ropes wear evenly, it's a good idea to change them end for end occasionally. 
-
-The life of a rope can be extended considerably by washing it in fresh water to get rid of salt crystal, grit, and dirt. Use only soap powder - not detergent - to wash rope.
-                 INTENDED USE 
-
-Many products are designed for a specific purpose. When a use is specified on the product, use the rope for its intended application. This will add life to the product and reduce the possibility of a product failure. 
-
-AVOID KINKS 
-
-When rope is repeatedly turned or twisted in one direction, it is certain that kinks will develop, unless twists are repeatedly thrown in, or out of rope. Pulling a kink through a restricted space such as a tackle block will seriously damage the rope fibers. 
-
-AVOID ABRASION 
-
-Outer and inner rope fibers contribute equally to the strength of your rope. When worn, your rope is naturally weakened. Where it is necessary for a rope to rub over and object, protect it with chafing gear, such as canvas wrapped and tied around the rope. 
-
-AVOID OVERLOADING 
-
-Safe working strength for rope varies from 5:1 to 12:1 or higher. For example, a rope rated at 10,000 pounds minimum breaking strength may be loaded to 2,000 pounds at a 5:1 safe working load and at 833 pounds at a 12:1 safe working load. Ignoring safe working loads can cause personal injury, damage to property or even death. If your rope is old or worn, make allowances for safety. Downgrade rope to a less critical application or discard and replace 
-
-AVOID SUDDEN STRAIN 
-
-Rope that is strong enough under a steady strain can be broken with a sudde3n jerk. Avoid shock loads whenever possible. 
-
-AVOID SHARP ANGLES 
-
-Sharp bends greatly affect the strength of a rope. Any sharp angle is a weak spot. Pad it for safety, and even then, be careful! 
-
-AVOID WRONG REEVING 
-
-Always use the right size rope for the sheaves in block or pulleys. Too small a sheaves diameter can cause added friction and rope wear. 
-
-REVERSE ENDS 
-
-Prolonged use, or wear, on one part of a rope will naturally decrease its effectiveness at that point. Occasionally reverse your rope, end-for-end, to distribute the wear more evenly. A good example is an anchor line aboard a boat. 
-
-AVOID CHEMICALS 
-
-Virtually all synthetic fiber ropes are immune to damage from oil, gasoline, paint and most chemicals. To be on the safe side, however, keep your rope free of any type chemical. Natural fiber ropes are, of course, severely damaged by exposure to chemicals. 
-
-KEEP ROPE CLEAN 
-
-Dirt on the surface and embedded in rope acts as an abrasive on fibers. When rope becomes dirty, wash it thoroughly with clean water. Be sure to air-dry natural fiber ropes before storing. 
-
-AVOID IMPROPER STORAGE 
-
-Synthetic fiber ropes require no special storing conditions other than keeping them out of sunlight and out of extremely hot rooms. The ultra-violet rays of sunlight have a weakening effect on rope that is exposed for prolonged periods of time. Natural fiber ropes must be kept dry or they will rot in a very short time. 
-                 Numerous surveys conducted with industry in the United States have found that 70% of equipment failures are self-induced, and more than 30-50% of these self-induced failures are caused by maintenance personnel not knowing the basics of maintenance. 
-
-The other portions of these self-induced failures are caused by operator error, parts handling and storage, improper diagnosis of failures, inadequate or ineffective Preventive Maintenance programs, etc. 
-
-Over 90% of maintenance personnel fail fundamental skills assessments in key areas like alignment and lubrication. 
-
-This problem has been further proven through the skill assessment process I was involved with in the State of Georgia’s Skills Assessment program from 1990 – 1994, in which I was involved in the creation of the assessment. 
-
-This assessment program assessed the basic maintenance fundamentals through a written identification and performance format. 
-
-A high number of maintenance personnel in many different types of industries were assessed, and we found that over 90% of these personnel that were assessed in the “Basic Fundamentals of Mechanical Maintenance” scored 50% or less in the following areas: 
-
-Belt Drives 
-
-Chain Drives 
-
-Bearing Maintenance 
-
-Precision Measurement 
-
-Lubrication 
-
-Welding 
-
-Couplings and Coupling Alignment 
-
-Hydraulics and Pneumatics 
-
-A database has been compiled by the Technical Training Corporation (from 1993-2000) that has found similar results of their skill assessment program, but their database represents not only industrial plants in Georgia but also throughout North America. 
-
-These findings prove that the basics in maintenance are a fundamental problem in many maintenance organizations throughout the United States. One solution is to develop proper and detailed “Preventive Maintenance and Corrective Maintenance Procedures” and then train all personnel in how to use these procedures. 
-
-We will attempt to address some of the maintenance basics that a maintenance person must know to perform proper maintenance on a piece of equipment. 
-
- These areas are belt drive maintenance, chain drive maintenance, and coupling alignment. 
-
-Belt Drive Maintenance 
-
-Routine Preventive Maintenance is essential if a belt drive is to operate correctly. Belt maintenance should include regular belt condition checks, alignment, and tension. You should also perform frequent inspections of the sheaves and shafts. 
-
-Proper belt and chain maintenance isn’t just routine—it’s the difference between uptime and costly downtime. 
-
-Routine maintenance will extend the life of the sheaves and belts. Belt-drive maintenance requires little time, but it must be done regularly. Keeping the belts clean and free of oil and grease will help ensure a long belt life. 
-
-Proper tools must be selected. (These must be identified on your PM inspection checklist or Job Plan) 
-
-In addition to a set of basic hand tools, you will also need a reliable tension gauge with a set of belt tension tables, a set of sheave gauges, and a straight edge or string with a flashlight. 
-
-Tension gauge and sheave gauges with measurement tables for belt maintenance and alignment. 
-
-When the proper procedures are followed for installing V-Belts, they will yield years of trouble-free service. 
-
-Install the belt on the sheaves. Never force a belt on with a screwdriver, this can damage the belt and cause you to lose a finger. Next, begin increasing the distance between the sheaves by turning the jacking bolts; do this until the belt is snug but not tight. 
-
-Using a belt tension gauge, tighten the belts to the manufacturer’s recommendation. Be sure to measure deflection and tension. This information can be found in a belt tension gauge’s information sheet. 
-
-Belt tension gauge measuring distance between sheaves for proper V-Belt installation and maintenance. 
-
-Check for parallel and angular alignment of sheaves. The tolerance for alignment of V-Belts is to within 1/10 of an inch per foot of span, and for positive-drive belts to within 1/16 of an inch per foot of span. 
-
-Diagram illustrating the alignment of sheaves for belt installation, highlighting jacking bolts and sheave positioning in mechanical maintenance practices. 
-
-When you replace a belt, always check the tension immediately after installation. Check the tension again after 24 hours of operation. 
-
-The belt should never ride in the bottom of the sheave because the sheave is deeper than the belt. The belt is made to ride near the top of the sheave. The belt may wear to the point that it is riding on the bottom of the sheave. If so, it will slip no matter how much tension is applied to the belt. 
-
-Sometimes belts are stored on shelves in their original packaging. Other times, they are stacked without packaging. If possible, store them on two or more pegs to prevent distortion. Keep belts away from damp floors and high-heat areas. 
-
-Illustration of belt storage methods, featuring labeled shelves with V-belts, stacked belts, and a diagram of a belt sheave, emphasizing proper maintenance practices for mechanical belts. 
-
-You may need to replace belts that are worn or damaged from overheating or contact with oil or grease. Never replace one belt of a multi-belt drive. Belts stretch with use. If you replace one belt of a multi-belt drive, it will be tighter than the others, thus not meeting the horsepower requirements the drive was designed for. 
-
-Chain Drive Maintenance 
-
-Chain drives transmit power between a drive unit and a driven unit. For example, if we have a gearbox and a contact roll on a conveyor, we need a way to transmit the power from the gearbox to the roll. This can be done quickly and efficiently with a chain drive unit. 
-
- Chain drives can consist of one or multiple strand chains, depending on the load that the unit must transmit. The chains need to be matched with the sprocket type, and they must be tight enough to prevent slippage. 
-
- An effective “Preventive Maintenance Program” will provide extended life to a chain drive system, and through proper “Corrective Maintenance Procedures,” we could prevent premature failures. 
-
-Preventive Maintenance 
-
-Inspect a chain for wear by inspecting the links for worn 
-
-Lubricate the chain with lightweight oil recommended by the chain 
-
-Inspect sprockets for worn teeth and abnormal wear on the sides of the 
-
-Realign sprockets using the same method used for belt 
-
-Ensure the chain has the proper amount of sag (About ¼” per foot of span). 
-
-Corrective Maintenance 
-
-Replace all sprockets and chain when replacing any portion of the chain drive. This ensures the chain drive operates under the pitch diameter. Worn sprockets have groves worn in them, which create changes to the pitch diameter. Worn or “stretched chains” change their pitch diameter by the chain wearing beyond limits, thus changing the distance between links. Sprockets and chains must match the pitch diameter, or they cause premature failure. 
-
-If a chain is too long, do not install a half link without trying all means available to take up excess A half link does not have the load requirements of a full link and thus can cause premature failure. </p>
-               </div>
-             </div>
-           </div>
+        <!-- TODO: Add more guide cards here following the same pattern -->
       </section>
+
+      <!-- Back button — shown when a guide is open -->
+      <div id="guide-back-wrapper" class="timeline-back-wrapper" hidden>
+        <button id="guide-back-btn" class="timeline-back-btn">← Back to Guides</button>
+      </div>
+
+      <!-- =====================
+           GUIDE: Spinning Mule Maintenance
+      ===================== -->
+      <section class="guide-section" data-guide="maintenance" hidden>
+        <h2 class="timeline-title">Spinning Mule Maintenance Guide</h2>
+
+        <div class="guide-entries">
+
+          <!-- Lubricants -->
+          <div class="guide-entry">
+            <div class="guide-entry-header">
+              <span class="guide-type-badge">Lubricants</span>
+              <h3 class="guide-entry-title">Lubricant Guide</h3>
+            </div>
+            <div class="guide-entry-body">
+              <p>Lubrication is the most common form of preventative maintenance. Lubricants are used on gears, pins and bushings, chains, pulleys, and rollers. There are many different types of lubricants with different applications and purposes. Early lubricants used on the mill were likely to be seed oils, whale oils and later petroleum derivatives. Grease was also used in situations of higher loads and greater temperatures.</p>
+            </div>
+          </div>
+
+          <!-- Gears -->
+          <div class="guide-entry">
+            <div class="guide-entry-header">
+              <span class="guide-type-badge">Gears</span>
+              <h3 class="guide-entry-title">Gears Guide</h3>
+            </div>
+            <div class="guide-entry-body">
+              <p>Gears are the most common component of the mill's main drive head and are the primary way forces are distributed in the mill. The best practice for preventative maintenance of gears is a methodical visual inspection before attempting to start the mill.</p>
+              <p>Similar to other mechanical components, all types of gears including spur gears, helical gears, bevel gears, and racks should be well maintained so they can perform efficiently. Here are some things to look out for when conducting maintenance:</p>
+
+              <h4>Lubrication</h4>
+              <p>Lubrication is necessary for any gear mechanism to function at its best. It enables gears to move smoothly and limits the temperature increase resulting from friction. Lack of lubrication or using the wrong type of lubricant can damage even high quality gears, causing tooth wear and premature failure.</p>
+              <p>The lubricant choice depends on the gear's rotating speed and tangential speed. Generally, grease lubricants are used for low-speed gears, while splash lubrication and forced oil lubrication benefit medium and high-speed gears. Make sure lubricants are clean and free of contaminants like dust.</p>
+
+              <h4>Wear and Tear</h4>
+              <p>Due to constant friction, gear teeth may wear out sooner. Check your gears carefully for any signs of wear and tear so you can replace parts as needed. It is also important to use the proper type of lubricant at proper intervals. Specifically, the gear flanks in spur gears are always in contact with the teeth of another gear and will result in normal wear and tear.</p>
+
+              <h4>Broken or Chipped Gear Teeth</h4>
+              <p>Although certain machines can still function with a chipped or broken gear tooth, it could affect performance and output. Replacing the gear might be the best option. You can avoid broken teeth by making sure the gear has sufficient lubrication and by avoiding high stress or excessive loads.</p>
+
+              <h4>Knowing the Conditions</h4>
+              <p>Many types of gears can last for decades without ongoing maintenance — everything depends on the nature of the gear and conditions of use. Pay close attention to:</p>
+              <ul>
+                <li><strong>Gear materials</strong> — some materials are more durable than others. For example, phosphor bronze has high tolerance of wear, while ceramic gears may be more vulnerable to damage over time.</li>
+                <li><strong>Loads</strong> — gears that bear heavy loads are more vulnerable to wear, though this can be compensated for with gear design.</li>
+                <li><strong>Speeds</strong> — high-speed applications tend to wear gears out faster due to the sheer amount of contact and number of rotations.</li>
+                <li><strong>Temperatures</strong> — some materials break down faster at high temperatures.</li>
+                <li><strong>Other harsh conditions</strong> — exposure to water or other elements may cause gears to wear down faster.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Ropes -->
+          <div class="guide-entry">
+            <div class="guide-entry-header">
+              <span class="guide-type-badge">Ropes</span>
+              <h3 class="guide-entry-title">Rope and Pulley Maintenance Guide</h3>
+            </div>
+            <div class="guide-entry-body">
+              <p>Manmade fibers, as well as being much stronger than natural fibers, are very tolerant of those factors that reduce the working life of the latter. Physical damage must be guarded against — rope under tension is easily damaged by chafe. Lines under tension but static (e.g., mooring lines) should be protected at any angular point or rough surface by placing plastic tubing over the rope or wrapping it with canvas.</p>
+              <p>The effects of chafe from normal friction surfaces such as sheaves, fairleads, and cleats is considerably reduced if the bearing surfaces are large. The groove of a sheave should have a radius that supports one-third of the rope's circumference. Whenever possible, avoid making sharp bends in a rope.</p>
+
+              <h4>Securing a Coil</h4>
+              <p>When coiling a line, always begin at the end that is made fast so that any twists or kinks can be chased along and run out at the far end. Never apply load to a line when there is a kink in it — doing so will almost inevitably damage and weaken it. Nearly all laid ropes are right-handed and should be coiled clockwise to ensure smooth running out. To ensure even wear, change ropes end-for-end occasionally.</p>
+
+              <h4>Key Rules for Rope Care</h4>
+              <ul>
+                <li><strong>Intended use</strong> — use rope only for its intended application to add life to the product and reduce the possibility of failure.</li>
+                <li><strong>Avoid kinks</strong> — pulling a kink through a restricted space such as a tackle block will seriously damage the rope fibers.</li>
+                <li><strong>Avoid abrasion</strong> — where rope must rub over an object, protect it with chafing gear such as canvas wrapped and tied around the rope.</li>
+                <li><strong>Avoid overloading</strong> — safe working strength for rope varies from 5:1 to 12:1. If your rope is old or worn, downgrade it to a less critical application or replace it.</li>
+                <li><strong>Avoid sudden strain</strong> — rope strong enough under a steady strain can be broken with a sudden jerk. Avoid shock loads whenever possible.</li>
+                <li><strong>Avoid sharp angles</strong> — sharp bends greatly affect rope strength. Pad sharp angles for safety.</li>
+                <li><strong>Reverse ends</strong> — occasionally reverse your rope end-for-end to distribute wear more evenly.</li>
+                <li><strong>Keep rope clean</strong> — dirt embedded in rope acts as an abrasive. Wash with clean water when dirty; air-dry natural fiber ropes before storing.</li>
+                <li><strong>Avoid improper storage</strong> — keep synthetic ropes out of sunlight and extremely hot rooms. Natural fiber ropes must be kept dry to prevent rot.</li>
+              </ul>
+
+              <h4>Belt Drive Maintenance</h4>
+              <p>Routine preventive maintenance is essential if a belt drive is to operate correctly. Belt maintenance should include regular condition checks, alignment, and tension checks, as well as frequent inspections of the sheaves and shafts.</p>
+              <p>When installing V-Belts, never force a belt on with a screwdriver — this can damage the belt. Begin increasing the distance between sheaves by turning the jacking bolts until the belt is snug but not tight, then use a belt tension gauge to tighten to the manufacturer's recommendation. Check tension again after 24 hours of operation.</p>
+              <p>When replacing a belt, always replace all belts in a multi-belt drive. Belts stretch with use — replacing only one belt means it will be tighter than the others, not meeting the horsepower requirements the drive was designed for.</p>
+
+              <h4>Chain Drive Maintenance</h4>
+              <p>Chain drives transmit power between a drive unit and a driven unit. An effective preventive maintenance program will provide extended life to a chain drive system.</p>
+              <ul>
+                <li>Inspect chain links for wear regularly.</li>
+                <li>Lubricate the chain with lightweight oil recommended by the chain manufacturer.</li>
+                <li>Inspect sprockets for worn teeth and abnormal wear on the sides.</li>
+                <li>Realign sprockets using the same method used for belt drives.</li>
+                <li>Ensure the chain has the proper amount of sag (about ¼" per foot of span).</li>
+              </ul>
+              <p>When replacing any portion of a chain drive, replace all sprockets and chain together. Worn sprockets create changes to the pitch diameter, and worn or "stretched" chains change their pitch diameter beyond limits — both cause premature failure.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </main>
+
   <!-- Add Files Button -->
   <div class="add-file-wrapper">
-  <button
-    class="add-file-btn admin-only"
-    data-input="#manualFileInput"
-    data-grid="#manualGrid"
-  >
-    Add File
-  </button>
+    <button class="add-file-btn admin-only" data-input="#manualFileInput" data-grid="#manualGrid">
+      Add File
+    </button>
+    <input type="file" id="manualFileInput" multiple hidden>
+  </div>
 
-  <input type="file" id="manualFileInput" multiple hidden>
-
-</div>
-<script>
-  window.defaultManualFiles = [
-    {
-      fileName: "Ulverton Wool Mill Safety Manual.pdf",
-      fileURL: "../content/Ulverton Wool Mill Safety Manual.pdf",
-      thumbnail: "../images/pdf-icon.webp",
-      description: "Read the safety manual here!"
-    },
-    {
-      fileName: "Maintenance of the spinning mule at Ulverton.pdf",
-      fileURL: "../content/Maintenance of the spinning mule at Ulverton.pdf",
-      thumbnail: "../images/pdf-icon.webp",
-      description: "Check here for a complete maintenance guide."
-    },
-    {
-      fileName: "cyclopediaoftext02amer_bw.pdf",
-      fileURL: "../content/cyclopediaoftext02amer_bw.pdf",
-      thumbnail: "../images/pdf-icon.webp",
-      description: "Cyclopedia of Textile work (Volume 2). Contains a huge amount of information on textile manufacturing before 1912!"
-    },
-  ];
-</script>
+  <script>
+    window.defaultManualFiles = [
+      {
+        fileName: "Ulverton Wool Mill Safety Manual.pdf",
+        fileURL: "../content/Ulverton Wool Mill Safety Manual.pdf",
+        thumbnail: "../images/pdf-icon.webp",
+        description: "Read the safety manual here!"
+      },
+      {
+        fileName: "Maintenance of the spinning mule at Ulverton.pdf",
+        fileURL: "../content/Maintenance of the spinning mule at Ulverton.pdf",
+        thumbnail: "../images/pdf-icon.webp",
+        description: "Check here for a complete maintenance guide."
+      },
+      {
+        fileName: "cyclopediaoftext02amer_bw.pdf",
+        fileURL: "../content/cyclopediaoftext02amer_bw.pdf",
+        thumbnail: "../images/pdf-icon.webp",
+        description: "Cyclopedia of Textile work (Volume 2). Contains a huge amount of information on textile manufacturing before 1912!"
+      }
+    ];
+  </script>
 
   <footer class="site-footer">
     <img src="../images/ulverton-logo.png" alt="Ulverton Mill logo" class="tablet-logo footer-logo" />
@@ -326,24 +200,50 @@ If a chain is too long, do not install a half link without trying all means avai
     </div>
   </footer>
 
-<!-- === Fullscreen File Viewer Overlay === -->
-<div id="file-viewer" class="file-viewer">
-  <div class="file-viewer-content">
-  <div class="viewer-admin-controls admin-only">
-  <button id="viewer-edit" title="Replace file">✏️</button>
-  <button id="viewer-delete" title="Delete file">🗑️</button>
-  <button id="viewer-download">💾</button>
+  <div id="file-viewer" class="file-viewer">
+    <div class="file-viewer-content">
+      <button id="file-viewer-close" class="file-viewer-close">✕</button>
+      <div id="viewer-body"></div>
+    </div>
   </div>
-    <button id="file-viewer-close" class="file-viewer-close">✕</button>
-    <div id="viewer-body"></div>
-  </div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+  <script src="../js/main.js" defer></script>
 
-<script src="../js/main.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const selector   = document.getElementById("guide-selector");
+      const backWrapper = document.getElementById("guide-back-wrapper");
+      const backBtn    = document.getElementById("guide-back-btn");
+
+      function openGuide(id) {
+        selector.hidden    = true;
+        backWrapper.hidden = false;
+        document.querySelectorAll(".guide-section").forEach(s => {
+          s.hidden = s.dataset.guide !== id;
+        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function showSelector() {
+        selector.hidden    = false;
+        backWrapper.hidden = true;
+        document.querySelectorAll(".guide-section").forEach(s => s.hidden = true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      document.querySelectorAll("[data-open-guide]").forEach(card => {
+        card.addEventListener("click", e => {
+          e.preventDefault();
+          openGuide(card.dataset.openGuide);
+        });
+      });
+
+      backBtn.addEventListener("click", showSelector);
+    });
+  </script>
+
 </body>
 </html>
-
